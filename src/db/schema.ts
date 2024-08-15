@@ -5,6 +5,7 @@ export const usersTable = pgTable("users_table", {
   name: text("name").notNull(),
   age: integer("age").notNull(),
   email: text("email").notNull().unique(),
+  test: text("test"),
 });
 
 export const postsTable = pgTable("posts_table", {
