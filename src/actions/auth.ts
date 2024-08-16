@@ -3,7 +3,8 @@
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
-import { validateRequest } from "@/lib/auth/validate";
+import { isValidEmail } from "@/lib/auth/email";
+import { validateRequest } from "@/lib/auth/validate-user";
 import { hash, verify } from "@node-rs/argon2";
 import { eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
@@ -17,19 +18,13 @@ interface ActionResult {
 export async function signup(formData: FormData): Promise<ActionResult> {
   console.log(formData);
 
-  const username = formData.get("username");
-  // username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
-  // keep in mind some database (e.g. mysql) are case insensitive
-  if (
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username)
-  ) {
+  const email = formData.get("email");
+  if (!email || typeof email !== "string" || !isValidEmail(email)) {
     return {
-      error: "Invalid username",
+      error: "Invalid email",
     };
   }
+
   const password = formData.get("password");
   if (
     typeof password !== "string" ||
@@ -50,34 +45,34 @@ export async function signup(formData: FormData): Promise<ActionResult> {
   });
   const userId = generateIdFromEntropySize(10); // 16 characters long
 
-  // TODO: check if username is already used
-  await db
-    .insert(users)
-    .values({ id: userId, username, passwordHash: passwordHash });
+  try {
+    await db
+      .insert(users)
+      .values({ id: userId, email, passwordHash: passwordHash });
 
-  const session = await lucia.createSession(userId, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-  return redirect("/");
+    const session = await lucia.createSession(userId, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+    return redirect("/");
+  } catch (error) {
+    return {
+      error: "User already exists",
+    };
+  }
 }
 
 export async function login(formData: FormData): Promise<ActionResult> {
-  "use server";
-  const username = formData.get("username");
-  if (
-    typeof username !== "string" ||
-    username.length < 3 ||
-    username.length > 31 ||
-    !/^[a-z0-9_-]+$/.test(username)
-  ) {
+  const email = formData.get("email");
+  if (!email || typeof email !== "string") {
     return {
-      error: "Invalid username",
+      error: "Invalid email",
     };
   }
+
   const password = formData.get("password");
   if (
     typeof password !== "string" ||
@@ -92,21 +87,22 @@ export async function login(formData: FormData): Promise<ActionResult> {
   const existingUserResults = await db
     .select()
     .from(users)
-    .where(eq(users.username, username.toLowerCase()))
+    .where(eq(users.email, email))
     .limit(1);
 
   if (existingUserResults.length !== 1) {
     // NOTE:
-    // Returning immediately allows malicious actors to figure out valid usernames from response times,
+    // Returning immediately allows malicious actors to figure out valid emails from response times,
     // allowing them to only focus on guessing passwords in brute-force attacks.
-    // As a preventive measure, you may want to hash passwords even for invalid usernames.
-    // However, valid usernames can be already be revealed with the signup page among other methods.
+    // As a preventive measure, you may want to hash passwords even for invalid emails.
+    // However, valid emails can be already be revealed with the signup page
+    // and a similar timing issue can likely be found in password reset implementation.
     // It will also be much more resource intensive.
     // Since protecting against this is non-trivial,
     // it is crucial your implementation is protected against brute-force attacks with login throttling etc.
-    // If usernames are public, you may outright tell the user that the username is invalid.
+    // If emails/usernames are public, you may outright tell the user that the username is invalid.
     return {
-      error: "Incorrect username or password",
+      error: "Incorrect email or password",
     };
   }
 
@@ -120,7 +116,7 @@ export async function login(formData: FormData): Promise<ActionResult> {
   });
   if (!validPassword) {
     return {
-      error: "Incorrect username or password",
+      error: "Incorrect email or password",
     };
   }
 
