@@ -1,5 +1,5 @@
-import { db } from "@/src/db";
-import { sessions, users } from "@/src/db/schema";
+import { db } from "@/db";
+import { sessions, users } from "@/db/schema";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { Lucia } from "lucia";
 
@@ -23,7 +23,6 @@ export const lucia = new Lucia(adapter, {
   },
 });
 
-// IMPORTANT!
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
