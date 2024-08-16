@@ -4,6 +4,10 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
 import { isValidEmail } from "@/lib/auth/email";
+import {
+  generateEmailVerificationCode,
+  sendVerificationCode,
+} from "@/lib/auth/email-verification";
 import { validateRequest } from "@/lib/auth/validate-user";
 import { hash, verify } from "@node-rs/argon2";
 import { eq } from "drizzle-orm";
@@ -16,8 +20,6 @@ interface ActionResult {
 }
 
 export async function signup(formData: FormData): Promise<ActionResult> {
-  console.log(formData);
-
   const email = formData.get("email");
   if (!email || typeof email !== "string" || !isValidEmail(email)) {
     return {
@@ -46,23 +48,30 @@ export async function signup(formData: FormData): Promise<ActionResult> {
   const userId = generateIdFromEntropySize(10); // 16 characters long
 
   try {
-    await db
-      .insert(users)
-      .values({ id: userId, email, passwordHash: passwordHash });
-
-    const session = await lucia.createSession(userId, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
-    return redirect("/");
+    await db.insert(users).values({
+      id: userId,
+      email,
+      passwordHash: passwordHash,
+      emailVerified: false,
+    });
   } catch (error) {
     return {
       error: "User already exists",
     };
   }
+
+  const verificationCode = await generateEmailVerificationCode(userId, email);
+  await sendVerificationCode(email, verificationCode);
+
+  const session = await lucia.createSession(userId, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  redirect("/");
 }
 
 export async function login(formData: FormData): Promise<ActionResult> {
@@ -84,13 +93,13 @@ export async function login(formData: FormData): Promise<ActionResult> {
     };
   }
 
-  const existingUserResults = await db
+  const [existingUser] = await db
     .select()
     .from(users)
     .where(eq(users.email, email))
     .limit(1);
 
-  if (existingUserResults.length !== 1) {
+  if (!existingUser) {
     // NOTE:
     // Returning immediately allows malicious actors to figure out valid emails from response times,
     // allowing them to only focus on guessing passwords in brute-force attacks.
@@ -105,8 +114,6 @@ export async function login(formData: FormData): Promise<ActionResult> {
       error: "Incorrect email or password",
     };
   }
-
-  const existingUser = existingUserResults[0];
 
   const validPassword = await verify(existingUser.passwordHash, password, {
     memoryCost: 19456,
@@ -127,7 +134,8 @@ export async function login(formData: FormData): Promise<ActionResult> {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/");
+
+  redirect("/");
 }
 
 export async function logout(): Promise<ActionResult> {
@@ -146,5 +154,6 @@ export async function logout(): Promise<ActionResult> {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/login");
+
+  redirect("/login");
 }
