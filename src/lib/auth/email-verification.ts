@@ -1,8 +1,12 @@
 import { db } from "@/db";
 import { emailVerificationCodes } from "@/db/schema";
+import VerifyUserEmail from "@/emails/verification-code";
 import { eq } from "drizzle-orm";
 import { TimeSpan, createDate } from "oslo";
-import { generateRandomString, alphabet } from "oslo/crypto";
+import { alphabet, generateRandomString } from "oslo/crypto";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function generateEmailVerificationCode(
   userId: string,
@@ -24,4 +28,24 @@ export async function generateEmailVerificationCode(
   return code;
 }
 
-export async function sendVerificationCode(email: string, code: string) {}
+export async function sendVerificationCode(email: string, code: string) {
+  // TODO: add domain
+  const sender =
+    process.env.VERCEL_ENV === "production"
+      ? "Acme <onboarding@resend.dev>"
+      : "Acme <onboarding@resend.dev>";
+
+  const recipient =
+    process.env.VERCEL_ENV === "production" ? email : "delivered@resend.dev";
+
+  const { error } = await resend.emails.send({
+    from: sender,
+    to: [recipient],
+    subject: "[Monoform] Verify your email",
+    react: VerifyUserEmail({ verificationCode: code }),
+  });
+
+  if (error) {
+    throw error;
+  }
+}

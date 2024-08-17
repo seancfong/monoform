@@ -61,7 +61,14 @@ export async function signup(formData: FormData): Promise<ActionResult> {
   }
 
   const verificationCode = await generateEmailVerificationCode(userId, email);
-  await sendVerificationCode(email, verificationCode);
+
+  try {
+    await sendVerificationCode(email, verificationCode);
+  } catch (error) {
+    return {
+      error: "Failed to send verification code",
+    };
+  }
 
   const session = await lucia.createSession(userId, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
