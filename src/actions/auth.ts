@@ -63,7 +63,11 @@ export async function signup(formData: FormData): Promise<ActionResult> {
   const verificationCode = await generateEmailVerificationCode(userId, email);
 
   try {
-    await sendVerificationCode(email, verificationCode);
+    if (process.env.VERCEL_ENV === "development") {
+      console.log("Email verification code: ", verificationCode);
+    } else {
+      await sendVerificationCode(email, verificationCode);
+    }
   } catch (error) {
     return {
       error: "Failed to send verification code",

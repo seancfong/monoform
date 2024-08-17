@@ -30,10 +30,7 @@ export async function generateEmailVerificationCode(
 
 export async function sendVerificationCode(email: string, code: string) {
   // TODO: add domain
-  const sender =
-    process.env.VERCEL_ENV === "production"
-      ? "Acme <onboarding@resend.dev>"
-      : "Acme <onboarding@resend.dev>";
+  const sender = "Acme <onboarding@resend.dev>";
 
   const recipient =
     process.env.VERCEL_ENV === "production" ? email : "delivered@resend.dev";
