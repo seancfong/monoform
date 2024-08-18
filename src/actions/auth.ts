@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
-import { isValidEmail } from "@/lib/auth/email";
+import { isValidEmail } from "@/lib/auth/email-utils";
 import {
   generateEmailVerificationCode,
   sendVerificationCode,
@@ -82,7 +82,7 @@ export async function signup(formData: FormData): Promise<ActionResult> {
     sessionCookie.attributes
   );
 
-  redirect("/");
+  redirect("/email-verification");
 }
 
 export async function login(formData: FormData): Promise<ActionResult> {
@@ -146,7 +146,7 @@ export async function login(formData: FormData): Promise<ActionResult> {
     sessionCookie.attributes
   );
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function logout(): Promise<ActionResult> {
