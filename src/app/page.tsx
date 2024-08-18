@@ -1,13 +1,11 @@
-import { db } from "@/src/db";
-import { usersTable } from "@/src/db/schema";
+import Link from "next/link";
 
-export default async function Home() {
-  const users = await db.select().from(usersTable);
-
+export default function Home() {
   return (
     <main className="flex min-h-screen flex-col justify-center items-center">
-      <div>hello monoform!</div>
-      <pre>{JSON.stringify(users, null, 2)}</pre>
+      <div>hello monoform</div>
+      <Link href="/signup">Sign up</Link>
+      <Link href="/login">Login</Link>
     </main>
   );
 }

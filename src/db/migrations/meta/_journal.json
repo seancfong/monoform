@@ -22,6 +22,34 @@
       "when": 1723694430400,
       "tag": "0002_gorgeous_supernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1723763148992,
+      "tag": "0003_neat_the_hand",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1723763564426,
+      "tag": "0004_absent_vanisher",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1723772373968,
+      "tag": "0005_nervous_patriot",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1723849334164,
+      "tag": "0006_omniscient_phil_sheldon",
+      "breakpoints": true
     }
   ]
 }
