@@ -79,7 +79,7 @@ export async function signup(formData: FormData): Promise<ActionResult> {
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
-    sessionCookie.attributes
+    sessionCookie.attributes,
   );
 
   redirect("/email-verification");
@@ -143,7 +143,7 @@ export async function login(formData: FormData): Promise<ActionResult> {
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
-    sessionCookie.attributes
+    sessionCookie.attributes,
   );
 
   redirect("/dashboard");
@@ -163,7 +163,7 @@ export async function logout(): Promise<ActionResult> {
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
-    sessionCookie.attributes
+    sessionCookie.attributes,
   );
 
   redirect("/login");
