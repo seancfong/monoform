@@ -38,9 +38,8 @@ export const VerifyUserEmail = ({ verificationCode }: VerifyUserEmailProps) => {
             </Section>
             <Section className="mb-8">
               <Text className="text-zinc-600 m-0">
-                We want to make sure it's really you. Please enter the following
-                verification code in your open browser window and we'll get you
-                on your way:
+                Please enter the following verification code in your open
+                browser window and we'll get you on your way:
               </Text>
             </Section>
             <Section className="text-center bg-zinc-100 py-4 rounded-md mb-8 shadow-lg">
