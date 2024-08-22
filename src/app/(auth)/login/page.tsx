@@ -2,24 +2,40 @@
 
 import React from "react";
 
+import { login } from "@/actions/auth/login";
+import { loginFormSchema } from "@/actions/auth/login/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useNextForm } from "@/lib/hooks/useNextForm";
 import Link from "next/link";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 type Props = {};
 
 export default function LoginPage({}: Props) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
+  const form = useNextForm<typeof loginFormSchema, { error: string }>(
+    login,
+    loginFormSchema,
+    {
+      defaultFields: {
+        email: "",
+        password: "",
+      },
+      initialState: {
+        error: "",
+      },
+    },
+  );
 
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -30,44 +46,53 @@ export default function LoginPage({}: Props) {
         </p>
       </div>
       <div className="grid gap-4">
-        <form onSubmit={onSubmit}>
-          <div className="grid gap-4">
-            <div className="grid gap-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
+        <Form {...form.formManager}>
+          <form ref={form.ref} action={form.action} onSubmit={form.onSubmit}>
+            <div className="grid gap-4">
+              <FormField
+                control={form.formManager.control}
                 name="email"
-                placeholder="name@example.com"
-                type="email"
-                autoCapitalize="none"
-                autoComplete="email"
-                autoCorrect="off"
-                disabled={isLoading}
-                required
-                className="placeholder:text-zinc-400"
+                render={({ field }) => (
+                  <FormItem className="grid">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="name@example.com"
+                        className="placeholder:text-zinc-400"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid gap-1">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/password-recovery"
-                  className="text-sm text-zinc-400 underline hover:text-zinc-800"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input
-                id="password"
+              <FormField
+                control={form.formManager.control}
                 name="password"
-                type="password"
-                required
-                disabled={isLoading}
+                render={({ field }) => (
+                  <FormItem className="grid">
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        className="placeholder:text-zinc-400"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <Button type="submit" disabled={form.isPending}>
+                Login
+              </Button>
             </div>
-            <Button disabled={isLoading}>Login</Button>
-          </div>
-        </form>
+            {form.state.error && (
+              <p className="text-red-500">{form.state.error}</p>
+            )}
+          </form>
+        </Form>
         <div className="grid gap-3">
           <Button variant="outline" type="button" disabled={isLoading}>
             Login with GitHub
