@@ -1,23 +1,50 @@
 "use client";
 
-import React from "react";
+import { useRef, useState } from "react";
 
+import { signup } from "@/actions/auth/signup";
+import { signupFormSchema } from "@/app/(auth)/signup/signupFormSchema";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useFormState } from "react-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isPending, setIsPending] = useState(false);
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
+  const [formState, formAction] = useFormState(
+    async (_: any, formData: FormData) => {
+      console.log(formData);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
+      const result = await signup(formData);
+      setIsPending(false);
+      return result;
+    },
+    {
+      error: "",
+    },
+  );
+
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -30,36 +57,68 @@ export default function LoginPage() {
         </p>
       </div>
       <div className="grid gap-6">
-        <form onSubmit={onSubmit}>
-          <div className="grid gap-4">
-            <div className="grid gap-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
+        <Form {...form}>
+          <form
+            ref={formRef}
+            action={formAction}
+            onSubmit={(e) => {
+              setIsPending(true);
+
+              form.handleSubmit(
+                async () => {
+                  await formAction(new FormData(formRef.current!));
+                },
+                () => {
+                  setIsPending(false);
+                },
+              )(e);
+            }}
+          >
+            <div className="grid gap-4">
+              <FormField
+                control={form.control}
                 name="email"
-                placeholder="name@example.com"
-                type="email"
-                autoCapitalize="none"
-                autoComplete="email"
-                autoCorrect="off"
-                disabled={isLoading}
-                required
-                className="placeholder:text-zinc-400"
+                render={({ field }) => (
+                  <FormItem className="grid">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="name@example.com"
+                        className="placeholder:text-zinc-400"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid gap-1">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
+              <FormField
+                control={form.control}
                 name="password"
-                type="password"
-                required
-                disabled={isLoading}
+                render={({ field }) => (
+                  <FormItem className="grid">
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        className="placeholder:text-zinc-400"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <Button type="submit" disabled={isPending}>
+                Sign up
+              </Button>
             </div>
-            <Button disabled={isLoading}>Sign Up</Button>
-          </div>
-        </form>
+            {formState.error && (
+              <p className="text-red-500">{formState.error}</p>
+            )}
+          </form>
+        </Form>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
@@ -69,10 +128,10 @@ export default function LoginPage() {
           </div>
         </div>
         <div className="grid gap-3">
-          <Button variant="outline" type="button" disabled={isLoading}>
+          <Button variant="outline" type="button">
             Sign up with GitHub
           </Button>
-          <Button variant="outline" type="button" disabled={isLoading}>
+          <Button variant="outline" type="button">
             Sign up with Google
           </Button>
         </div>
