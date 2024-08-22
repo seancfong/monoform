@@ -7,3 +7,7 @@ export const signupFormSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters" })
     .max(255, { message: "Password must be at most 255 characters" }),
 });
+
+export interface SignupFormState {
+  error: string;
+}

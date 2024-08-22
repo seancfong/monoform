@@ -7,3 +7,7 @@ export const loginFormSchema = z.object({
     .min(1, { message: "Password must not be empty" })
     .max(255, { message: "Invalid password" }),
 });
+
+export interface LoginFormState {
+  error: string;
+}

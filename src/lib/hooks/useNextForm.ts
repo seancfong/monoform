@@ -1,5 +1,7 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useCallback, useRef, useState } from "react";
 import { useFormState } from "react-dom";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { z, ZodObject, ZodSchema } from "zod";
@@ -32,7 +34,7 @@ export function useNextForm<Schema extends ZodObject<any>, State>(
   });
 
   const [formState, formAction] = useFormState(
-    async (_: any, formData: FormData) => {
+    async (_: State, formData: FormData) => {
       const result = await action(formData);
       setIsPending(false);
       return result;
@@ -40,20 +42,25 @@ export function useNextForm<Schema extends ZodObject<any>, State>(
     options.initialState,
   );
 
-  const onSubmit = async (e: React.SyntheticEvent) => {
-    setIsPending(true);
+  const onSuccessfulClientValidation = useCallback(async () => {
+    await formAction(new FormData(ref.current!));
+  }, [formAction]);
 
-    formManager.handleSubmit(
-      // on valid client-side form
-      async () => {
-        await formAction(new FormData(ref.current!));
-      },
-      // on invalid client-side form
-      () => {
-        setIsPending(false);
-      },
-    )(e);
-  };
+  const onInvalidClientValidation = useCallback(() => {
+    setIsPending(false);
+  }, [setIsPending]);
+
+  const onSubmit = useCallback(
+    async (e: React.SyntheticEvent) => {
+      setIsPending(true);
+
+      formManager.handleSubmit(
+        onSuccessfulClientValidation,
+        onInvalidClientValidation,
+      )(e);
+    },
+    [formManager, onSuccessfulClientValidation, onInvalidClientValidation],
+  );
 
   return {
     action: formAction,

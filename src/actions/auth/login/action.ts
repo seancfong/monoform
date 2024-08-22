@@ -1,5 +1,6 @@
 "use server";
 
+import { loginFormSchema } from "@/actions/auth/login/schema";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
@@ -13,23 +14,18 @@ interface ActionResult {
 }
 
 export async function login(formData: FormData): Promise<ActionResult> {
-  const email = formData.get("email");
-  if (!email || typeof email !== "string") {
+  const parsed = loginFormSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!parsed.success) {
     return {
-      error: "Invalid email",
+      error: "Incorrect email or password",
     };
   }
 
-  const password = formData.get("password");
-  if (
-    typeof password !== "string" ||
-    password.length < 6 ||
-    password.length > 255
-  ) {
-    return {
-      error: "Invalid password",
-    };
-  }
+  const { email, password } = parsed.data;
 
   const [existingUser] = await db
     .select()

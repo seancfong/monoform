@@ -1,6 +1,9 @@
 "use server";
 
-import { signupFormSchema } from "@/app/(auth)/signup/signupFormSchema";
+import {
+  SignupFormState,
+  signupFormSchema,
+} from "@/actions/auth/signup/schema";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
@@ -13,13 +16,7 @@ import { generateIdFromEntropySize } from "lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-interface FormState {
-  error: string;
-}
-
-export async function signup(formData: FormData): Promise<FormState> {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
+export async function signup(formData: FormData): Promise<SignupFormState> {
   const parsed = signupFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

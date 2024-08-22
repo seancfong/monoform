@@ -1,4 +1,4 @@
-import { logout } from "@/actions/auth";
+import { logout } from "@/actions/auth/logout/action";
 
 export default async function Page() {
   return (

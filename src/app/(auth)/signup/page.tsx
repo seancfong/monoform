@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
-
-import { signup } from "@/actions/auth/signup";
-import { signupFormSchema } from "@/app/(auth)/signup/signupFormSchema";
+import { signup } from "@/actions/auth/signup/action";
+import {
+  signupFormSchema,
+  SignupFormState,
+} from "@/actions/auth/signup/schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,37 +15,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useNextForm } from "@/lib/hooks/useNextForm";
 import Link from "next/link";
-import { useFormState } from "react-dom";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 export default function LoginPage() {
-  const [isPending, setIsPending] = useState(false);
-
-  const [formState, formAction] = useFormState(
-    async (_: any, formData: FormData) => {
-      console.log(formData);
-
-      const result = await signup(formData);
-      setIsPending(false);
-      return result;
-    },
+  const form = useNextForm<typeof signupFormSchema, SignupFormState>(
+    signup,
+    signupFormSchema,
     {
-      error: "",
+      defaultFields: {
+        email: "",
+        password: "",
+      },
+      initialState: {
+        error: "",
+      },
     },
   );
-
-  const form = useForm<z.infer<typeof signupFormSchema>>({
-    resolver: zodResolver(signupFormSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const formRef = useRef<HTMLFormElement>(null);
 
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -57,26 +44,11 @@ export default function LoginPage() {
         </p>
       </div>
       <div className="grid gap-6">
-        <Form {...form}>
-          <form
-            ref={formRef}
-            action={formAction}
-            onSubmit={(e) => {
-              setIsPending(true);
-
-              form.handleSubmit(
-                async () => {
-                  await formAction(new FormData(formRef.current!));
-                },
-                () => {
-                  setIsPending(false);
-                },
-              )(e);
-            }}
-          >
+        <Form {...form.formManager}>
+          <form ref={form.ref} action={form.action} onSubmit={form.onSubmit}>
             <div className="grid gap-4">
               <FormField
-                control={form.control}
+                control={form.formManager.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem className="grid">
@@ -94,7 +66,7 @@ export default function LoginPage() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={form.formManager.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem className="grid">
@@ -110,12 +82,12 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isPending}>
+              <Button type="submit" disabled={form.isPending}>
                 Sign up
               </Button>
             </div>
-            {formState.error && (
-              <p className="text-red-500">{formState.error}</p>
+            {form.state.error && (
+              <p className="text-red-500">{form.state.error}</p>
             )}
           </form>
         </Form>

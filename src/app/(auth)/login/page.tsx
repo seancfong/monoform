@@ -1,14 +1,8 @@
 "use client";
 
-import React from "react";
-
-import { login } from "@/actions/auth/login";
-import { loginFormSchema } from "@/actions/auth/login/schema";
+import { login } from "@/actions/auth/login/action";
+import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useNextForm } from "@/lib/hooks/useNextForm";
-import Link from "next/link";
 import {
   Form,
   FormControl,
@@ -17,13 +11,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useNextForm } from "@/lib/hooks/useNextForm";
+import Link from "next/link";
 
 type Props = {};
 
 export default function LoginPage({}: Props) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  const form = useNextForm<typeof loginFormSchema, { error: string }>(
+  const form = useNextForm<typeof loginFormSchema, LoginFormState>(
     login,
     loginFormSchema,
     {
@@ -94,10 +89,10 @@ export default function LoginPage({}: Props) {
           </form>
         </Form>
         <div className="grid gap-3">
-          <Button variant="outline" type="button" disabled={isLoading}>
+          <Button variant="outline" type="button" disabled={form.isPending}>
             Login with GitHub
           </Button>
-          <Button variant="outline" type="button" disabled={isLoading}>
+          <Button variant="outline" type="button" disabled={form.isPending}>
             Login with Google
           </Button>
         </div>
