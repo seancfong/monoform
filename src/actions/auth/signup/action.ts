@@ -7,10 +7,6 @@ import {
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
-import {
-  generateEmailVerificationCode,
-  sendVerificationCode,
-} from "@/lib/auth/email-verification";
 import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import { cookies } from "next/headers";
@@ -49,20 +45,6 @@ export async function signup(formData: FormData): Promise<SignupFormState> {
   } catch (error) {
     return {
       error: "User already exists",
-    };
-  }
-
-  const verificationCode = await generateEmailVerificationCode(userId, email);
-
-  try {
-    if (process.env.VERCEL_ENV === "development") {
-      console.log("Email verification code: ", verificationCode);
-    } else {
-      await sendVerificationCode(email, verificationCode);
-    }
-  } catch (error) {
-    return {
-      error: "Failed to send verification code",
     };
   }
 

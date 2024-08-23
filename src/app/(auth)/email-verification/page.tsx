@@ -1,6 +1,6 @@
+import VerificationRequestForm from "@/app/(auth)/email-verification/components/verification-request-form";
 import { validateRequest } from "@/lib/auth/validate-user";
 import { redirect } from "next/navigation";
-import React from "react";
 
 type Props = {};
 
@@ -11,5 +11,13 @@ export default async function EmailVerificationPage({}: Props) {
     return redirect("/login");
   }
 
-  return <div>Verify your email</div>;
+  if (user.emailVerified) {
+    redirect("/dashboard");
+  }
+
+  return (
+    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+      <VerificationRequestForm />
+    </div>
+  );
 }
