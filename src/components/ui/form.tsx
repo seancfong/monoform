@@ -14,6 +14,8 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useFormStatus } from "react-dom";
 
 const Form = FormProvider;
 
@@ -105,10 +107,12 @@ FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } =
+  React.ComponentPropsWithoutRef<typeof Slot> & { clearErrorsOnFocus?: boolean }
+>(({ clearErrorsOnFocus, ...props }, ref) => {
+  const { error, formItemId, formDescriptionId, formMessageId, name } =
     useFormField();
+
+  const { clearErrors } = useFormContext();
 
   return (
     <Slot
@@ -120,6 +124,11 @@ const FormControl = React.forwardRef<
           : `${formDescriptionId} ${formMessageId}`
       }
       aria-invalid={!!error}
+      onFocus={() => {
+        if (clearErrorsOnFocus) {
+          clearErrors(name);
+        }
+      }}
       {...props}
     />
   );
@@ -167,6 +176,20 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = "FormMessage";
 
+const FormButton = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  React.ComponentPropsWithoutRef<typeof Button>
+>(({ className, children, ...props }, ref) => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button ref={ref} className={cn(className)} disabled={pending} {...props}>
+      {children}
+    </Button>
+  );
+});
+FormButton.displayName = "FormButton";
+
 export {
   useFormField,
   Form,
@@ -176,4 +199,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormButton,
 };

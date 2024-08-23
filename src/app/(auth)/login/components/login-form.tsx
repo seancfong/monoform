@@ -5,6 +5,7 @@ import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
@@ -28,13 +29,14 @@ export default function LoginForm({}: Props) {
       initialState: {
         error: "",
       },
+      mode: "onBlur",
     },
   );
 
   return (
     <div className="grid gap-4">
       <Form {...form.formManager}>
-        <form ref={form.ref} action={form.action} onSubmit={form.onSubmit}>
+        <form action={form.action}>
           <div className="grid gap-4">
             <FormField
               control={form.formManager.control}
@@ -71,9 +73,7 @@ export default function LoginForm({}: Props) {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={form.isPending}>
-              Login
-            </Button>
+            <FormButton type="submit">Login</FormButton>
           </div>
           {form.state.error && (
             <p className="text-red-500">{form.state.error}</p>
@@ -81,10 +81,10 @@ export default function LoginForm({}: Props) {
         </form>
       </Form>
       <div className="grid gap-3">
-        <Button variant="outline" type="button" disabled={form.isPending}>
+        <Button variant="outline" type="button">
           Login with GitHub
         </Button>
-        <Button variant="outline" type="button" disabled={form.isPending}>
+        <Button variant="outline" type="button">
           Login with Google
         </Button>
       </div>

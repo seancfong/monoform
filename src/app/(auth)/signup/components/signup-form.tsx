@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
@@ -31,13 +32,14 @@ export default function SignupForm({}: Props) {
       initialState: {
         error: "",
       },
+      mode: "onBlur",
     },
   );
 
   return (
     <div className="grid gap-6">
       <Form {...form.formManager}>
-        <form ref={form.ref} action={form.action} onSubmit={form.onSubmit}>
+        <form action={form.action}>
           <div className="grid gap-4">
             <FormField
               control={form.formManager.control}
@@ -45,7 +47,7 @@ export default function SignupForm({}: Props) {
               render={({ field }) => (
                 <FormItem className="grid">
                   <FormLabel>Email</FormLabel>
-                  <FormControl>
+                  <FormControl clearErrorsOnFocus>
                     <Input
                       type="email"
                       placeholder="name@example.com"
@@ -63,7 +65,7 @@ export default function SignupForm({}: Props) {
               render={({ field }) => (
                 <FormItem className="grid">
                   <FormLabel>Password</FormLabel>
-                  <FormControl>
+                  <FormControl clearErrorsOnFocus>
                     <Input
                       type="password"
                       className="placeholder:text-zinc-400"
@@ -74,12 +76,10 @@ export default function SignupForm({}: Props) {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={form.isPending}>
-              Sign up
-            </Button>
+            <FormButton type="submit">Sign up</FormButton>
           </div>
           {form.state.error && (
-            <p className="text-red-500">{form.state.error}</p>
+            <p className="text-destructive">{form.state.error}</p>
           )}
         </form>
       </Form>

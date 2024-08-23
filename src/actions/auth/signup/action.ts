@@ -12,7 +12,10 @@ import { generateIdFromEntropySize } from "lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function signup(formData: FormData): Promise<SignupFormState> {
+export async function signup(
+  _: SignupFormState,
+  formData: FormData,
+): Promise<SignupFormState> {
   const parsed = signupFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

@@ -1,6 +1,6 @@
 "use server";
 
-import { loginFormSchema } from "@/actions/auth/login/schema";
+import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
@@ -9,11 +9,10 @@ import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-interface ActionResult {
-  error: string;
-}
-
-export async function login(formData: FormData): Promise<ActionResult> {
+export async function login(
+  _: LoginFormState,
+  formData: FormData,
+): Promise<LoginFormState> {
   const parsed = loginFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

@@ -7,6 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
@@ -47,19 +48,14 @@ export default function EnterCodeForm({ message }: Props) {
         <p className="text-sm text-zinc-500">{message}</p>
       </div>
       <Form {...form.formManager}>
-        <form
-          ref={form.ref}
-          action={form.action}
-          onSubmit={form.onSubmit}
-          className="w-2/3 space-y-6"
-        >
+        <form action={form.action} className="w-2/3 space-y-6">
           <FormField
             control={form.formManager.control}
             name="code"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Verification Code</FormLabel>
-                <FormControl>
+                <FormControl clearErrorsOnFocus>
                   <InputOTP
                     maxLength={6}
                     pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
@@ -75,11 +71,15 @@ export default function EnterCodeForm({ message }: Props) {
                     </InputOTPGroup>
                   </InputOTP>
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <div className="space-y-2">
+            <FormButton type="submit">Submit</FormButton>
+            {form.state.error && (
+              <p className="text-sm text-destructive">{form.state.error}</p>
+            )}
+          </div>
         </form>
       </Form>
     </div>
