@@ -2,7 +2,7 @@
 
 import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { passwords, users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
 import { verify } from "@node-rs/argon2";
 import { eq } from "drizzle-orm";
@@ -27,9 +27,13 @@ export async function login(
   const { email, password } = parsed.data;
 
   const [existingUser] = await db
-    .select()
+    .select({
+      id: users.id,
+      passwordHash: passwords.passwordHash,
+    })
     .from(users)
     .where(eq(users.email, email))
+    .innerJoin(passwords, eq(users.id, passwords.userId))
     .limit(1);
 
   if (!existingUser) {

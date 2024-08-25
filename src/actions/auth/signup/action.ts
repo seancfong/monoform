@@ -5,7 +5,7 @@ import {
   signupFormSchema,
 } from "@/actions/auth/signup/schema";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { passwords, users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
 import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
@@ -42,8 +42,11 @@ export async function signup(
     await db.insert(users).values({
       id: userId,
       email,
-      passwordHash: passwordHash,
       emailVerified: false,
+    });
+    await db.insert(passwords).values({
+      passwordHash,
+      userId,
     });
   } catch (error) {
     return {

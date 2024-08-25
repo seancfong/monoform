@@ -3,8 +3,15 @@ import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   email: text("email").unique().notNull(),
-  passwordHash: text("password_hash").notNull(),
   emailVerified: boolean("email_verified").notNull().default(false),
+});
+
+export const passwords = pgTable("passwords", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  passwordHash: text("password_hash").notNull(),
 });
 
 export const sessions = pgTable("sessions", {
