@@ -1,6 +1,8 @@
 import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
+import { Subset } from "@/lib/types/inferences";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { InferSelectModel } from "drizzle-orm";
 import { Lucia } from "lucia";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
@@ -18,7 +20,7 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       email: attributes.email,
-      emailVerified: attributes.email_verified,
+      emailVerified: attributes.emailVerified,
     };
   },
 });
@@ -30,7 +32,10 @@ declare module "lucia" {
   }
 }
 
-interface DatabaseUserAttributes {
-  email: string;
-  email_verified: boolean;
-}
+type DatabaseUserAttributes = Subset<
+  InferSelectModel<typeof users>,
+  {
+    email: string;
+    emailVerified: boolean;
+  }
+>;

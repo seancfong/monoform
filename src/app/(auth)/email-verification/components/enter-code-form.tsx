@@ -4,7 +4,6 @@ import {
   verifyEmailCodeFormSchema,
   VerifyEmailCodeFormState,
 } from "@/actions/auth/handle-email-verification/schema";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormButton,
@@ -12,7 +11,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import {
   InputOTP,
