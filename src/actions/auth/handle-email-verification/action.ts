@@ -10,7 +10,6 @@ import { lucia } from "@/lib/auth";
 import { validateRequest } from "@/lib/auth/validate-user";
 import { eq } from "drizzle-orm";
 import type { User } from "lucia";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { isWithinExpirationDate } from "oslo";
