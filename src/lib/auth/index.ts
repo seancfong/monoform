@@ -1,7 +1,8 @@
 import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
-import { Subset } from "@/lib/types/inferences";
+import { Subset } from "@/lib/types/aliases";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { GitHub } from "arctic";
 import { InferSelectModel } from "drizzle-orm";
 import { Lucia } from "lucia";
 
@@ -24,6 +25,11 @@ export const lucia = new Lucia(adapter, {
     };
   },
 });
+
+export const github = new GitHub(
+  process.env.GITHUB_CLIENT_ID!,
+  process.env.GITHUB_CLIENT_SECRET!,
+);
 
 declare module "lucia" {
   interface Register {

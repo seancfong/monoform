@@ -2,7 +2,7 @@
 
 import { login } from "@/actions/auth/login/action";
 import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormButton,
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNextForm } from "@/lib/hooks/useNextForm";
+import Link from "next/link";
 
 type Props = {};
 
@@ -81,12 +82,18 @@ export default function LoginForm({}: Props) {
         </form>
       </Form>
       <div className="grid gap-3">
-        <Button variant="outline" type="button">
+        <Link
+          className={buttonVariants({ variant: "outline" })}
+          href="/login/github"
+        >
           Login with GitHub
-        </Button>
-        <Button variant="outline" type="button">
+        </Link>
+        <Link
+          className={buttonVariants({ variant: "outline" })}
+          href="/login/google"
+        >
           Login with Google
-        </Button>
+        </Link>
       </div>
     </div>
   );

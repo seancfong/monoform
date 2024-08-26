@@ -5,7 +5,7 @@ import {
   signupFormSchema,
   SignupFormState,
 } from "@/actions/auth/signup/schema";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormButton,
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNextForm } from "@/lib/hooks/useNextForm";
+import Link from "next/link";
 
 type Props = {};
 
@@ -92,12 +93,18 @@ export default function SignupForm({}: Props) {
         </div>
       </div>
       <div className="grid gap-3">
-        <Button variant="outline" type="button">
-          Sign up with GitHub
-        </Button>
-        <Button variant="outline" type="button">
-          Sign up with Google
-        </Button>
+        <Link
+          className={buttonVariants({ variant: "outline" })}
+          href="/login/github"
+        >
+          Login with GitHub
+        </Link>
+        <Link
+          className={buttonVariants({ variant: "outline" })}
+          href="/login/google"
+        >
+          Login with Google
+        </Link>
       </div>
     </div>
   );
