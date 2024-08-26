@@ -34,8 +34,6 @@ export interface GitHubUserResponse {
   id: string;
   login: string;
   avatar_url: string;
-  email?: string;
-  emailVerified?: boolean;
 }
 
 export interface GitHubEmailResponse {

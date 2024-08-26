@@ -50,16 +50,16 @@ export async function GET(request: Request): Promise<Response> {
       });
     }
 
-    const emailData = await getPrimaryEmailData(tokens.accessToken);
-    githubUser.emailVerified = emailData.verified;
-    githubUser.email = emailData.email;
+    const { email, verified: emailVerified } = await getPrimaryEmailData(
+      tokens.accessToken,
+    );
 
     const userId = generateIdFromEntropySize(10); // 16 characters long
 
     await db.insert(users).values({
       id: userId,
-      email: githubUser.email,
-      emailVerified: githubUser.emailVerified,
+      email,
+      emailVerified: emailVerified,
     });
 
     await db.insert(oauthAccounts).values({
