@@ -50,6 +50,20 @@
       "when": 1723849334164,
       "tag": "0006_omniscient_phil_sheldon",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1724623635345,
+      "tag": "0007_odd_captain_universe",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1724625247001,
+      "tag": "0008_wide_madrox",
+      "breakpoints": true
     }
   ]
 }

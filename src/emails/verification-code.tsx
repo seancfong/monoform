@@ -29,34 +29,33 @@ export const VerifyUserEmail = ({ verificationCode }: VerifyUserEmailProps) => {
       <Head />
       <Preview>{previewText}</Preview>
       <Tailwind>
-        <Body className="bg-white my-auto mx-auto font-sans px-2 py-4">
-          <Container className="p-8 max-w-[500px]">
+        <Body className="mx-auto my-auto bg-white px-2 py-4 font-sans">
+          <Container className="max-w-[500px] p-8">
             <Section className="mb-2">
-              <Heading className="text-2xl text-zinc-700 font-bold m-0">
+              <Heading className="m-0 text-2xl font-bold text-zinc-700">
                 Confirm your email address
               </Heading>
             </Section>
             <Section className="mb-8">
-              <Text className="text-zinc-600 m-0">
-                We want to make sure it's really you. Please enter the following
-                verification code in your open browser window and we'll get you
-                on your way:
+              <Text className="m-0 text-zinc-600">
+                Please enter the following verification code in your open
+                browser window and we'll get you on your way:
               </Text>
             </Section>
-            <Section className="text-center bg-zinc-100 py-4 rounded-md mb-8 shadow-lg">
-              <Text className="text-4xl tracking-[4px] text-zinc-700 font-bold my-1 font-mono">
+            <Section className="mb-8 rounded-md bg-zinc-100 py-4 text-center shadow-lg">
+              <Text className="my-1 font-mono text-4xl font-bold tracking-[4px] text-zinc-700">
                 {verificationCode}
               </Text>
             </Section>
             <Section className="mb-8">
-              <Text className="text-zinc-400 m-0">
+              <Text className="m-0 text-zinc-400">
                 If you did not request this email, there is nothing to worry
                 about, you can safely ignore it.
               </Text>
             </Section>
             <Hr />
             <Section>
-              <Link href={baseUrl} className="text-zinc-400 m-0">
+              <Link href={baseUrl} className="m-0 text-zinc-400">
                 - Monoform
               </Link>
             </Section>

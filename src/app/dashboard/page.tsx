@@ -1,6 +1,5 @@
 import { validateRequest } from "@/lib/auth/validate-user";
 import { redirect } from "next/navigation";
-import React from "react";
 
 type Props = {};
 

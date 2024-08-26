@@ -1,11 +1,44 @@
-import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
+
+export const providerEnum = pgEnum("provider", ["google", "github"]);
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   email: text("email").unique().notNull(),
-  passwordHash: text("password_hash").notNull(),
   emailVerified: boolean("email_verified").notNull().default(false),
 });
+
+export const passwords = pgTable("passwords", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  passwordHash: text("password_hash").notNull(),
+});
+
+export const oauthAccounts = pgTable(
+  "oauth_accounts",
+  {
+    providerId: providerEnum("provider_id").notNull(),
+    providerUserId: text("provider_user_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.providerId, table.providerUserId] }),
+    };
+  },
+);
 
 export const sessions = pgTable("sessions", {
   id: text("id").primaryKey(),
