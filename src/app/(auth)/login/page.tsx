@@ -1,5 +1,10 @@
 import LoginForm from "@/app/(auth)/login/components/login-form";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Login | Monoform",
+};
 
 type Props = {};
 

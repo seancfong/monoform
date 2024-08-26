@@ -1,5 +1,10 @@
 import SignupForm from "@/app/(auth)/signup/components/signup-form";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Create an account | Monoform",
+};
 
 export default function LoginPage() {
   return (
