@@ -12,7 +12,7 @@ export const providerEnum = pgEnum("provider", ["google", "github"]);
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
-  email: text("email").unique().notNull(),
+  email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
 });
 
