@@ -2,7 +2,7 @@
 
 import { login } from "@/actions/auth/login/action";
 import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormButton,
