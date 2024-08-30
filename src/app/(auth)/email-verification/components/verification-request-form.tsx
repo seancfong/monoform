@@ -1,5 +1,5 @@
 "use client";
-import sendEmailVerification from "@/actions/auth/send-email-verification/action";
+import sendEmailVerification from "@/lib/actions/auth/send-email-verification/action";
 import EnterCodeForm from "@/app/(auth)/email-verification/components/enter-code-form";
 import { Button } from "@/components/ui/button";
 import { useFormState, useFormStatus } from "react-dom";

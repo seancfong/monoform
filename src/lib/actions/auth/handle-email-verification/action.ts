@@ -3,7 +3,7 @@
 import {
   verifyEmailCodeFormSchema,
   VerifyEmailCodeFormState,
-} from "@/actions/auth/handle-email-verification/schema";
+} from "@/lib/actions/auth/handle-email-verification/schema";
 import { db } from "@/db";
 import { emailVerificationCodes, users } from "@/db/schema";
 import { lucia } from "@/lib/auth";

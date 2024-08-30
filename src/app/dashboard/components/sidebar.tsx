@@ -1,13 +1,18 @@
 import { db } from "@/db";
 import { userOwnsWorkspaces, users, workspaces } from "@/db/schema";
-import { User } from "lucia";
+import { validateRequest } from "@/lib/auth/validate-user";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
-type Props = {
-  user: User;
-};
+type Props = {};
 
-export default async function Sidebar({ user }: Props) {
+export default async function Sidebar({}: Props) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    return redirect("/login");
+  }
+
   // TODO: fetch workspace and its folders
   const ownedWorkspaces = await db
     .select()

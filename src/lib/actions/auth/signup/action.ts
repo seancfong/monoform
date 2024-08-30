@@ -3,7 +3,7 @@
 import {
   SignupFormState,
   signupFormSchema,
-} from "@/actions/auth/signup/schema";
+} from "@/lib/actions/auth/signup/schema";
 import { db } from "@/db";
 import { passwords, users } from "@/db/schema";
 import { lucia } from "@/lib/auth";

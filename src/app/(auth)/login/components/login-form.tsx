@@ -1,7 +1,10 @@
 "use client";
 
-import { login } from "@/actions/auth/login/action";
-import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
+import { login } from "@/lib/actions/auth/login/action";
+import {
+  loginFormSchema,
+  LoginFormState,
+} from "@/lib/actions/auth/login/schema";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Form,

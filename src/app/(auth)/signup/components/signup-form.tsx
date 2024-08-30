@@ -1,10 +1,10 @@
 "use client";
 
-import { signup } from "@/actions/auth/signup/action";
+import { signup } from "@/lib/actions/auth/signup/action";
 import {
   signupFormSchema,
   SignupFormState,
-} from "@/actions/auth/signup/schema";
+} from "@/lib/actions/auth/signup/schema";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
