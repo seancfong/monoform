@@ -1,25 +1,46 @@
 import { users } from "@/db/schema/auth";
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTable,
+  primaryKey,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const workspaces = pgTable("workspaces", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
 });
 
-export const userOwnsWorkspaces = pgTable("user_owns_workspaces", {
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
-  workspaceId: text("workspace_id").notNull(),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-    mode: "date",
-  }).notNull(),
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-    mode: "date",
-  }).notNull(),
-});
+export const userOwnsWorkspaces = pgTable(
+  "user_owns_workspaces",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id),
+    workspaceId: integer("workspace_id")
+      .notNull()
+      .references(() => workspaces.id),
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+      mode: "date",
+    })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", {
+      withTimezone: true,
+      mode: "date",
+    })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.userId, table.workspaceId] }),
+    };
+  },
+);
 
 export const workspaceFolders = pgTable("workspace_folders", {
   id: serial("id").primaryKey(),
@@ -30,9 +51,13 @@ export const workspaceFolders = pgTable("workspace_folders", {
   createdAt: timestamp("created_at", {
     withTimezone: true,
     mode: "date",
-  }).notNull(),
+  })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp("updated_at", {
     withTimezone: true,
     mode: "date",
-  }).notNull(),
+  })
+    .notNull()
+    .defaultNow(),
 });

@@ -71,6 +71,34 @@
       "when": 1724810609848,
       "tag": "0009_far_sauron",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1724979135592,
+      "tag": "0010_many_vin_gonzales",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1724979307424,
+      "tag": "0011_gray_proteus",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1724979441069,
+      "tag": "0012_workable_fixer",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1724979450883,
+      "tag": "0013_confused_true_believers",
+      "breakpoints": true
     }
   ]
 }
