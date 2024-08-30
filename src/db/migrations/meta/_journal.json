@@ -99,6 +99,27 @@
       "when": 1724979450883,
       "tag": "0013_confused_true_believers",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1725000299100,
+      "tag": "0014_late_thundra",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1725000462529,
+      "tag": "0015_broken_doctor_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1725000479131,
+      "tag": "0016_wet_tusk",
+      "breakpoints": true
     }
   ]
 }

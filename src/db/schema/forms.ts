@@ -7,6 +7,7 @@ import {
   serial,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 const BLOCK_TYPES = ["HEADER", "MULTIPLE_CHOICE", "CHECKBOX"] as const;
@@ -14,7 +15,7 @@ const BLOCK_TYPES = ["HEADER", "MULTIPLE_CHOICE", "CHECKBOX"] as const;
 export const blockTypeEnum = pgEnum("blockType", BLOCK_TYPES);
 
 export const forms = pgTable("forms", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   workspaceFolderId: text("workspace_folder_id").notNull(),
   description: text("description"),
@@ -30,7 +31,7 @@ export const forms = pgTable("forms", {
 
 export const sections = pgTable("sections", {
   id: serial("id").primaryKey(),
-  formId: integer("form_id")
+  formId: uuid("form_id")
     .notNull()
     .references(() => forms.id),
   title: text("title").notNull(),
@@ -60,7 +61,7 @@ export const responses = pgTable("responses", {
   })
     .notNull()
     .defaultNow(),
-  formId: integer("form_id")
+  formId: uuid("form_id")
     .notNull()
     .references(() => forms.id),
 });

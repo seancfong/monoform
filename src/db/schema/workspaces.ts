@@ -11,6 +11,18 @@ import {
 export const workspaces = pgTable("workspaces", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    mode: "date",
+  })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", {
+    withTimezone: true,
+    mode: "date",
+  })
+    .notNull()
+    .defaultNow(),
 });
 
 export const userOwnsWorkspaces = pgTable(
@@ -22,18 +34,6 @@ export const userOwnsWorkspaces = pgTable(
     workspaceId: integer("workspace_id")
       .notNull()
       .references(() => workspaces.id),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "date",
-    })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "date",
-    })
-      .notNull()
-      .defaultNow(),
   },
   (table) => {
     return {
