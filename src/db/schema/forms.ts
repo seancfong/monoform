@@ -1,4 +1,5 @@
 import { users } from "@/db/schema/auth";
+import { workspaceFolders } from "@/db/schema/workspaces";
 import {
   boolean,
   integer,
@@ -17,7 +18,9 @@ export const blockTypeEnum = pgEnum("blockType", BLOCK_TYPES);
 export const forms = pgTable("forms", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  workspaceFolderId: text("workspace_folder_id").notNull(),
+  workspaceFolderId: integer("workspace_folder_id")
+    .notNull()
+    .references(() => workspaceFolders.id, { onDelete: "cascade" }),
   description: text("description"),
   createdAt: timestamp("created_at", {
     withTimezone: true,
@@ -42,7 +45,7 @@ export const blocks = pgTable("blocks", {
   id: serial("id").primaryKey(),
   sectionId: integer("section_id")
     .notNull()
-    .references(() => sections.id),
+    .references(() => sections.id, { onDelete: "cascade" }),
   text: text("text").notNull(),
   description: text("description"),
   blockType: blockTypeEnum("block_type").notNull(),
@@ -54,7 +57,7 @@ export const responses = pgTable("responses", {
   id: serial("id").primaryKey(),
   responderId: text("responder_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   submittedAt: timestamp("submitted_at", {
     withTimezone: true,
     mode: "date",

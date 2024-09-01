@@ -31,10 +31,10 @@ export const userOwnsWorkspaces = pgTable(
   {
     userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     workspaceId: integer("workspace_id")
       .notNull()
-      .references(() => workspaces.id),
+      .references(() => workspaces.id, { onDelete: "cascade" }),
     orderNum: integer("order_num").notNull(),
     slug: text("slug").notNull(),
   },

@@ -1,0 +1,1 @@
+ALTER TABLE "forms" DROP COLUMN IF EXISTS "workspace_folder_id";
