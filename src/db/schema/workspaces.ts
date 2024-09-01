@@ -6,6 +6,7 @@ import {
   serial,
   text,
   timestamp,
+  unique,
 } from "drizzle-orm/pg-core";
 
 export const workspaces = pgTable("workspaces", {
@@ -34,10 +35,14 @@ export const userOwnsWorkspaces = pgTable(
     workspaceId: integer("workspace_id")
       .notNull()
       .references(() => workspaces.id),
+    orderNum: integer("order_num").notNull(),
+    slug: text("slug").notNull(),
   },
   (table) => {
     return {
       pk: primaryKey({ columns: [table.userId, table.workspaceId] }),
+      unq: unique().on(table.userId, table.slug),
+      unq2: unique().on(table.userId, table.workspaceId, table.orderNum),
     };
   },
 );

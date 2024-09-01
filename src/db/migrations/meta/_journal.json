@@ -120,6 +120,13 @@
       "when": 1725000479131,
       "tag": "0016_wet_tusk",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1725179660184,
+      "tag": "0017_tired_vampiro",
+      "breakpoints": true
     }
   ]
 }
