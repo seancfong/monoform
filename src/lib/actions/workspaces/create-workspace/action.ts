@@ -29,8 +29,7 @@ export default async function createWorkspace(
 
   const { user } = await validateUser();
 
-  // TODO: optimize this flow with interactive transaction
-
+  // TODO: optimize this flow :nerd:
   const [[existingWorkspaceSlug], [{ maxOrderNum, workspacesCount }]] =
     await Promise.all([
       db
