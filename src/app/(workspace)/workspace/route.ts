@@ -2,9 +2,7 @@ import { validateUser } from "@/lib/auth/validate-user";
 import { getUserWorkspaces } from "@/lib/queries/workspaces";
 import { redirect } from "next/navigation";
 
-type Props = {};
-
-export default async function WorkspaceRedirect({}: Props) {
+export async function GET() {
   const { user } = await validateUser();
 
   const [primaryWorkspace] = await getUserWorkspaces(user);
@@ -13,5 +11,5 @@ export default async function WorkspaceRedirect({}: Props) {
     return redirect(`/workspace/${primaryWorkspace.slug}`);
   }
 
-  return <div>No workspace</div>;
+  return redirect("/create-workspace");
 }

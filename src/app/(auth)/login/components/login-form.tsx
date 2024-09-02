@@ -91,12 +91,12 @@ export default function LoginForm({}: Props) {
         >
           Login with GitHub
         </Link>
-        <Link
+        {/* <Link
           className={buttonVariants({ variant: "outline" })}
           href="/login/google"
         >
           Login with Google
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
