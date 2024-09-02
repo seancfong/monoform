@@ -1,4 +1,5 @@
 import { users } from "@/db/schema/auth";
+import { InferSelectModel } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -26,8 +27,8 @@ export const workspaces = pgTable("workspaces", {
     .defaultNow(),
 });
 
-export const userOwnsWorkspaces = pgTable(
-  "user_owns_workspaces",
+export const usersOwnWorkspaces = pgTable(
+  "users_own_workspaces",
   {
     userId: text("user_id")
       .notNull()
@@ -66,3 +67,9 @@ export const workspaceFolders = pgTable("workspace_folders", {
     .notNull()
     .defaultNow(),
 });
+
+export type SelectWorkspaces = InferSelectModel<typeof workspaces>;
+export type SelectWorkspaceFolders = InferSelectModel<typeof workspaceFolders>;
+export type SelectUserOwnsWorkspaces = InferSelectModel<
+  typeof usersOwnWorkspaces
+>;

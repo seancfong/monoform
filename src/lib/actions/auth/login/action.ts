@@ -75,5 +75,5 @@ export async function login(
     sessionCookie.attributes,
   );
 
-  redirect("/dashboard");
+  redirect("/workspace");
 }

@@ -61,7 +61,7 @@ export default async function handleEmailVerification(
     sessionCookie.attributes,
   );
 
-  redirect("/dashboard");
+  redirect("/workspace");
 }
 
 async function verifyVerificationCode(

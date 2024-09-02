@@ -1,4 +1,5 @@
 import { blocks, responses } from "@/db/schema/forms";
+import { InferSelectModel } from "drizzle-orm";
 import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const multipleChoiceOptions = pgTable("multiple_choice_options", {
@@ -17,3 +18,10 @@ export const multipleChoiceResponses = pgTable("multiple_choice_responses", {
     { onDelete: "cascade" },
   ),
 });
+
+export type SelectMultipleChoiceOptions = InferSelectModel<
+  typeof multipleChoiceOptions
+>;
+export type SelectMultipleChoiceResponses = InferSelectModel<
+  typeof multipleChoiceResponses
+>;

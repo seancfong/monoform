@@ -1,5 +1,6 @@
 import { users } from "@/db/schema/auth";
 import { workspaceFolders } from "@/db/schema/workspaces";
+import { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -68,3 +69,8 @@ export const responses = pgTable("responses", {
     .notNull()
     .references(() => forms.id),
 });
+
+export type SelectForms = InferSelectModel<typeof forms>;
+export type SelectSections = InferSelectModel<typeof sections>;
+export type SelectBlocks = InferSelectModel<typeof blocks>;
+export type SelectResponses = InferSelectModel<typeof responses>;

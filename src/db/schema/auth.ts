@@ -1,3 +1,4 @@
+import { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   pgEnum,
@@ -63,3 +64,11 @@ export const emailVerificationCodes = pgTable("email_verification_codes", {
     mode: "date",
   }).notNull(),
 });
+
+export type SelectUser = InferSelectModel<typeof users>;
+export type SelectPassword = InferSelectModel<typeof passwords>;
+export type SelectOauthAccount = InferSelectModel<typeof oauthAccounts>;
+export type SelectSession = InferSelectModel<typeof sessions>;
+export type SelectEmailVerificationCode = InferSelectModel<
+  typeof emailVerificationCodes
+>;

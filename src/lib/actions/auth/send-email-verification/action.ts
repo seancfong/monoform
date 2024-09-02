@@ -20,7 +20,7 @@ export default async function sendEmailVerification(): Promise<ActionResponse> {
   }
 
   if (user.emailVerified) {
-    redirect("/dashboard");
+    redirect("/workspace");
   }
 
   const userId = user.id;

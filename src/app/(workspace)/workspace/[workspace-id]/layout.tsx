@@ -1,6 +1,5 @@
-import Sidebar from "@/app/space/[workspace-id]/components/sidebar";
-import { validateRequest } from "@/lib/auth/validate-user";
-import { redirect } from "next/navigation";
+import Sidebar from "@/app/(workspace)/workspace/[workspace-id]/components/sidebar";
+import { validateUser } from "@/lib/auth/validate-user";
 import React from "react";
 
 type Props = {
@@ -8,11 +7,9 @@ type Props = {
 };
 
 export default async function DashboardLayout({ children }: Props) {
-  const { user } = await validateRequest();
+  const { user } = await validateUser();
 
-  if (!user) {
-    return redirect("/login");
-  }
+  // TODO: check if user owns workspace
 
   return (
     <div className="relative min-h-screen w-full bg-zinc-50">

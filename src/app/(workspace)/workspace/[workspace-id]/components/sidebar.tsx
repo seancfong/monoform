@@ -1,4 +1,4 @@
-import { getWorkspaces } from "@/lib/queries/workspaces";
+import { getUserWorkspaces } from "@/lib/queries/workspaces";
 import { User } from "lucia";
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 
 export default async function Sidebar({ user }: Props) {
   // TODO: fetch workspace and its folders
-  const workspaces = await getWorkspaces(user);
+  const workspaces = await getUserWorkspaces(user);
 
   console.log("workspaces", workspaces);
 
