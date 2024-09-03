@@ -3,7 +3,7 @@ import {
   Sidebar,
   SidebarSkeleton,
 } from "@/app/(workspace)/workspace/[slug]/components/sidebar";
-import { SidebarProvider } from "@/app/(workspace)/workspace/[slug]/components/sidebar/SidebarContext";
+import { SidebarProvider } from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-context";
 import React, { Suspense } from "react";
 
 type Props = {

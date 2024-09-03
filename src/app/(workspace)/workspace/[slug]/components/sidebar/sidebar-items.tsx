@@ -1,8 +1,9 @@
 "use client";
 
-import { ChangeWorkspaces } from "@/app/(workspace)/workspace/[slug]/components/sidebar/ChangeWorkspaces";
-import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/sidebar/SidebarContext";
-import SidebarNavigation from "@/app/(workspace)/workspace/[slug]/components/sidebar/SidebarNavigation";
+import { ChangeWorkspaces } from "@/app/(workspace)/workspace/[slug]/components/sidebar/change-workspaces";
+import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-context";
+import SidebarFolders from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-folders";
+import SidebarNavigation from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-navigation";
 import { Separator } from "@/components/ui/separator";
 import { UserWorkspace, UserWorkspaceFolder } from "@/lib/queries/workspaces";
 import { cn } from "@/lib/utils";
@@ -38,6 +39,7 @@ export default function SidebarItems({
         />
         <Separator />
         <SidebarNavigation slug={slug} />
+        <SidebarFolders folders={folders} />
       </div>
     </>
   );

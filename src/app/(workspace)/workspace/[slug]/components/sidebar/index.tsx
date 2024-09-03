@@ -1,4 +1,4 @@
-import SidebarItems from "@/app/(workspace)/workspace/[slug]/components/sidebar/SidebarItems";
+import SidebarItems from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-items";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { validateUser } from "@/lib/auth/validate-user";

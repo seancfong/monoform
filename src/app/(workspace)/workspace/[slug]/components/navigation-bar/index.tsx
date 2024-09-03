@@ -1,5 +1,5 @@
 import NotificationMenu from "@/app/(workspace)/workspace/[slug]/components/navigation-bar/notification-menu";
-import MobileSidebarToggle from "@/app/(workspace)/workspace/[slug]/components/sidebar/MobileSidebarToggle";
+import MobileSidebarToggle from "@/app/(workspace)/workspace/[slug]/components/sidebar/mobile-sidebar-toggle";
 
 export default function NavigationBar() {
   return (
