@@ -75,9 +75,13 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      data: {
+        open: 'state~="open"',
+        closed: 'state~="closed"',
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwindcss-easing")],
 } satisfies Config;
 
 export default config;
