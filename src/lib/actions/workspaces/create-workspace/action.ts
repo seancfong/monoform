@@ -10,6 +10,8 @@ import { validateUser } from "@/lib/auth/validate-user";
 import { and, count, eq, max } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
+const MAX_WORKSPACES_QTY = 2;
+
 export default async function createWorkspace(
   _: CreateWorkspaceFormState,
   formData: FormData,
@@ -57,9 +59,9 @@ export default async function createWorkspace(
     };
   }
 
-  if (workspacesCount >= 1) {
+  if (workspacesCount >= MAX_WORKSPACES_QTY) {
     return {
-      error: "You can only have one workspace",
+      error: `Maximum workspaces quantity reached (${MAX_WORKSPACES_QTY})`,
     };
   }
 

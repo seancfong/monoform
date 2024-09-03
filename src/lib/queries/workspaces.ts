@@ -50,3 +50,16 @@ export async function getUserWorkspaceFolders(
     )
     .orderBy(asc(workspaceFolders.title));
 }
+
+export async function checkIfUserOwnsWorkspace(
+  user: User,
+  slug: string,
+): Promise<boolean> {
+  return db
+    .select({ id: usersOwnWorkspaces.workspaceId })
+    .from(users)
+    .innerJoin(usersOwnWorkspaces, eq(users.id, user.id))
+    .innerJoin(workspaces, eq(usersOwnWorkspaces.slug, slug))
+    .limit(1)
+    .then((rows) => rows.length > 0);
+}

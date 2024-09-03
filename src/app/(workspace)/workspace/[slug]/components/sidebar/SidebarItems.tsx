@@ -1,13 +1,24 @@
 "use client";
 
+import { ChangeWorkspaces } from "@/app/(workspace)/workspace/[slug]/components/sidebar/ChangeWorkspaces";
 import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/sidebar/SidebarContext";
+import { UserWorkspace, UserWorkspaceFolder } from "@/lib/queries/workspaces";
 import { cn } from "@/lib/utils";
-import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-type Props = {};
+type Props = {
+  currentWorkspace: UserWorkspace;
+  otherWorkspaces: UserWorkspace[];
+  folders: UserWorkspaceFolder[];
+  slug: string;
+};
 
-export default function SidebarItems({}: Props) {
+export default function SidebarItems({
+  currentWorkspace,
+  otherWorkspaces,
+  folders,
+  slug,
+}: Props) {
   const { isOpen } = useSidebarContext();
 
   return (
@@ -15,11 +26,14 @@ export default function SidebarItems({}: Props) {
       <SidebarBackground />
       <div
         className={cn(
-          "ease-out-quart fixed left-0 top-0 z-50 min-h-screen min-w-80 -translate-x-full border-r-1 border-r-zinc-200 bg-zinc-100 duration-500 lg:relative lg:translate-x-0 lg:duration-0",
+          "fixed left-0 top-0 z-50 flex min-h-screen min-w-80 -translate-x-full flex-col border-r-1 border-r-zinc-200 bg-zinc-100 py-3 duration-500 ease-out-quart lg:relative lg:translate-x-0 lg:duration-0",
           { "translate-x-0": isOpen },
         )}
       >
-        SidebarItems
+        <ChangeWorkspaces
+          currentWorkspace={currentWorkspace}
+          otherWorkspaces={otherWorkspaces}
+        />
       </div>
     </>
   );
