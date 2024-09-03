@@ -16,13 +16,13 @@ export default function DashboardLayout({ children, params }: Props) {
 
   return (
     <SidebarProvider>
-      <div className="relative min-h-screen w-full bg-zinc-50 lg:flex">
+      <div className="relative min-h-screen w-full overflow-x-hidden bg-zinc-50 lg:flex">
         <Suspense fallback={<SidebarSkeleton />}>
           <Sidebar slug={slug} />
         </Suspense>
-        <div className="lg:flex-grow lg:px-8">
+        <div className="min-w-0 lg:flex-grow lg:px-6">
           <NavigationBar />
-          <main>{children}</main>
+          <main className="w-full">{children}</main>
         </div>
       </div>
     </SidebarProvider>

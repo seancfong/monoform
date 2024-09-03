@@ -14,12 +14,12 @@ const navigationItems: NavigationItem[] = [
   {
     title: "Dashboard",
     relativePath: "",
-    icon: <LayoutGrid size="24" />,
+    icon: <LayoutGrid size="20" />,
   },
   {
     title: "Responses",
     relativePath: "/responses",
-    icon: <Inbox size="24" />,
+    icon: <Inbox size="20" />,
   },
 ];
 
@@ -47,7 +47,7 @@ export default function SidebarNavigation({ slug }: Props) {
             href={`/workspace/${slug}${item.relativePath}`}
           >
             <span>{item.icon}</span>
-            <span className="leading-tight">{item.title}</span>
+            <span className="text-sm leading-tight">{item.title}</span>
           </Link>
         );
       })}
