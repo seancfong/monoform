@@ -2,6 +2,8 @@
 
 import { ChangeWorkspaces } from "@/app/(workspace)/workspace/[slug]/components/sidebar/ChangeWorkspaces";
 import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/sidebar/SidebarContext";
+import SidebarNavigation from "@/app/(workspace)/workspace/[slug]/components/sidebar/SidebarNavigation";
+import { Separator } from "@/components/ui/separator";
 import { UserWorkspace, UserWorkspaceFolder } from "@/lib/queries/workspaces";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -34,6 +36,8 @@ export default function SidebarItems({
           currentWorkspace={currentWorkspace}
           otherWorkspaces={otherWorkspaces}
         />
+        <Separator />
+        <SidebarNavigation slug={slug} />
       </div>
     </>
   );
