@@ -79,6 +79,10 @@ const config = {
         open: 'state~="open"',
         closed: 'state~="closed"',
       },
+      fontFamily: {
+        sans: ["var(--font-geist-sans)"],
+        mono: ["var(--font-geist-mono)"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("tailwindcss-easing")],

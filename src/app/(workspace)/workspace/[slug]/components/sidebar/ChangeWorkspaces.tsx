@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -60,6 +61,14 @@ export function ChangeWorkspaces({ currentWorkspace, otherWorkspaces }: Props) {
                     className="p-3"
                   >
                     {workspace.title}
+                    {workspace.slug === currentWorkspace.slug && (
+                      <Badge
+                        variant="secondary"
+                        className="ml-2 bg-zinc-200/50 text-xs"
+                      >
+                        Current
+                      </Badge>
+                    )}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -75,8 +84,8 @@ function WorkspaceCard({ workspace }: { workspace: UserWorkspace }) {
   return (
     <div className="flex items-center gap-3">
       <div className="size-10 rounded-md bg-gradient-to-bl from-slate-500 to-zinc-950" />
-      <div className="space-y-1 text-left">
-        <h2 className="text-base font-semibold leading-tight text-zinc-800">
+      <div className="max-w-44 text-left">
+        <h2 className="overflow-hidden overflow-ellipsis whitespace-nowrap text-lg font-medium leading-tight text-zinc-800">
           {workspace.title}
         </h2>
         <p className="text-xs font-medium text-zinc-400">{workspace.slug}</p>

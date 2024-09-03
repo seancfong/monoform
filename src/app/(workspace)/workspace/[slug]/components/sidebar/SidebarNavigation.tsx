@@ -1,7 +1,7 @@
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Inbox, LayoutGrid } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface NavigationItem {
@@ -14,12 +14,12 @@ const navigationItems: NavigationItem[] = [
   {
     title: "Dashboard",
     relativePath: "",
-    icon: <LayoutGrid />,
+    icon: <LayoutGrid size="24" />,
   },
   {
     title: "Responses",
-    relativePath: "responses",
-    icon: <Inbox />,
+    relativePath: "/responses",
+    icon: <Inbox size="24" />,
   },
 ];
 
@@ -28,20 +28,29 @@ type Props = {
 };
 
 export default function SidebarNavigation({ slug }: Props) {
+  const pathName = usePathname();
+
   return (
-    <div className="mt-3 flex flex-col px-3">
-      {navigationItems.map((item) => (
-        <Link
-          className="flex items-center justify-start gap-3 px-4 py-3 text-zinc-500"
-          key={item.title}
-          href={`/workspace/${slug}/${item.relativePath}`}
-        >
-          <span className="text-sm">{item.icon}</span>
-          <span className="text-sm font-medium leading-tight">
-            {item.title}
-          </span>
-        </Link>
-      ))}
+    <div className="mt-3 flex flex-col gap-2 px-3">
+      {navigationItems.map((item) => {
+        const isActive = pathName === `/workspace/${slug}${item.relativePath}`;
+
+        return (
+          <Link
+            className={cn(
+              "flex items-center justify-start gap-3 rounded-md px-4 py-3 text-zinc-500",
+              {
+                "bg-zinc-200/50 text-zinc-800": isActive,
+              },
+            )}
+            key={item.relativePath}
+            href={`/workspace/${slug}${item.relativePath}`}
+          >
+            <span>{item.icon}</span>
+            <span className="leading-tight">{item.title}</span>
+          </Link>
+        );
+      })}
     </div>
   );
 }
