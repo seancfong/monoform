@@ -1,29 +1,23 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { buildUrl } from "@/lib/utils/url";
 import { Calendar, FilePen, Lightbulb, Plus } from "lucide-react";
 import Link from "next/link";
 
-type Props = {};
+type Props = {
+  slug: string;
+};
 
-export default function CreateNew({}: Props) {
+export default function CreateNew({ slug }: Props) {
   return (
     <div className="flex w-full snap-x snap-mandatory gap-4 overflow-x-auto">
       <CreateNewCard
         primary
         title="New form"
         icon={<FilePen />}
-        href="/forms/new"
+        href={buildUrl("/new", { "workspace-slug": slug })}
       />
-      <CreateNewCard
-        title="Quiz template"
-        icon={<Lightbulb />}
-        href="/forms/new"
-      />
-      <CreateNewCard
-        title="Event template"
-        icon={<Calendar />}
-        href="/forms/new"
-      />
+      <CreateNewCard title="Quiz template" icon={<Lightbulb />} href="/new" />
+      <CreateNewCard title="Event template" icon={<Calendar />} href="/new" />
     </div>
   );
 }

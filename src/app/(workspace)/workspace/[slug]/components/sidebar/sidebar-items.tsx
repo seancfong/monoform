@@ -29,7 +29,7 @@ export default function SidebarItems({
       <SidebarBackground />
       <div
         className={cn(
-          "fixed left-0 top-0 z-50 flex min-h-screen w-80 -translate-x-full flex-col border-r-1 border-r-zinc-200 bg-zinc-100 py-3 duration-500 ease-out-quart lg:relative lg:translate-x-0 lg:duration-0",
+          "fixed left-0 top-0 z-50 flex min-h-screen min-w-80 -translate-x-full flex-col border-r-1 border-r-zinc-200 bg-zinc-100 py-3 duration-500 ease-out-quart lg:relative lg:translate-x-0 lg:duration-0",
           { "translate-x-0": isOpen },
         )}
       >
