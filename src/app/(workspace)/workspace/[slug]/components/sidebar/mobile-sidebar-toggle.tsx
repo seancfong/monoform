@@ -1,6 +1,6 @@
 "use client";
 
-import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-context";
+import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/contexts/sidebar-context";
 import { Button } from "@/components/ui/button";
 import { PanelLeft } from "lucide-react";
 

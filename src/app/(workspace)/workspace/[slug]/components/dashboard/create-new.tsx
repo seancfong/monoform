@@ -38,7 +38,7 @@ function CreateNewCard({
   return (
     <Link
       href={href}
-      className="flex min-w-52 snap-start items-start justify-between rounded-lg border-1 border-zinc-200 bg-white p-5 transition-colors duration-150 hover:bg-white/50 lg:min-w-60"
+      className="group flex min-w-52 snap-start items-start justify-between rounded-lg border-1 border-zinc-200 bg-white p-5 transition-colors duration-150 hover:bg-white/50 lg:min-w-60"
     >
       <div className="space-y-2">
         <div
@@ -54,7 +54,10 @@ function CreateNewCard({
         <h3 className="font-medium">{title}</h3>
       </div>
       <span>
-        <Plus className="text-zinc-400" size="18" />
+        <Plus
+          className="text-zinc-400 transition-colors duration-150 group-hover:scale-105 group-hover:text-zinc-500"
+          size="18"
+        />
       </span>
     </Link>
   );

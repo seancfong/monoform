@@ -162,6 +162,20 @@
       "when": 1725264314486,
       "tag": "0022_closed_darkstar",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1725571801508,
+      "tag": "0023_fixed_malcolm_colcord",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1725571964089,
+      "tag": "0024_jittery_nebula",
+      "breakpoints": true
     }
   ]
 }

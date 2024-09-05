@@ -43,11 +43,11 @@ export async function getUserWorkspaceFolders(
     })
     .from(users)
     .innerJoin(usersOwnWorkspaces, eq(users.id, user.id))
-    .innerJoin(workspaces, eq(usersOwnWorkspaces.slug, slug))
     .innerJoin(
       workspaceFolders,
       eq(usersOwnWorkspaces.workspaceId, workspaceFolders.workspaceId),
     )
+    .where(eq(usersOwnWorkspaces.slug, slug))
     .orderBy(asc(workspaceFolders.title));
 }
 

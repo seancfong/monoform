@@ -19,7 +19,7 @@ export const blockTypeEnum = pgEnum("blockType", BLOCK_TYPES);
 export const forms = pgTable("forms", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  workspaceFolderId: integer("workspace_folder_id")
+  workspaceFolderId: uuid("workspace_folder_id")
     .notNull()
     .references(() => workspaceFolders.id, { onDelete: "cascade" }),
   description: text("description"),

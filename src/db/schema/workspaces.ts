@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   unique,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 export const workspaces = pgTable("workspaces", {
@@ -49,7 +50,7 @@ export const usersOwnWorkspaces = pgTable(
 );
 
 export const workspaceFolders = pgTable("workspace_folders", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   workspaceId: integer("workspace_id")
     .notNull()
     .references(() => workspaces.id),

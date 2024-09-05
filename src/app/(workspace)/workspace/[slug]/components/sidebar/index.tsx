@@ -1,4 +1,5 @@
 import SidebarItems from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-items";
+import SidebarNavigation from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-navigation";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { validateUser } from "@/lib/auth/validate-user";
@@ -17,10 +18,7 @@ type Props = {
 export async function Sidebar({ slug }: Props) {
   const { user } = await validateUser();
 
-  const [userWorkspaces, folders] = await Promise.all([
-    getUserWorkspaces(user),
-    getUserWorkspaceFolders(user, slug),
-  ]);
+  const userWorkspaces = await getUserWorkspaces(user);
 
   const { currentWorkspace, otherWorkspaces } = userWorkspaces.reduce<{
     currentWorkspace: UserWorkspace | null;
@@ -44,33 +42,36 @@ export async function Sidebar({ slug }: Props) {
     notFound();
   }
 
+  const foldersPromise = getUserWorkspaceFolders(user, slug);
+
   return (
     <>
       <SidebarItems
         currentWorkspace={currentWorkspace}
         otherWorkspaces={otherWorkspaces}
-        folders={folders}
-        slug={slug}
+        foldersPromise={foldersPromise}
       />
-      {/* <SidebarSkeleton overlay /> */}
+      {/* <SidebarSkeleton overlay slug={slug} /> */}
     </>
   );
 }
 
-export function SidebarSkeleton({ overlay }: { overlay?: boolean }) {
+type SidebarSkeletonProps = {
+  overlay?: boolean;
+  slug: string;
+};
+
+export function SidebarSkeleton({ overlay, slug }: SidebarSkeletonProps) {
   return (
     <div
       className={cn(
-        "hidden min-h-screen w-80 border-r-1 border-r-zinc-200 bg-zinc-100 py-6 lg:block",
+        "hidden min-h-screen min-w-80 border-r-1 border-r-zinc-200 bg-zinc-100 py-6 lg:block",
         { "absolute left-0 top-0 z-50 opacity-80": overlay },
       )}
     >
       <SelectWorkspaceSkeleton />
       <Separator className="my-3" />
-      <div className="space-y-2 px-6">
-        <NavigationSkeleton />
-        <NavigationSkeleton />
-      </div>
+      <SidebarNavigation slug={slug} />
     </div>
   );
 }
