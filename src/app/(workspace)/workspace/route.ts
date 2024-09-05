@@ -13,3 +13,16 @@ export async function GET() {
 
   return redirect("/create-workspace");
 }
+
+// For redirects
+export async function POST() {
+  const { user } = await validateUser();
+
+  const [primaryWorkspace] = await getUserWorkspaces(user);
+
+  if (primaryWorkspace) {
+    return redirect(`/workspace/${primaryWorkspace.slug}`);
+  }
+
+  return redirect("/create-workspace");
+}
