@@ -31,7 +31,7 @@ export default function SidebarNavigation({ slug }: Props) {
   const pathName = usePathname();
 
   return (
-    <div className="mt-3 flex flex-col gap-2 px-3">
+    <div className="mt-3 flex flex-col gap-1 px-3">
       {navigationItems.map((item) => {
         const isActive = pathName === `/workspace/${slug}${item.relativePath}`;
 

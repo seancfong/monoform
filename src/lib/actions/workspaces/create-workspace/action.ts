@@ -16,6 +16,8 @@ export default async function createWorkspace(
   _: CreateWorkspaceFormState,
   formData: FormData,
 ): Promise<CreateWorkspaceFormState> {
+  const { user } = await validateUser();
+
   const parsed = createWorkspaceFormSchema.safeParse({
     slug: formData.get("slug"),
     title: formData.get("title"),
@@ -28,8 +30,6 @@ export default async function createWorkspace(
   }
 
   const { slug, title } = parsed.data;
-
-  const { user } = await validateUser();
 
   // TODO: optimize this flow :nerd:
   const [[existingWorkspaceSlug], [{ maxOrderNum, workspacesCount }]] =

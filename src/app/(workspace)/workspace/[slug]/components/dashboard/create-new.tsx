@@ -48,13 +48,16 @@ function CreateNewCard({
     >
       <div className="space-y-2">
         <div
-          className={cn("w-fit rounded-md bg-zinc-100 p-2", {
-            "bg-zinc-800": primary,
-          })}
+          className={cn(
+            "w-fit rounded-md border-1 border-zinc-200 bg-zinc-100 p-2",
+            {
+              "bg-zinc-800": primary,
+            },
+          )}
         >
           <span className={cn({ "text-zinc-100": primary })}>{icon}</span>
         </div>
-        <p>{title}</p>
+        <h3 className="font-medium">{title}</h3>
       </div>
       <span>
         <Plus className="text-zinc-400" size="18" />
