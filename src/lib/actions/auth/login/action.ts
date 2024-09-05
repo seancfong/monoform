@@ -1,6 +1,9 @@
 "use server";
 
-import { loginFormSchema, LoginFormState } from "@/actions/auth/login/schema";
+import {
+  loginFormSchema,
+  LoginFormState,
+} from "@/lib/actions/auth/login/schema";
 import { db } from "@/db";
 import { passwords, users } from "@/db/schema";
 import { lucia } from "@/lib/auth";
@@ -72,5 +75,5 @@ export async function login(
     sessionCookie.attributes,
   );
 
-  redirect("/dashboard");
+  redirect("/workspace");
 }

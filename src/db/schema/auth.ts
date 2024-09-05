@@ -1,3 +1,4 @@
+import { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   pgEnum,
@@ -20,7 +21,7 @@ export const passwords = pgTable("passwords", {
   id: serial("id").primaryKey(),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   passwordHash: text("password_hash").notNull(),
 });
 
@@ -31,7 +32,7 @@ export const oauthAccounts = pgTable(
     providerUserId: text("provider_user_id").notNull(),
     userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
   },
   (table) => {
     return {
@@ -44,7 +45,7 @@ export const sessions = pgTable("sessions", {
   id: text("id").primaryKey(),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
     mode: "date",
@@ -57,9 +58,17 @@ export const emailVerificationCodes = pgTable("email_verification_codes", {
   email: text("email").notNull(),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
     mode: "date",
   }).notNull(),
 });
+
+export type SelectUser = InferSelectModel<typeof users>;
+export type SelectPassword = InferSelectModel<typeof passwords>;
+export type SelectOauthAccount = InferSelectModel<typeof oauthAccounts>;
+export type SelectSession = InferSelectModel<typeof sessions>;
+export type SelectEmailVerificationCode = InferSelectModel<
+  typeof emailVerificationCodes
+>;

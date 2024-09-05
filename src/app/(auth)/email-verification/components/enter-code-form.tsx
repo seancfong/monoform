@@ -1,9 +1,9 @@
 "use client";
-import handleEmailVerification from "@/actions/auth/handle-email-verification/action";
+import handleEmailVerification from "@/lib/actions/auth/handle-email-verification/action";
 import {
   verifyEmailCodeFormSchema,
   VerifyEmailCodeFormState,
-} from "@/actions/auth/handle-email-verification/schema";
+} from "@/lib/actions/auth/handle-email-verification/schema";
 import {
   Form,
   FormButton,

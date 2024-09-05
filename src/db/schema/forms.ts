@@ -1,4 +1,6 @@
 import { users } from "@/db/schema/auth";
+import { workspaceFolders } from "@/db/schema/workspaces";
+import { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -7,6 +9,7 @@ import {
   serial,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 const BLOCK_TYPES = ["HEADER", "MULTIPLE_CHOICE", "CHECKBOX"] as const;
@@ -14,9 +17,11 @@ const BLOCK_TYPES = ["HEADER", "MULTIPLE_CHOICE", "CHECKBOX"] as const;
 export const blockTypeEnum = pgEnum("blockType", BLOCK_TYPES);
 
 export const forms = pgTable("forms", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  workspaceFolderId: text("workspace_folder_id").notNull(),
+  workspaceFolderId: integer("workspace_folder_id")
+    .notNull()
+    .references(() => workspaceFolders.id, { onDelete: "cascade" }),
   description: text("description"),
   createdAt: timestamp("created_at", {
     withTimezone: true,
@@ -30,7 +35,7 @@ export const forms = pgTable("forms", {
 
 export const sections = pgTable("sections", {
   id: serial("id").primaryKey(),
-  formId: integer("form_id")
+  formId: uuid("form_id")
     .notNull()
     .references(() => forms.id),
   title: text("title").notNull(),
@@ -41,7 +46,7 @@ export const blocks = pgTable("blocks", {
   id: serial("id").primaryKey(),
   sectionId: integer("section_id")
     .notNull()
-    .references(() => sections.id),
+    .references(() => sections.id, { onDelete: "cascade" }),
   text: text("text").notNull(),
   description: text("description"),
   blockType: blockTypeEnum("block_type").notNull(),
@@ -53,14 +58,19 @@ export const responses = pgTable("responses", {
   id: serial("id").primaryKey(),
   responderId: text("responder_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   submittedAt: timestamp("submitted_at", {
     withTimezone: true,
     mode: "date",
   })
     .notNull()
     .defaultNow(),
-  formId: integer("form_id")
+  formId: uuid("form_id")
     .notNull()
     .references(() => forms.id),
 });
+
+export type SelectForms = InferSelectModel<typeof forms>;
+export type SelectSections = InferSelectModel<typeof sections>;
+export type SelectBlocks = InferSelectModel<typeof blocks>;
+export type SelectResponses = InferSelectModel<typeof responses>;

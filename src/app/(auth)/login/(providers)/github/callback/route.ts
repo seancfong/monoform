@@ -11,7 +11,7 @@ import { OAuth2RequestError } from "arctic";
 import { generateIdFromEntropySize } from "lucia";
 import { cookies } from "next/headers";
 
-const REDIRECT_PATH = "/dashboard";
+const REDIRECT_PATH = "/workspace";
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
