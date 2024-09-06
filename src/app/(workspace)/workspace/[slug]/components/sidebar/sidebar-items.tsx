@@ -42,7 +42,7 @@ export default function SidebarItems({
           foldersPromise={foldersPromise}
           workspace={currentWorkspace}
         >
-          <SidebarFolders slug={currentWorkspace.slug} />
+          <SidebarFolders workspace={currentWorkspace} />
         </FoldersProvider>
       </div>
     </>

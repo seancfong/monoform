@@ -48,7 +48,7 @@ export async function getUserWorkspaceFolders(
       eq(usersOwnWorkspaces.workspaceId, workspaceFolders.workspaceId),
     )
     .where(eq(usersOwnWorkspaces.slug, slug))
-    .orderBy(asc(workspaceFolders.title));
+    .orderBy(asc(workspaceFolders.createdAt));
 }
 
 export async function checkIfUserOwnsWorkspace(

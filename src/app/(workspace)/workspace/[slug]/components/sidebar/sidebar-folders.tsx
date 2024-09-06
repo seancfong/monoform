@@ -1,38 +1,43 @@
 "use client";
 
 import { useFoldersContext } from "@/app/(workspace)/workspace/[slug]/components/contexts/folders-context";
+import AddFolderModal from "@/app/(workspace)/workspace/[slug]/components/sidebar/add-folder-modal";
 import { Button } from "@/components/ui/button";
-import { UserWorkspaceFolder } from "@/lib/queries/workspaces";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { UserWorkspace, UserWorkspaceFolder } from "@/lib/queries/workspaces";
 import { cn } from "@/lib/utils";
 import { FolderClosed, FolderOpen, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 type Props = {
-  slug: string;
+  workspace: UserWorkspace;
 };
 
-export default function SidebarFolders({ slug }: Props) {
-  const { folders, addFolder } = useFoldersContext();
+export default function SidebarFolders({ workspace }: Props) {
+  const { folders } = useFoldersContext();
 
   return (
     <div className="mt-6 px-3">
-      <div className="flex items-center justify-between px-3">
-        <p className="pl-1 text-xs font-medium text-zinc-400">Folders</p>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-fit p-1 hover:bg-zinc-200/50"
-          onClick={() => {
-            addFolder("Untitled Folder");
-          }}
-        >
-          <Plus className="size-4 text-zinc-400" />
-        </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            className="group/add-folder flex size-fit w-full items-center justify-between px-3 py-1"
+          >
+            <p className="pl-1 text-xs font-medium text-zinc-400">Folders</p>
+            <div className="size-fit p-1 group-hover/add-folder:bg-zinc-200/50">
+              <Plus className="size-4 text-zinc-400" />
+            </div>
+          </Button>
+        </DialogTrigger>
+        <AddFolderModal workspace={workspace} />
+      </Dialog>
+      <div className="flex flex-col gap-1">
+        {folders?.map((folder) => (
+          <FolderItem key={folder.id} folder={folder} slug={workspace.slug} />
+        ))}
       </div>
-      {folders?.map((folder) => (
-        <FolderItem key={folder.id} folder={folder} slug={slug} />
-      ))}
     </div>
   );
 }
