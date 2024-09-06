@@ -85,7 +85,11 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwindcss-easing")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwindcss-easing"),
+    require("tailwind-gradient-mask-image"),
+  ],
 } satisfies Config;
 
 export default config;

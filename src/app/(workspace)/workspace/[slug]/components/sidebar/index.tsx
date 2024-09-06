@@ -9,6 +9,7 @@ import {
   UserWorkspace,
 } from "@/lib/queries/workspaces";
 import { cn } from "@/lib/utils";
+import { FolderClosed, Plus } from "lucide-react";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -72,6 +73,7 @@ export function SidebarSkeleton({ overlay, slug }: SidebarSkeletonProps) {
       <SelectWorkspaceSkeleton />
       <Separator className="my-3" />
       <SidebarNavigation slug={slug} />
+      <SidebarFoldersSkeleton />
     </div>
   );
 }
@@ -79,20 +81,39 @@ export function SidebarSkeleton({ overlay, slug }: SidebarSkeletonProps) {
 function SelectWorkspaceSkeleton() {
   return (
     <div className="flex items-center gap-3 px-6">
-      <Skeleton className="size-10 bg-zinc-200" />
+      <Skeleton className="size-10 bg-zinc-200/50" />
       <div className="space-y-2 text-left">
-        <Skeleton className="h-4 w-32 bg-zinc-200" />
-        <Skeleton className="h-2 w-32 bg-zinc-200" />
+        <Skeleton className="h-4 w-32 bg-zinc-200/50" />
+        <Skeleton className="h-2 w-32 bg-zinc-200/50" />
       </div>
     </div>
   );
 }
 
-function NavigationSkeleton() {
+function SidebarFoldersSkeleton() {
   return (
-    <div className="flex items-center gap-2 py-2">
-      <Skeleton className="size-8 bg-zinc-200" />
-      <Skeleton className="h-4 w-20 bg-zinc-200" />
+    <div className="mt-6 flex flex-col px-3">
+      <div className="flex w-full items-center justify-between px-3 py-1">
+        <p className="pl-1 text-xs font-medium text-zinc-400">Folders</p>
+        <div className="size-fit p-1">
+          <Plus className="size-4 text-zinc-400" />
+        </div>
+      </div>
+      <div className="gradient-mask-b-0 flex flex-col gap-1">
+        <SidebarFolderSkeletonItem />
+        <SidebarFolderSkeletonItem />
+        <SidebarFolderSkeletonItem />
+        <SidebarFolderSkeletonItem />
+      </div>
+    </div>
+  );
+}
+
+function SidebarFolderSkeletonItem() {
+  return (
+    <div className="flex items-center justify-start gap-3 px-4 py-3 text-zinc-400">
+      <FolderClosed size="20" />
+      <Skeleton className="h-4 w-32 bg-zinc-200/50" />
     </div>
   );
 }

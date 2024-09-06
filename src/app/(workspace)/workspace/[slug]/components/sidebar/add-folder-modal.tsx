@@ -27,7 +27,7 @@ export default function AddFolderModal({ workspace }: Props) {
       <DialogHeader>
         <DialogTitle>
           Add a folder to{" "}
-          <span className="rounded-md bg-zinc-100 px-2 py-1 font-mono text-base font-black tracking-wide">
+          <span className="rounded-md bg-zinc-100 px-2 py-1 font-mono text-base font-extrabold tracking-wide">
             {workspace.title}
           </span>
         </DialogTitle>
