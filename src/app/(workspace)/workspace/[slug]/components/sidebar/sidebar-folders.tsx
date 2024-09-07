@@ -26,7 +26,7 @@ export default function SidebarFolders({ workspace }: Props) {
             className="group/add-folder flex size-fit w-full items-center justify-between px-3 py-1"
           >
             <p className="pl-1 text-xs font-medium text-zinc-400">Folders</p>
-            <div className="size-fit p-1 group-hover/add-folder:bg-zinc-200/50">
+            <div className="size-fit rounded-sm p-1 transition-colors duration-150 group-hover/add-folder:bg-zinc-200/50">
               <Plus className="size-4 text-zinc-400" />
             </div>
           </Button>

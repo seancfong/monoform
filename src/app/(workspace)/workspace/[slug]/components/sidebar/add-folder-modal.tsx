@@ -24,7 +24,7 @@ export default function AddFolderModal({ workspace }: Props) {
 
   return (
     <DialogContent className="mx-auto w-[calc(100vw-2rem)] rounded-md">
-      <DialogHeader>
+      <DialogHeader className="text-left">
         <DialogTitle>
           Add a folder to{" "}
           <span className="rounded-md bg-zinc-100 px-2 py-1 font-mono text-base font-extrabold tracking-wide">
@@ -35,7 +35,7 @@ export default function AddFolderModal({ workspace }: Props) {
           Keep your workspace tidy by organizing forms into folders.
         </DialogDescription>
       </DialogHeader>
-      <div className="grid gap-4 py-4">
+      <div className="grid gap-4 py-2">
         <form
           className="grid grid-cols-4 items-center gap-4"
           onSubmit={(e: React.FormEvent) => {
