@@ -20,13 +20,9 @@ export default async function NewFormPage({ searchParams }: Props) {
     redirect("/create-workspace");
   }
 
-  let selectedWorkspace = workspaces.find(
-    (workspace) => workspace.slug === workspaceSlug,
-  );
-
-  if (!selectedWorkspace) {
-    selectedWorkspace = workspaces[0];
-  }
+  const selectedWorkspace =
+    workspaces.find((workspace) => workspace.slug === workspaceSlug) ??
+    workspaces[0];
 
   console.log(workspaces, selectedWorkspace);
 

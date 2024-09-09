@@ -42,42 +42,51 @@ export const FoldersProvider = ({
     foldersReducer,
   );
 
-  const addFolder = useCallback(async (title: string) => {
-    const folderId = uuidv4();
+  const addFolder = useCallback(
+    async (title: string) => {
+      const folderId = uuidv4();
 
-    updateOptimisticFolders({
-      type: "ADD_FOLDER",
-      payload: {
-        folderId,
-        title,
-      },
-    });
+      updateOptimisticFolders({
+        type: "ADD_FOLDER",
+        payload: {
+          folderId,
+          title,
+        },
+      });
 
-    await createFolder(folderId, title, workspace.id);
-  }, []);
+      await createFolder(folderId, title, workspace);
+    },
+    [updateOptimisticFolders, workspace],
+  );
 
-  const removeFolder = useCallback(async (folderId: string) => {
-    updateOptimisticFolders({
-      type: "REMOVE_FOLDER",
-      payload: {
-        folderId,
-      },
-    });
+  const removeFolder = useCallback(
+    async (folderId: string) => {
+      updateOptimisticFolders({
+        type: "REMOVE_FOLDER",
+        payload: {
+          folderId,
+        },
+      });
 
-    // TODO: await remove folder action
-  }, []);
+      // TODO: await remove folder action
+    },
+    [updateOptimisticFolders],
+  );
 
-  const updateFolder = useCallback(async (folderId: string, title: string) => {
-    updateOptimisticFolders({
-      type: "UPDATE_FOLDER",
-      payload: {
-        folderId,
-        title,
-      },
-    });
+  const updateFolder = useCallback(
+    async (folderId: string, title: string) => {
+      updateOptimisticFolders({
+        type: "UPDATE_FOLDER",
+        payload: {
+          folderId,
+          title,
+        },
+      });
 
-    // TODO: await update folder action
-  }, []);
+      // TODO: await update folder action
+    },
+    [updateOptimisticFolders],
+  );
 
   const value = useMemo(() => {
     return {

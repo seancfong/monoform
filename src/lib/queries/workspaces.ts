@@ -10,7 +10,7 @@ import {
   workspaceFolders,
   workspaces,
 } from "@/db/schema";
-import { asc, eq } from "drizzle-orm";
+import { asc, and, eq, count } from "drizzle-orm";
 import { User } from "lucia";
 
 export type UserWorkspace = Pick<SelectWorkspaces, "id" | "title"> &
@@ -23,10 +23,9 @@ export async function getUserWorkspaces(user: User): Promise<UserWorkspace[]> {
       title: workspaces.title,
       slug: usersOwnWorkspaces.slug,
     })
-    .from(users)
-    .innerJoin(usersOwnWorkspaces, eq(users.id, usersOwnWorkspaces.userId))
+    .from(usersOwnWorkspaces)
     .innerJoin(workspaces, eq(usersOwnWorkspaces.workspaceId, workspaces.id))
-    .where(eq(users.id, user.id))
+    .where(eq(usersOwnWorkspaces.userId, user.id))
     .orderBy(asc(usersOwnWorkspaces.orderNum));
 }
 
@@ -41,13 +40,17 @@ export async function getUserWorkspaceFolders(
       id: workspaceFolders.id,
       title: workspaceFolders.title,
     })
-    .from(users)
-    .innerJoin(usersOwnWorkspaces, eq(users.id, user.id))
+    .from(usersOwnWorkspaces)
     .innerJoin(
       workspaceFolders,
       eq(usersOwnWorkspaces.workspaceId, workspaceFolders.workspaceId),
     )
-    .where(eq(usersOwnWorkspaces.slug, slug))
+    .where(
+      and(
+        eq(usersOwnWorkspaces.userId, user.id),
+        eq(usersOwnWorkspaces.slug, slug),
+      ),
+    )
     .orderBy(asc(workspaceFolders.createdAt));
 }
 
@@ -57,9 +60,29 @@ export async function checkIfUserOwnsWorkspace(
 ): Promise<boolean> {
   return db
     .select({ id: usersOwnWorkspaces.workspaceId })
-    .from(users)
-    .innerJoin(usersOwnWorkspaces, eq(users.id, user.id))
+    .from(usersOwnWorkspaces)
     .innerJoin(workspaces, eq(usersOwnWorkspaces.slug, slug))
+    .where(eq(usersOwnWorkspaces.userId, user.id))
     .limit(1)
     .then((rows) => rows.length > 0);
+}
+
+export async function getWorkspaceFolderCount(
+  user: User,
+  slug: string,
+): Promise<number> {
+  return db
+    .select({ count: count() })
+    .from(usersOwnWorkspaces)
+    .innerJoin(
+      workspaceFolders,
+      eq(usersOwnWorkspaces.workspaceId, workspaceFolders.workspaceId),
+    )
+    .where(
+      and(
+        eq(usersOwnWorkspaces.userId, user.id),
+        eq(usersOwnWorkspaces.slug, slug),
+      ),
+    )
+    .then((rows) => rows[0].count);
 }
