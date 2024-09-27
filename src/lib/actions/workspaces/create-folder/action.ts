@@ -24,11 +24,7 @@ export default async function createFolder(
     getWorkspaceFolderCount(user, workspace.slug),
   ]);
 
-  if (!userOwnsWorkspace) {
-    return;
-  }
-
-  if (workspaceFoldersCount >= MAX_FOLDERS_QTY) {
+  if (!userOwnsWorkspace || workspaceFoldersCount >= MAX_FOLDERS_QTY) {
     return;
   }
 

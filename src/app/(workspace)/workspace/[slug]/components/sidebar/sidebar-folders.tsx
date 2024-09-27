@@ -26,7 +26,7 @@ export default function SidebarFolders({ workspace }: Props) {
             className="group/add-folder flex size-fit w-full items-center justify-between px-3 py-1"
           >
             <p className="pl-1 text-xs font-medium text-zinc-400">Folders</p>
-            <div className="size-fit rounded-sm p-1 transition-colors duration-150 group-hover/add-folder:bg-zinc-200/50">
+            <div className="size-fit rounded-sm p-1 transition-colors duration-100 group-hover/add-folder:bg-zinc-200/50">
               <Plus className="size-4 text-zinc-400" />
             </div>
           </Button>
@@ -54,17 +54,19 @@ function FolderItem({ slug, folder }: FolderItemProps) {
   return (
     <Link
       className={cn(
-        "flex items-center justify-start gap-3 rounded-md px-4 py-3 text-zinc-500",
+        "group/folder flex items-center justify-start gap-3 rounded-md px-4 py-3 text-zinc-500",
         {
           "bg-zinc-200/50 text-zinc-800": isActive,
         },
       )}
       href={`/workspace/${slug}/folder/${folder.id}`}
     >
-      <span>
+      <span className="transition-colors duration-100 group-hover/folder:text-zinc-700">
         {isActive ? <FolderOpen size="20" /> : <FolderClosed size="20" />}
       </span>
-      <span className="text-sm leading-tight">{folder.title}</span>
+      <span className="text-sm leading-tight transition-colors duration-100 group-hover/folder:text-zinc-700">
+        {folder.title}
+      </span>
     </Link>
   );
 }
