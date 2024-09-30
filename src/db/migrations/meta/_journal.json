@@ -176,6 +176,20 @@
       "when": 1725571964089,
       "tag": "0024_jittery_nebula",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1727461455679,
+      "tag": "0025_cooing_xorn",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1727721853990,
+      "tag": "0026_icy_loa",
+      "breakpoints": true
     }
   ]
 }

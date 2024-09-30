@@ -53,7 +53,7 @@ export const workspaceFolders = pgTable("workspace_folders", {
   id: uuid("id").primaryKey().defaultRandom(),
   workspaceId: integer("workspace_id")
     .notNull()
-    .references(() => workspaces.id),
+    .references(() => workspaces.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   createdAt: timestamp("created_at", {
     withTimezone: true,

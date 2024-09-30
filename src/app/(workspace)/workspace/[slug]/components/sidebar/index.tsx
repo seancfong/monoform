@@ -99,7 +99,7 @@ function SidebarFoldersSkeleton() {
           <Plus className="size-4 text-zinc-400" />
         </div>
       </div>
-      <div className="gradient-mask-b-0 flex flex-col gap-1">
+      <div className="flex flex-col gap-1 gradient-mask-b-0">
         <SidebarFolderSkeletonItem />
         <SidebarFolderSkeletonItem />
         <SidebarFolderSkeletonItem />

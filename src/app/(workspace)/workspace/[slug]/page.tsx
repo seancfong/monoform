@@ -9,8 +9,6 @@ type Props = {
 export default async function DashboardPage({ params }: Props) {
   const { slug } = params;
 
-  await validateUser();
-
   return (
     <div className="flex w-full flex-col gap-6 px-4 py-4 lg:px-6 lg:py-8">
       <CreateNew slug={slug} />

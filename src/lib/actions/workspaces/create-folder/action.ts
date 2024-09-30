@@ -34,5 +34,5 @@ export default async function createFolder(
     workspaceId: workspace.id,
   });
 
-  revalidatePath("/workspace/[slug]", "layout");
+  revalidatePath(`/workspace/${workspace.slug}`, "layout");
 }
