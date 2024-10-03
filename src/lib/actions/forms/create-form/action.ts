@@ -37,7 +37,9 @@ export default async function createForm(
 
   const { user } = await validateUser();
 
-  if (!checkIfUserOwnsWorkspaceFolder(user, folderId)) {
+  const userOwnsFolder = await checkIfUserOwnsWorkspaceFolder(user, folderId);
+
+  if (!userOwnsFolder) {
     return {
       error: "Unauthorized",
     };
@@ -46,7 +48,6 @@ export default async function createForm(
   // Get workspace id through folder id to prevent against client-side
   // form injection and to keep logic simple
   const workspaceId = await getWorkspaceIdByFolderId(folderId);
-
   const formsCount = await getWorkspaceFormsCount(workspaceId);
 
   if (formsCount >= MAX_FORMS_QTY) {
