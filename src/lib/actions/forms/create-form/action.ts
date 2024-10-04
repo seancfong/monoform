@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { forms } from "@/db/schema";
+import { forms, sections } from "@/db/schema";
 import {
   createFormSchema,
   CreateFormState,
@@ -63,6 +63,12 @@ export default async function createForm(
       workspaceFolderId: folderId,
     })
     .returning({ id: forms.id });
+
+  await db.insert(sections).values({
+    formId,
+    title: "Section 1",
+    orderNum: 0,
+  });
 
   redirect(`/edit/${formId}`);
 }

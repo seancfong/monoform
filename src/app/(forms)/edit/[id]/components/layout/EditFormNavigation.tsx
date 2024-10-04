@@ -1,4 +1,4 @@
-import NavigationBreadcrumbs from "@/app/(forms)/edit/[id]/components/NavigationBreadcrumbs";
+import NavigationBreadcrumbs from "@/app/(forms)/edit/[id]/components/layout/NavigationBreadcrumbs";
 import React, { Suspense } from "react";
 
 type Props = {

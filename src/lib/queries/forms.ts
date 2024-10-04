@@ -3,12 +3,14 @@ import "server-only";
 import { db } from "@/db";
 import {
   forms,
+  sections,
   SelectForms,
+  SelectSections,
   SelectWorkspaceFolders,
   usersOwnWorkspaces,
   workspaceFolders,
 } from "@/db/schema";
-import { and, count, eq } from "drizzle-orm";
+import { and, asc, count, eq } from "drizzle-orm";
 
 export async function getWorkspaceFormsCount(
   workspaceId: number,
@@ -42,4 +44,14 @@ export async function getFormWithWorkspaceFolder(formId: string): Promise<{
     .where(and(eq(forms.id, formId)))
     .limit(1)
     .then((rows) => rows[0]);
+}
+
+export async function getFormSections(
+  formId: string,
+): Promise<SelectSections[]> {
+  return db
+    .select()
+    .from(sections)
+    .where(and(eq(sections.formId, formId)))
+    .orderBy(asc(sections.orderNum));
 }

@@ -1,5 +1,6 @@
 import { getFormWithWorkspaceFolder } from "@/lib/queries/forms";
 import { Slash } from "lucide-react";
+import { notFound } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -7,7 +8,11 @@ type Props = {
 };
 
 export default async function NavigationBreadcrumbs({ formId }: Props) {
-  const { form, workspaceFolder } = await getFormWithWorkspaceFolder(formId);
+  const formData = await getFormWithWorkspaceFolder(formId);
+
+  if (!formData) notFound();
+
+  const { form } = formData;
 
   return (
     <div className="flex items-center gap-1">
