@@ -1,7 +1,9 @@
-import EditQuestions from "@/app/(forms)/edit/[id]/components/questions/EditQuestions";
-import EditQuestionsSkeleton from "@/app/(forms)/edit/[id]/components/questions/EditQuestionsSkeleton";
+import { SectionsProvider } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
+import EditQuestions from "@/app/(forms)/edit/[id]/components/questions/edit-questions";
+import EditQuestionsSkeleton from "@/app/(forms)/edit/[id]/components/questions/edit-questions-skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { validateUser } from "@/lib/auth/validate-user";
+import { getFormSections } from "@/lib/queries/forms";
 import { Suspense } from "react";
 
 type Props = {
@@ -14,6 +16,8 @@ export default async function EditFormPage({ params }: Props) {
   const { user } = await validateUser();
 
   // TODO: check if user owns form
+
+  const sectionsPromise = getFormSections(formId);
 
   return (
     <div className="flex flex-col items-center justify-center p-4 sm:p-6">
@@ -35,7 +39,12 @@ export default async function EditFormPage({ params }: Props) {
           </TabsList>
           <TabsContent value="questions">
             <Suspense fallback={<EditQuestionsSkeleton />}>
-              <EditQuestions formId={formId} />
+              <SectionsProvider
+                formId={formId}
+                sectionsPromise={sectionsPromise}
+              >
+                <EditQuestions />
+              </SectionsProvider>
             </Suspense>
           </TabsContent>
           <TabsContent value="responses">

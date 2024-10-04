@@ -6,6 +6,7 @@ import { UserWorkspace, UserWorkspaceFolder } from "@/lib/queries/workspaces";
 import {
   createContext,
   ReactNode,
+  startTransition,
   use,
   useCallback,
   useContext,
@@ -46,12 +47,14 @@ export const FoldersProvider = ({
     async (title: string) => {
       const folderId = uuidv4();
 
-      updateOptimisticFolders({
-        type: "ADD_FOLDER",
-        payload: {
-          folderId,
-          title,
-        },
+      startTransition(() => {
+        updateOptimisticFolders({
+          type: "ADD_FOLDER",
+          payload: {
+            folderId,
+            title,
+          },
+        });
       });
 
       await createFolder(folderId, title, workspace);
@@ -61,11 +64,13 @@ export const FoldersProvider = ({
 
   const removeFolder = useCallback(
     async (folderId: string) => {
-      updateOptimisticFolders({
-        type: "REMOVE_FOLDER",
-        payload: {
-          folderId,
-        },
+      startTransition(() => {
+        updateOptimisticFolders({
+          type: "REMOVE_FOLDER",
+          payload: {
+            folderId,
+          },
+        });
       });
 
       // TODO: await remove folder action
