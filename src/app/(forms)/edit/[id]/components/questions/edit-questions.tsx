@@ -1,22 +1,24 @@
 "use client";
 
 import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
+import SectionList from "@/app/(forms)/edit/[id]/components/questions/edit-section";
 import { Button } from "@/components/ui/button";
 
 type Props = {};
 
 export default function EditQuestions({}: Props) {
-  const { sections, addSection } = useSectionsContext();
+  const { sections, appendSection: addSection } = useSectionsContext();
+
+  console.log(sections);
 
   return (
     <div>
-      <div>
+      <div className="flex flex-col gap-8">
         {sections.map((section) => (
-          <div key={section.id}>{section.title}</div>
+          <SectionList key={section.id} section={section} />
         ))}
       </div>
       <div>
-        {/* TODO: add section */}
         <Button
           size="sm"
           onClick={() => {

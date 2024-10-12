@@ -190,6 +190,20 @@
       "when": 1727721853990,
       "tag": "0026_icy_loa",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1728070134336,
+      "tag": "0027_dark_hitman",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1728070184973,
+      "tag": "0028_classy_liz_osborn",
+      "breakpoints": true
     }
   ]
 }

@@ -1,26 +1,25 @@
-import { SelectSections } from "@/db/schema";
+import { FormSection } from "@/lib/types/forms";
 import { produce } from "immer";
 
 type SectionsAction = AddSectionAction;
 
 export function sectionsReducer(
-  state: SelectSections[] | undefined,
+  state: FormSection[] | undefined,
   action: SectionsAction,
-): SelectSections[] {
+): FormSection[] {
   const currentSectionsState = state || [];
 
   switch (action.type) {
-    case "ADD_SECTION": {
-      const { sectionId, title } = action.payload;
+    case "APPEND_SECTION": {
+      const { sectionId, title, formId } = action.payload;
       const newSection = {
-        id: -1,
+        id: sectionId,
         title,
         orderNum: currentSectionsState.length,
-        formId: "",
       };
 
       return produce(currentSectionsState, (draft) => {
-        draft.push(newSection);
+        draft.push({ ...newSection, blocks: [] });
       });
     }
     default:
@@ -29,9 +28,10 @@ export function sectionsReducer(
 }
 
 type AddSectionAction = {
-  type: "ADD_SECTION";
+  type: "APPEND_SECTION";
   payload: {
     sectionId: string;
     title: string;
+    formId: string;
   };
 };

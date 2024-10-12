@@ -1,8 +1,8 @@
 "use client";
 
 import { sectionsReducer } from "@/app/(forms)/edit/[id]/components/contexts/sections-reducer";
-import { SelectSections } from "@/db/schema";
 import createSection from "@/lib/actions/forms/mutations/create-section";
+import { FormSection } from "@/lib/types/forms";
 import {
   createContext,
   ReactNode,
@@ -16,8 +16,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 interface SectionsContextValue {
-  sections: SelectSections[];
-  addSection: (title: string) => void;
+  formId: string;
+  sections: FormSection[];
+  appendSection: (title: string) => void;
 }
 
 const SectionsContext = createContext<SectionsContextValue | undefined>(
@@ -27,7 +28,7 @@ const SectionsContext = createContext<SectionsContextValue | undefined>(
 type SectionsProviderProps = {
   children: ReactNode;
   formId: string;
-  sectionsPromise: Promise<SelectSections[]>;
+  sectionsPromise: Promise<FormSection[]>;
 };
 
 export const SectionsProvider = ({
@@ -41,32 +42,38 @@ export const SectionsProvider = ({
     sectionsReducer,
   );
 
-  const addSection = useCallback(
+  const appendSection = useCallback(
     async (title: string) => {
       const sectionId = uuidv4();
 
       startTransition(() => {
         updateOptimisticSections({
-          type: "ADD_SECTION",
+          type: "APPEND_SECTION",
           payload: {
             sectionId,
             title,
+            formId,
           },
         });
       });
 
-      // TODO: call server action
-      await createSection({ formId });
+      await createSection(formId, {
+        id: sectionId,
+        title,
+        formId,
+        orderNum: optimisticSections.length,
+      });
     },
-    [formId, updateOptimisticSections],
+    [formId, optimisticSections.length, updateOptimisticSections],
   );
 
   const value = useMemo(() => {
     return {
+      formId,
       sections: optimisticSections,
-      addSection,
+      appendSection,
     };
-  }, [optimisticSections, addSection]);
+  }, [formId, optimisticSections, appendSection]);
 
   return (
     <SectionsContext.Provider value={value}>

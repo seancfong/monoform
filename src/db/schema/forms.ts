@@ -1,6 +1,6 @@
 import { users } from "@/db/schema/auth";
 import { workspaceFolders } from "@/db/schema/workspaces";
-import { InferSelectModel } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -38,7 +38,7 @@ export const forms = pgTable("forms", {
 });
 
 export const sections = pgTable("sections", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   formId: uuid("form_id")
     .notNull()
     .references(() => forms.id),
@@ -46,9 +46,13 @@ export const sections = pgTable("sections", {
   orderNum: integer("order_num").notNull(),
 });
 
+export const sectionsRelations = relations(sections, ({ many }) => ({
+  blocks: many(blocks),
+}));
+
 export const blocks = pgTable("blocks", {
   id: serial("id").primaryKey(),
-  sectionId: integer("section_id")
+  sectionId: uuid("section_id")
     .notNull()
     .references(() => sections.id, { onDelete: "cascade" }),
   text: text("text").notNull(),
@@ -57,6 +61,13 @@ export const blocks = pgTable("blocks", {
   orderNum: integer("order_num").notNull(),
   required: boolean("required").notNull().default(false),
 });
+
+export const blocksRelations = relations(blocks, ({ one }) => ({
+  section: one(sections, {
+    fields: [blocks.sectionId],
+    references: [sections.id],
+  }),
+}));
 
 export const responses = pgTable("responses", {
   id: serial("id").primaryKey(),
@@ -78,3 +89,5 @@ export type SelectForms = InferSelectModel<typeof forms>;
 export type SelectSections = InferSelectModel<typeof sections>;
 export type SelectBlocks = InferSelectModel<typeof blocks>;
 export type SelectResponses = InferSelectModel<typeof responses>;
+
+export type InsertSections = InferInsertModel<typeof sections>;
