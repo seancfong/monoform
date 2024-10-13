@@ -40,13 +40,13 @@ type SectionContentProps = {
 
 function SectionContent({ section }: SectionContentProps) {
   return (
-    <div className="rounded-lg bg-zinc-200/25 p-2">
-      <div className="flex flex-col">
+    <div className="rounded-lg bg-zinc-200/25 p-3">
+      <div className="flex flex-col gap-2">
         {section.blocks.map((block) => (
           <EditBlock key={block.id} block={block} />
         ))}
       </div>
-      <div>
+      <div className="flex justify-center">
         <AddBlock section={section} />
       </div>
     </div>
