@@ -1,6 +1,8 @@
 "use client";
 
 import { sectionsReducer } from "@/app/(forms)/edit/[id]/components/contexts/sections-reducer";
+import { BlockVariant } from "@/db/schema";
+import appendBlockToSection from "@/lib/actions/forms/mutations/append-block";
 import createSection from "@/lib/actions/forms/mutations/create-section";
 import { FormSection } from "@/lib/types/forms";
 import {
@@ -19,6 +21,7 @@ interface SectionsContextValue {
   formId: string;
   sections: FormSection[];
   appendSection: (title: string) => void;
+  appendBlock: (section: FormSection, variant: BlockVariant) => void;
 }
 
 const SectionsContext = createContext<SectionsContextValue | undefined>(
@@ -52,7 +55,6 @@ export const SectionsProvider = ({
           payload: {
             sectionId,
             title,
-            formId,
           },
         });
       });
@@ -67,13 +69,44 @@ export const SectionsProvider = ({
     [formId, optimisticSections.length, updateOptimisticSections],
   );
 
+  const appendBlock = useCallback(
+    async (section: FormSection, variant: BlockVariant) => {
+      const blockId = uuidv4();
+
+      startTransition(() => {
+        updateOptimisticSections({
+          type: "APPEND_BLOCK",
+          payload: {
+            sectionId: section.id,
+            blockId,
+            variant,
+          },
+        });
+      });
+
+      await appendBlockToSection(
+        section.id,
+        {
+          id: blockId,
+          sectionId: section.id,
+          orderNum: section.blocks.length,
+          blockType: variant,
+          text: "",
+        },
+        formId,
+      );
+    },
+    [formId, updateOptimisticSections],
+  );
+
   const value = useMemo(() => {
     return {
       formId,
       sections: optimisticSections,
       appendSection,
+      appendBlock,
     };
-  }, [formId, optimisticSections, appendSection]);
+  }, [formId, optimisticSections, appendSection, appendBlock]);
 
   return (
     <SectionsContext.Provider value={value}>

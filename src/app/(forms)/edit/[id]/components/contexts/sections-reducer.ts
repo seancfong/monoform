@@ -1,7 +1,8 @@
+import { BlockVariant } from "@/db/schema";
 import { FormSection } from "@/lib/types/forms";
 import { produce } from "immer";
 
-type SectionsAction = AddSectionAction;
+type SectionsAction = AddSectionAction | AppendBlockAction;
 
 export function sectionsReducer(
   state: FormSection[] | undefined,
@@ -11,7 +12,7 @@ export function sectionsReducer(
 
   switch (action.type) {
     case "APPEND_SECTION": {
-      const { sectionId, title, formId } = action.payload;
+      const { sectionId, title } = action.payload;
       const newSection = {
         id: sectionId,
         title,
@@ -22,6 +23,32 @@ export function sectionsReducer(
         draft.push({ ...newSection, blocks: [] });
       });
     }
+
+    case "APPEND_BLOCK": {
+      const { sectionId, blockId, variant } = action.payload;
+
+      const sectionIndex = currentSectionsState.findIndex(
+        (section) => section.id === sectionId,
+      );
+
+      if (sectionIndex < 0) {
+        return currentSectionsState;
+      }
+
+      const newBlock = {
+        id: blockId,
+        blockType: variant,
+        orderNum: currentSectionsState[sectionIndex].blocks.length,
+        text: "",
+        description: "",
+        required: false,
+      };
+
+      return produce(currentSectionsState, (draft) => {
+        draft[sectionIndex].blocks.push(newBlock);
+      });
+    }
+
     default:
       return currentSectionsState;
   }
@@ -32,6 +59,14 @@ type AddSectionAction = {
   payload: {
     sectionId: string;
     title: string;
-    formId: string;
+  };
+};
+
+type AppendBlockAction = {
+  type: "APPEND_BLOCK";
+  payload: {
+    sectionId: string;
+    blockId: string;
+    variant: BlockVariant;
   };
 };

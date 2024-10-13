@@ -6,13 +6,12 @@ import {
   forms,
   sections,
   SelectForms,
-  SelectSections,
   SelectWorkspaceFolders,
   usersOwnWorkspaces,
   workspaceFolders,
 } from "@/db/schema";
-import { and, asc, count, eq } from "drizzle-orm";
 import { FormSection } from "@/lib/types/forms";
+import { and, asc, count, eq } from "drizzle-orm";
 
 export async function getWorkspaceFormsCount(
   workspaceId: number,

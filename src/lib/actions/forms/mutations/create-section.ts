@@ -11,9 +11,11 @@ export default async function createSection(
 ) {
   const { user } = await validateUser();
 
-  //   TODO: check if user owns form
+  // TODO: check if user owns form
+
+  // TODO: manually set orderNum
 
   await db.insert(sections).values(newSection);
 
-  revalidatePath(`/form/${formId}`, "page");
+  revalidatePath(`/edit/${formId}`, "page");
 }

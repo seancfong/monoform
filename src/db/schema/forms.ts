@@ -1,5 +1,6 @@
 import { users } from "@/db/schema/auth";
 import { workspaceFolders } from "@/db/schema/workspaces";
+import { enumToPgEnum } from "@/lib/utils/enums";
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 import {
   boolean,
@@ -12,9 +13,13 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-const BLOCK_TYPES = ["HEADER", "MULTIPLE_CHOICE", "CHECKBOX"] as const;
+export enum BlockVariant {
+  HEADER = "HEADER",
+  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
+  CHECKBOX = "CHECKBOX",
+}
 
-export const blockTypeEnum = pgEnum("blockType", BLOCK_TYPES);
+export const blockTypeEnum = pgEnum("blockType", enumToPgEnum(BlockVariant));
 
 export const forms = pgTable("forms", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -51,7 +56,7 @@ export const sectionsRelations = relations(sections, ({ many }) => ({
 }));
 
 export const blocks = pgTable("blocks", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   sectionId: uuid("section_id")
     .notNull()
     .references(() => sections.id, { onDelete: "cascade" }),
@@ -91,3 +96,4 @@ export type SelectBlocks = InferSelectModel<typeof blocks>;
 export type SelectResponses = InferSelectModel<typeof responses>;
 
 export type InsertSections = InferInsertModel<typeof sections>;
+export type InsertBlocks = InferInsertModel<typeof blocks>;
