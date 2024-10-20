@@ -7,13 +7,16 @@ import createSection from "@/lib/actions/forms/mutations/create-section";
 import { FormSection } from "@/lib/types/forms";
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   startTransition,
   use,
   useCallback,
   useContext,
   useMemo,
   useOptimistic,
+  useState,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -22,6 +25,8 @@ interface SectionsContextValue {
   sections: FormSection[];
   appendSection: (title: string) => void;
   appendBlock: (section: FormSection, variant: BlockVariant) => void;
+  focusedBlockId: string | undefined;
+  setFocusedBlockId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const SectionsContext = createContext<SectionsContextValue | undefined>(
@@ -44,6 +49,7 @@ export const SectionsProvider = ({
     initialSections,
     sectionsReducer,
   );
+  const [focusedBlockId, setFocusedBlockId] = useState<string>();
 
   const appendSection = useCallback(
     async (title: string) => {
@@ -105,8 +111,10 @@ export const SectionsProvider = ({
       sections: optimisticSections,
       appendSection,
       appendBlock,
+      focusedBlockId,
+      setFocusedBlockId,
     };
-  }, [formId, optimisticSections, appendSection, appendBlock]);
+  }, [formId, optimisticSections, appendSection, appendBlock, focusedBlockId]);
 
   return (
     <SectionsContext.Provider value={value}>

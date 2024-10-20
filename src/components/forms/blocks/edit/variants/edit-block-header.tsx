@@ -5,6 +5,6 @@ type Props = {
   block: FormBlock;
 };
 
-export default function BlockHeader({ block }: Props) {
+export default function EditBlockHeader({ block }: Props) {
   return <div>BlockHeader</div>;
 }

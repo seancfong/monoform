@@ -42,6 +42,8 @@ export function sectionsReducer(
         text: "",
         description: "",
         required: false,
+        sectionId,
+        multipleChoiceOptions: [],
       };
 
       return produce(currentSectionsState, (draft) => {

@@ -1,3 +1,4 @@
+import { multipleChoiceOptions } from "@/db/schema";
 import { users } from "@/db/schema/auth";
 import { workspaceFolders } from "@/db/schema/workspaces";
 import { enumToPgEnum } from "@/lib/utils/enums";
@@ -67,11 +68,12 @@ export const blocks = pgTable("blocks", {
   required: boolean("required").notNull().default(false),
 });
 
-export const blocksRelations = relations(blocks, ({ one }) => ({
+export const blocksRelations = relations(blocks, ({ one, many }) => ({
   section: one(sections, {
     fields: [blocks.sectionId],
     references: [sections.id],
   }),
+  multipleChoiceOptions: many(multipleChoiceOptions),
 }));
 
 export const responses = pgTable("responses", {

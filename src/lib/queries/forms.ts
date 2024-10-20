@@ -4,6 +4,7 @@ import { db } from "@/db";
 import {
   blocks,
   forms,
+  multipleChoiceOptions,
   sections,
   SelectForms,
   SelectWorkspaceFolders,
@@ -48,25 +49,23 @@ export async function getFormWithWorkspaceFolder(formId: string): Promise<{
 }
 
 export async function getFormSections(formId: string): Promise<FormSection[]> {
-  return db.query.sections.findMany({
+  return await db.query.sections.findMany({
     columns: {
-      id: true,
-      title: true,
-      orderNum: true,
+      formId: false,
     },
     where: eq(sections.formId, formId),
     orderBy: asc(sections.orderNum),
     with: {
       blocks: {
-        columns: {
-          id: true,
-          text: true,
-          blockType: true,
-          description: true,
-          orderNum: true,
-          required: true,
-        },
         orderBy: asc(blocks.orderNum),
+        with: {
+          multipleChoiceOptions: {
+            columns: {
+              blockId: false,
+            },
+            orderBy: asc(multipleChoiceOptions.orderNum),
+          },
+        },
       },
     },
   });

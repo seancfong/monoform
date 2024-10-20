@@ -1,10 +1,31 @@
-import { SelectBlocks, SelectSections } from "@/db/schema";
+import {
+  SelectBlocks,
+  SelectMultipleChoiceOptions,
+  SelectSections,
+} from "@/db/schema";
 
-export type FormSection = Pick<SelectSections, "id" | "title" | "orderNum"> & {
-  blocks: FormBlock[];
+export type FormBlock = SelectBlocks;
+
+export type BlockVariantUnion = MultipleChoiceBlock;
+
+export type FormSection = Omit<SelectSections, "formId"> & {
+  blocks: BlockVariantUnion[];
 };
 
-export type FormBlock = Pick<
-  SelectBlocks,
-  "id" | "text" | "blockType" | "description" | "required" | "orderNum"
->;
+export const isHeaderBlock = (block: FormBlock): block is FormBlock => {
+  return block.blockType === "HEADER";
+};
+
+export const isCheckboxBlock = (block: FormBlock): block is FormBlock => {
+  return block.blockType === "CHECKBOX";
+};
+
+export type MultipleChoiceBlock = FormBlock & {
+  multipleChoiceOptions: Omit<SelectMultipleChoiceOptions, "blockId">[];
+};
+
+export const isMultipleChoiceBlock = (
+  block: FormBlock,
+): block is MultipleChoiceBlock => {
+  return block.blockType === "MULTIPLE_CHOICE";
+};
