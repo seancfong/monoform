@@ -21,7 +21,7 @@ export const isCheckboxBlock = (block: FormBlock): block is FormBlock => {
 };
 
 export type MultipleChoiceBlock = FormBlock & {
-  multipleChoiceOptions: Omit<SelectMultipleChoiceOptions, "blockId">[];
+  multipleChoiceOptions: SelectMultipleChoiceOptions[];
 };
 
 export const isMultipleChoiceBlock = (

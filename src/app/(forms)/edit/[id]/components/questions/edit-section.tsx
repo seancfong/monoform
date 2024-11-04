@@ -2,6 +2,7 @@
 
 import AddBlock from "@/app/(forms)/edit/[id]/components/blocks/add-block";
 import EditBlock from "@/app/(forms)/edit/[id]/components/blocks/edit-block";
+import { BlockProvider } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
 import { FormSection } from "@/lib/types/forms";
 import { motion } from "framer-motion";
 
@@ -41,8 +42,10 @@ function SectionContent({ section }: SectionContentProps) {
   return (
     <motion.div layout className="rounded-lg bg-zinc-200/25 p-3">
       <div className="flex flex-col gap-2">
-        {section.blocks.map((block) => (
-          <EditBlock key={block.id} block={block} />
+        {section.blocks.map((block, index) => (
+          <BlockProvider key={block.id} index={index} block={block}>
+            <EditBlock />
+          </BlockProvider>
         ))}
       </div>
       <div className="flex justify-center">

@@ -1,10 +1,11 @@
-import { FormBlock } from "@/lib/types/forms";
-import React from "react";
+import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
 
-type Props = {
-  block: FormBlock;
-};
+export default function ChangeBlock() {
+  const { block } = useBlockContext();
 
-export default function ChangeBlock({ block }: Props) {
-  return <div>ChangeBlock</div>;
+  return (
+    <div className="border-1 border-zinc-200">
+      <p>{block.blockType}</p>
+    </div>
+  );
 }

@@ -25,6 +25,7 @@ interface SectionsContextValue {
   sections: FormSection[];
   appendSection: (title: string) => void;
   appendBlock: (section: FormSection, variant: BlockVariant) => void;
+
   focusedBlockId: string | undefined;
   setFocusedBlockId: Dispatch<SetStateAction<string | undefined>>;
 }

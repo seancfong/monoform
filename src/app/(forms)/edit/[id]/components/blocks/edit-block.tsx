@@ -1,40 +1,56 @@
 import ChangeBlock from "@/app/(forms)/edit/[id]/components/blocks/change-block";
+import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
 import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
 import EditBlockFactory from "@/components/forms/blocks/edit/edit-block-factory";
 import PreviewBlockFactory from "@/components/forms/blocks/preview/preview-block-factory";
-import { FormBlock } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-type Props = {
-  block: FormBlock;
-};
-
-export default function EditBlock({ block }: Props) {
+export default function EditBlock() {
   const { focusedBlockId, setFocusedBlockId } = useSectionsContext();
+  const { block, mutationCallback, setMutationCallback } = useBlockContext();
 
   return (
-    <motion.button
+    <motion.div
       layout
-      className={cn(
-        "flex w-full flex-col rounded-md border-1 border-zinc-200 bg-zinc-50 p-2 text-left",
-        {
-          "border-opacity-0 outline outline-2 -outline-offset-1 outline-slate-300":
-            focusedBlockId === block.id,
-        },
-      )}
-      onFocus={() => {
-        setFocusedBlockId(block.id);
-      }}
-      // onBlur={() => {
-      //   setFocusedBlockId(undefined);
-      // }}
+      className={cn("relative rounded-md border-1 border-zinc-200 bg-zinc-50", {
+        "z-20 mb-4 border-opacity-0 outline outline-2 -outline-offset-1 outline-slate-300":
+          focusedBlockId === block.id,
+      })}
     >
-      <motion.div layout="position">
-        <ChangeBlock block={block} />
-        {focusedBlockId === block.id && <EditBlockFactory block={block} />}
-        {focusedBlockId !== block.id && <PreviewBlockFactory block={block} />}
-      </motion.div>
-    </motion.button>
+      <div
+        className="flex w-full cursor-default flex-col overflow-hidden p-2 text-left"
+        onFocus={() => {
+          setFocusedBlockId(block.id);
+        }}
+        // onBlur={async (event) => {
+        //   if (event.currentTarget.contains(event.relatedTarget)) return;
+
+        //   if (saveCallback) {
+        //     await saveCallback();
+        //     setSaveCallback(undefined);
+        //   }
+
+        //   setFocusedBlockId(undefined);
+        // }}
+        tabIndex={0}
+        role="button"
+      >
+        <motion.div layout="position" className="relative z-10">
+          <ChangeBlock />
+          {focusedBlockId === block.id && <EditBlockFactory />}
+          {focusedBlockId !== block.id && <PreviewBlockFactory />}
+        </motion.div>
+      </div>
+      {focusedBlockId === block.id && (
+        <div className="absolute -bottom-2 left-1/2 duration-500 animate-in fade-in-50 zoom-in-90">
+          <div className="relative">
+            <div className="absolute -translate-x-1/2 rounded-sm bg-zinc-800 px-4 py-2 text-xs text-zinc-300 shadow-lg">
+              Required
+            </div>
+          </div>
+        </div>
+      )}
+    </motion.div>
   );
 }

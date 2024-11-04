@@ -60,9 +60,6 @@ export async function getFormSections(formId: string): Promise<FormSection[]> {
         orderBy: asc(blocks.orderNum),
         with: {
           multipleChoiceOptions: {
-            columns: {
-              blockId: false,
-            },
             orderBy: asc(multipleChoiceOptions.orderNum),
           },
         },

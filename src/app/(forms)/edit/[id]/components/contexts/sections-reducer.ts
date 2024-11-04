@@ -1,5 +1,5 @@
 import { BlockVariant } from "@/db/schema";
-import { FormSection } from "@/lib/types/forms";
+import { BlockVariantUnion, FormSection } from "@/lib/types/forms";
 import { produce } from "immer";
 
 type SectionsAction = AddSectionAction | AppendBlockAction;
@@ -35,7 +35,7 @@ export function sectionsReducer(
         return currentSectionsState;
       }
 
-      const newBlock = {
+      const newBlock: BlockVariantUnion = {
         id: blockId,
         blockType: variant,
         orderNum: currentSectionsState[sectionIndex].blocks.length,

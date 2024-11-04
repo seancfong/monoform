@@ -9,8 +9,6 @@ type Props = {};
 export default function EditQuestions({}: Props) {
   const { sections, appendSection: addSection } = useSectionsContext();
 
-  console.log("sections", sections);
-
   return (
     <div>
       <div className="flex flex-col gap-8">

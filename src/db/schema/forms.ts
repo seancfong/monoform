@@ -43,30 +43,42 @@ export const forms = pgTable("forms", {
     .defaultNow(),
 });
 
-export const sections = pgTable("sections", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  formId: uuid("form_id")
-    .notNull()
-    .references(() => forms.id),
-  title: text("title").notNull(),
-  orderNum: integer("order_num").notNull(),
-});
+export const sections = pgTable(
+  "sections",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    formId: uuid("form_id")
+      .notNull()
+      .references(() => forms.id),
+    title: text("title").notNull(),
+    orderNum: integer("order_num").notNull(),
+  },
+  (table) => ({
+    unique: [table.formId, table.orderNum],
+  }),
+);
 
 export const sectionsRelations = relations(sections, ({ many }) => ({
   blocks: many(blocks),
 }));
 
-export const blocks = pgTable("blocks", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  sectionId: uuid("section_id")
-    .notNull()
-    .references(() => sections.id, { onDelete: "cascade" }),
-  text: text("text").notNull(),
-  description: text("description"),
-  blockType: blockTypeEnum("block_type").notNull(),
-  orderNum: integer("order_num").notNull(),
-  required: boolean("required").notNull().default(false),
-});
+export const blocks = pgTable(
+  "blocks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    sectionId: uuid("section_id")
+      .notNull()
+      .references(() => sections.id, { onDelete: "cascade" }),
+    text: text("text").notNull(),
+    description: text("description"),
+    blockType: blockTypeEnum("block_type").notNull(),
+    orderNum: integer("order_num").notNull(),
+    required: boolean("required").notNull().default(false),
+  },
+  (table) => ({
+    unique: [table.sectionId, table.orderNum],
+  }),
+);
 
 export const blocksRelations = relations(blocks, ({ one, many }) => ({
   section: one(sections, {
