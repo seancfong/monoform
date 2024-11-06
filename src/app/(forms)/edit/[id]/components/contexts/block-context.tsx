@@ -1,40 +1,99 @@
 import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
-import { FormBlock } from "@/lib/types/forms";
-import { createContext, useContext, useMemo, useState } from "react";
+import { BlockVariantUnion } from "@/lib/types/forms";
+import {
+  createContext,
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+export interface BlockRef {
+  invokeSave: (sectionIndex: number, blockIndex: number) => void;
+}
 
 interface BlockContextValue {
-  block: FormBlock;
-  index: number;
+  /** Value that reflects the current database state */
+  optimisticBlock: BlockVariantUnion;
 
-  mutationCallback: (() => Promise<void>) | undefined;
-  setMutationCallback: React.Dispatch<
-    React.SetStateAction<(() => Promise<void>) | undefined>
-  >;
+  /** Value that reflects the current client-side draft and needs to be synced with its optimistic value */
+  blockDraft: BlockVariantUnion;
+  setBlockDraft: Dispatch<SetStateAction<BlockVariantUnion>>;
+
+  blockIndex: number;
+
+  saveCallback: () => void;
+  blockRef: RefObject<BlockRef>;
+
+  isStale: boolean;
+  setIsStale: Dispatch<SetStateAction<boolean>>;
 }
 
 const BlockContext = createContext<BlockContextValue | undefined>(undefined);
 
 type Props = {
-  block: FormBlock;
-  index: number;
+  sectionIndex: number;
+  blockIndex: number;
+  optimisticBlock: BlockVariantUnion;
   children: React.ReactNode;
 };
 
-export const BlockProvider = ({ block, index, children }: Props) => {
-  const { sections } = useSectionsContext();
+export const BlockProvider = ({
+  sectionIndex,
+  blockIndex,
+  optimisticBlock,
+  children,
+}: Props) => {
+  const { setFocusedBlockId } = useSectionsContext();
+  const [blockDraft, setBlockDraft] =
+    useState<BlockVariantUnion>(optimisticBlock);
+  const blockRef = useRef<BlockRef>(null);
+  const [isStale, setIsStale] = useState(false);
 
-  const [mutationCallback, setMutationCallback] = useState<
-    (() => Promise<void>) | undefined
-  >(undefined);
+  // Sync the block draft with the optimistic block on revalidation
+  useEffect(() => {
+    setBlockDraft(optimisticBlock);
+  }, [optimisticBlock]);
+
+  const saveCallback = useCallback(() => {
+    saveAttempt: try {
+      if (!isStale) {
+        break saveAttempt;
+      }
+
+      setIsStale(false);
+
+      if (!blockRef.current) {
+        throw new Error(
+          "`blockRef` is not initialized, cannot save this block entry.",
+        );
+      }
+
+      blockRef.current.invokeSave(sectionIndex, blockIndex);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setFocusedBlockId(undefined);
+    }
+  }, [blockIndex, isStale, sectionIndex, setFocusedBlockId]);
 
   const value = useMemo(
     () => ({
-      block,
-      index,
-      mutationCallback,
-      setMutationCallback,
+      optimisticBlock,
+      blockDraft,
+      setBlockDraft,
+      blockIndex,
+      saveCallback,
+      blockRef,
+      isStale,
+      setIsStale,
     }),
-    [block, index, mutationCallback],
+    [optimisticBlock, blockDraft, blockIndex, saveCallback, isStale],
   );
 
   return (

@@ -2,7 +2,7 @@ import { BlockVariant } from "@/db/schema";
 import { BlockVariantUnion, FormSection } from "@/lib/types/forms";
 import { produce } from "immer";
 
-type SectionsAction = AddSectionAction | AppendBlockAction;
+type SectionsAction = AddSectionAction | AppendBlockAction | MutateBlockAction;
 
 export function sectionsReducer(
   state: FormSection[] | undefined,
@@ -27,6 +27,7 @@ export function sectionsReducer(
     case "APPEND_BLOCK": {
       const { sectionId, blockId, variant } = action.payload;
 
+      // TODO: pass section index in payload and index currentSectionsState
       const sectionIndex = currentSectionsState.findIndex(
         (section) => section.id === sectionId,
       );
@@ -51,6 +52,16 @@ export function sectionsReducer(
       });
     }
 
+    case "MUTATE_BLOCK": {
+      const { sectionIndex, blockIndex, block } = action.payload;
+
+      const newDraft = produce(currentSectionsState, (draft) => {
+        draft[sectionIndex].blocks[blockIndex] = block;
+      });
+
+      return newDraft;
+    }
+
     default:
       return currentSectionsState;
   }
@@ -70,5 +81,14 @@ type AppendBlockAction = {
     sectionId: string;
     blockId: string;
     variant: BlockVariant;
+  };
+};
+
+type MutateBlockAction = {
+  type: "MUTATE_BLOCK";
+  payload: {
+    sectionIndex: number;
+    blockIndex: number;
+    block: BlockVariantUnion;
   };
 };

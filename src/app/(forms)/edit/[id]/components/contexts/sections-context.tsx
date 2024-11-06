@@ -2,9 +2,10 @@
 
 import { sectionsReducer } from "@/app/(forms)/edit/[id]/components/contexts/sections-reducer";
 import { BlockVariant } from "@/db/schema";
+import delay from "@/lib/actions/delay";
 import appendBlockToSection from "@/lib/actions/forms/mutations/append-block";
 import createSection from "@/lib/actions/forms/mutations/create-section";
-import { FormSection } from "@/lib/types/forms";
+import { BlockVariantUnion, FormSection } from "@/lib/types/forms";
 import {
   createContext,
   Dispatch,
@@ -25,6 +26,12 @@ interface SectionsContextValue {
   sections: FormSection[];
   appendSection: (title: string) => void;
   appendBlock: (section: FormSection, variant: BlockVariant) => void;
+  mutateBlock: (
+    sectionIndex: number,
+    blockIndex: number,
+    block: BlockVariantUnion,
+    action: () => Promise<void>,
+  ) => void;
 
   focusedBlockId: string | undefined;
   setFocusedBlockId: Dispatch<SetStateAction<string | undefined>>;
@@ -53,10 +60,10 @@ export const SectionsProvider = ({
   const [focusedBlockId, setFocusedBlockId] = useState<string>();
 
   const appendSection = useCallback(
-    async (title: string) => {
+    (title: string) => {
       const sectionId = uuidv4();
 
-      startTransition(() => {
+      startTransition(async () => {
         updateOptimisticSections({
           type: "APPEND_SECTION",
           payload: {
@@ -64,13 +71,13 @@ export const SectionsProvider = ({
             title,
           },
         });
-      });
 
-      await createSection(formId, {
-        id: sectionId,
-        title,
-        formId,
-        orderNum: optimisticSections.length,
+        await createSection(formId, {
+          id: sectionId,
+          title,
+          formId,
+          orderNum: optimisticSections.length,
+        });
       });
     },
     [formId, optimisticSections.length, updateOptimisticSections],
@@ -80,7 +87,7 @@ export const SectionsProvider = ({
     async (section: FormSection, variant: BlockVariant) => {
       const blockId = uuidv4();
 
-      startTransition(() => {
+      startTransition(async () => {
         updateOptimisticSections({
           type: "APPEND_BLOCK",
           payload: {
@@ -89,21 +96,44 @@ export const SectionsProvider = ({
             variant,
           },
         });
-      });
 
-      await appendBlockToSection(
-        section.id,
-        {
-          id: blockId,
-          sectionId: section.id,
-          orderNum: section.blocks.length,
-          blockType: variant,
-          text: "",
-        },
-        formId,
-      );
+        await appendBlockToSection(
+          section.id,
+          {
+            id: blockId,
+            sectionId: section.id,
+            orderNum: section.blocks.length,
+            blockType: variant,
+            text: "",
+          },
+          formId,
+        );
+      });
     },
     [formId, updateOptimisticSections],
+  );
+
+  const mutateBlock = useCallback(
+    (
+      sectionIndex: number,
+      blockIndex: number,
+      block: BlockVariantUnion,
+      action: () => Promise<void>,
+    ) => {
+      startTransition(async () => {
+        updateOptimisticSections({
+          type: "MUTATE_BLOCK",
+          payload: {
+            sectionIndex,
+            blockIndex,
+            block,
+          },
+        });
+
+        await action();
+      });
+    },
+    [updateOptimisticSections],
   );
 
   const value = useMemo(() => {
@@ -114,8 +144,16 @@ export const SectionsProvider = ({
       appendBlock,
       focusedBlockId,
       setFocusedBlockId,
+      mutateBlock,
     };
-  }, [formId, optimisticSections, appendSection, appendBlock, focusedBlockId]);
+  }, [
+    formId,
+    optimisticSections,
+    appendSection,
+    appendBlock,
+    focusedBlockId,
+    mutateBlock,
+  ]);
 
   return (
     <SectionsContext.Provider value={value}>

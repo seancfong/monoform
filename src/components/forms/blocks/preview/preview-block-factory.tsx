@@ -8,13 +8,13 @@ import {
 } from "@/lib/types/forms";
 
 export default function PreviewBlockFactory() {
-  const { block } = useBlockContext();
+  const { optimisticBlock } = useBlockContext();
 
-  if (isMultipleChoiceBlock(block)) {
-    return <PreviewBlockMultipleChoice block={block} />;
-  } else if (isHeaderBlock(block)) {
-    return <PreviewBlockHeader block={block} />;
-  } else if (isCheckboxBlock(block)) {
+  if (isMultipleChoiceBlock(optimisticBlock)) {
+    return <PreviewBlockMultipleChoice block={optimisticBlock} />;
+  } else if (isHeaderBlock(optimisticBlock)) {
+    return <PreviewBlockHeader block={optimisticBlock} />;
+  } else if (isCheckboxBlock(optimisticBlock)) {
     return <div>Checkbox</div>;
   }
 

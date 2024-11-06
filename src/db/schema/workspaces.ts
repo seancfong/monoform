@@ -1,5 +1,5 @@
-import { users } from "@/db/schema/auth";
-import { InferSelectModel } from "drizzle-orm";
+import { blocks, forms, users } from "@/db/schema";
+import { InferSelectModel, relations } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -28,6 +28,11 @@ export const workspaces = pgTable("workspaces", {
     .defaultNow(),
 });
 
+export const workspacesRelations = relations(workspaces, ({ many }) => ({
+  usersOwnWorkspaces: many(usersOwnWorkspaces),
+  folders: many(workspaceFolders),
+}));
+
 export const usersOwnWorkspaces = pgTable(
   "users_own_workspaces",
   {
@@ -49,6 +54,16 @@ export const usersOwnWorkspaces = pgTable(
   },
 );
 
+export const usersOwnWorkspacesRelations = relations(
+  usersOwnWorkspaces,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [usersOwnWorkspaces.workspaceId],
+      references: [workspaces.id],
+    }),
+  }),
+);
+
 export const workspaceFolders = pgTable("workspace_folders", {
   id: uuid("id").primaryKey().defaultRandom(),
   workspaceId: integer("workspace_id")
@@ -68,6 +83,17 @@ export const workspaceFolders = pgTable("workspace_folders", {
     .notNull()
     .defaultNow(),
 });
+
+export const workspaceFoldersRelations = relations(
+  workspaceFolders,
+  ({ one, many }) => ({
+    workspaces: one(workspaces, {
+      fields: [workspaceFolders.workspaceId],
+      references: [workspaces.id],
+    }),
+    forms: many(forms),
+  }),
+);
 
 export type SelectWorkspaces = InferSelectModel<typeof workspaces>;
 export type SelectWorkspaceFolders = InferSelectModel<typeof workspaceFolders>;

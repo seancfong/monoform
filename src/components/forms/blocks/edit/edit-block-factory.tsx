@@ -8,13 +8,13 @@ import {
 } from "@/lib/types/forms";
 
 export default function EditBlockFactory() {
-  const { block } = useBlockContext();
+  const { blockDraft, blockRef } = useBlockContext();
 
-  if (isMultipleChoiceBlock(block)) {
-    return <EditBlockMultipleChoice block={block} />;
-  } else if (isHeaderBlock(block)) {
-    return <EditBlockHeader block={block} />;
-  } else if (isCheckboxBlock(block)) {
+  if (isMultipleChoiceBlock(blockDraft)) {
+    return <EditBlockMultipleChoice blockDraft={blockDraft} ref={blockRef} />;
+  } else if (isHeaderBlock(blockDraft)) {
+    return <EditBlockHeader block={blockDraft} />;
+  } else if (isCheckboxBlock(blockDraft)) {
     return <div>Checkbox</div>;
   }
 

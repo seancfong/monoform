@@ -9,11 +9,13 @@ type Props = {};
 export default function EditQuestions({}: Props) {
   const { sections, appendSection: addSection } = useSectionsContext();
 
+  console.log(sections);
+
   return (
     <div>
       <div className="flex flex-col gap-8">
-        {sections.map((section) => (
-          <EditSection key={section.id} section={section} />
+        {sections.map((section, index) => (
+          <EditSection key={section.id} section={section} index={index} />
         ))}
       </div>
       <div>

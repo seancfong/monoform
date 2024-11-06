@@ -1,6 +1,5 @@
-import { multipleChoiceOptions } from "@/db/schema";
+import { multipleChoiceOptions, workspaceFolders } from "@/db/schema";
 import { users } from "@/db/schema/auth";
-import { workspaceFolders } from "@/db/schema/workspaces";
 import { enumToPgEnum } from "@/lib/utils/enums";
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 import {
@@ -43,6 +42,14 @@ export const forms = pgTable("forms", {
     .defaultNow(),
 });
 
+export const formsRelations = relations(forms, ({ one, many }) => ({
+  folder: one(workspaceFolders, {
+    fields: [forms.workspaceFolderId],
+    references: [workspaceFolders.id],
+  }),
+  sections: many(sections),
+}));
+
 export const sections = pgTable(
   "sections",
   {
@@ -58,7 +65,11 @@ export const sections = pgTable(
   }),
 );
 
-export const sectionsRelations = relations(sections, ({ many }) => ({
+export const sectionsRelations = relations(sections, ({ one, many }) => ({
+  form: one(forms, {
+    fields: [sections.formId],
+    references: [forms.id],
+  }),
   blocks: many(blocks),
 }));
 

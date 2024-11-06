@@ -107,52 +107,6 @@ export async function getWorkspaceFolderCount(
     .then((rows) => rows[0].count);
 }
 
-type UserWorkspaceWithFolders = UserWorkspace & {
-  folders: UserWorkspaceFolder[];
-};
-
-export async function getUserWorkspacesAndFolders(
-  user: User,
-): Promise<UserWorkspaceWithFolders[]> {
-  const rows = await db
-    .select({
-      id: workspaces.id,
-      title: workspaces.title,
-      slug: usersOwnWorkspaces.slug,
-      folders: {
-        id: workspaceFolders.id,
-        title: workspaceFolders.title,
-      },
-    })
-    .from(usersOwnWorkspaces)
-    .innerJoin(workspaces, eq(usersOwnWorkspaces.workspaceId, workspaces.id))
-    .leftJoin(
-      workspaceFolders,
-      eq(usersOwnWorkspaces.workspaceId, workspaceFolders.workspaceId),
-    )
-    .where(eq(usersOwnWorkspaces.userId, user.id))
-    .orderBy(asc(usersOwnWorkspaces.orderNum));
-
-  const workspaceMap = new Map<number, UserWorkspaceWithFolders>();
-
-  rows.forEach((row) => {
-    if (!workspaceMap.has(row.id)) {
-      workspaceMap.set(row.id, {
-        id: row.id,
-        title: row.title,
-        slug: row.slug,
-        folders: [],
-      });
-    }
-
-    if (row.folders) {
-      workspaceMap.get(row.id)!.folders.push(row.folders);
-    }
-  });
-
-  return Array.from(workspaceMap.values());
-}
-
 export async function getWorkspaceIdByFolderId(
   folderId: string,
 ): Promise<number> {

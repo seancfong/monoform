@@ -1,9 +1,9 @@
 import { blocks, responses } from "@/db/schema/forms";
 import { InferSelectModel, relations } from "drizzle-orm";
-import { integer, pgTable, serial, text, uuid } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 export const multipleChoiceOptions = pgTable("multiple_choice_options", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   blockId: uuid("block_id")
     .notNull()
     .references(() => blocks.id, { onDelete: "cascade" }),
@@ -23,7 +23,7 @@ export const multipleChoiceOptionsRelations = relations(
 
 export const multipleChoiceResponses = pgTable("multiple_choice_responses", {
   responseId: integer("response_id").references(() => responses.id),
-  selectedOptionId: integer("selected_option_id").references(
+  selectedOptionId: uuid("selected_option_id").references(
     () => multipleChoiceOptions.id,
     { onDelete: "cascade" },
   ),

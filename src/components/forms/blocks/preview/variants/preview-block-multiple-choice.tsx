@@ -1,8 +1,7 @@
-import { FormBlock } from "@/lib/types/forms";
-import React from "react";
+import { MultipleChoiceBlock } from "@/lib/types/forms";
 
 type Props = {
-  block: FormBlock;
+  block: MultipleChoiceBlock;
 };
 
 const QUESTION_PLACEHOLDER = "Untitled Question" as const;
@@ -14,6 +13,9 @@ export default function PreviewBlockMultipleChoice({ block }: Props) {
         <span className="text-zinc-600">
           {block.text || QUESTION_PLACEHOLDER}
         </span>
+        {block.multipleChoiceOptions.map((option) => (
+          <div key={option.id}>{option.text}</div>
+        ))}
       </div>
     </div>
   );

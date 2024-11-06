@@ -8,13 +8,14 @@ import { motion } from "framer-motion";
 
 type Props = {
   section: FormSection;
+  index: number;
 };
 
-export default function EditSection({ section }: Props) {
+export default function EditSection({ section, index }: Props) {
   return (
     <motion.div layout="position" className="flex flex-col gap-2">
       <SectionHeading section={section} />
-      <SectionContent section={section} />
+      <SectionContent section={section} sectionIndex={index} />
     </motion.div>
   );
 }
@@ -36,14 +37,20 @@ function SectionHeading({ section }: SectionHeadingProps) {
 
 type SectionContentProps = {
   section: FormSection;
+  sectionIndex: number;
 };
 
-function SectionContent({ section }: SectionContentProps) {
+function SectionContent({ section, sectionIndex }: SectionContentProps) {
   return (
     <motion.div layout className="rounded-lg bg-zinc-200/25 p-3">
       <div className="flex flex-col gap-2">
-        {section.blocks.map((block, index) => (
-          <BlockProvider key={block.id} index={index} block={block}>
+        {section.blocks.map((block, blockIndex) => (
+          <BlockProvider
+            key={block.id}
+            sectionIndex={sectionIndex}
+            blockIndex={blockIndex}
+            optimisticBlock={block}
+          >
             <EditBlock />
           </BlockProvider>
         ))}
