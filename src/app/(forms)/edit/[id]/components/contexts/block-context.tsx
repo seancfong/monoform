@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 
-export interface BlockRef {
+export interface MutationRef {
   invokeSave: (sectionIndex: number, blockIndex: number) => void;
 }
 
@@ -28,7 +28,7 @@ interface BlockContextValue {
   blockIndex: number;
 
   saveCallback: () => void;
-  blockRef: RefObject<BlockRef>;
+  mutationRef: RefObject<MutationRef>;
 
   isStale: boolean;
   setIsStale: Dispatch<SetStateAction<boolean>>;
@@ -52,7 +52,7 @@ export const BlockProvider = ({
   const { setFocusedBlockId } = useSectionsContext();
   const [blockDraft, setBlockDraft] =
     useState<BlockVariantUnion>(optimisticBlock);
-  const blockRef = useRef<BlockRef>(null);
+  const mutationRef = useRef<MutationRef>(null);
   const [isStale, setIsStale] = useState(false);
 
   // Sync the block draft with the optimistic block on revalidation
@@ -68,13 +68,13 @@ export const BlockProvider = ({
 
       setIsStale(false);
 
-      if (!blockRef.current) {
+      if (!mutationRef.current) {
         throw new Error(
           "`blockRef` is not initialized, cannot save this block entry.",
         );
       }
 
-      blockRef.current.invokeSave(sectionIndex, blockIndex);
+      mutationRef.current.invokeSave(sectionIndex, blockIndex);
     } catch (error) {
       console.error(error);
     } finally {
@@ -89,7 +89,7 @@ export const BlockProvider = ({
       setBlockDraft,
       blockIndex,
       saveCallback,
-      blockRef,
+      mutationRef,
       isStale,
       setIsStale,
     }),
