@@ -70,7 +70,7 @@ export const BlockProvider = ({
 
       if (!mutationRef.current) {
         throw new Error(
-          "`blockRef` is not initialized, cannot save this block entry.",
+          "`mutationRef` is not initialized, cannot save this block entry.",
         );
       }
 

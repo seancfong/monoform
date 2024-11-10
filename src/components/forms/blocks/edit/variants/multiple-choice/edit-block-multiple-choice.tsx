@@ -12,7 +12,6 @@ import { motion, Reorder } from "framer-motion";
 import { produce } from "immer";
 import {
   forwardRef,
-  startTransition,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -30,11 +29,12 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
     const { setBlockDraft, setIsStale } = useBlockContext();
     const [draggingId, setDraggingId] = useState<string | undefined>(undefined);
 
-    const inputRefs = useRef<HTMLInputElement[]>([]);
+    const optionRefs = useRef<HTMLButtonElement[]>([]);
     const addButtonRef = useRef<HTMLButtonElement>(null);
 
     const deleteOption = useCallback(
       (index: number) => {
+        setIsStale(true);
         setBlockDraft(
           produce(blockDraft, (draft) => {
             draft.multipleChoiceOptions.splice(index, 1);
@@ -46,25 +46,11 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
             ? index + 1
             : index - 1;
 
-        if (inputRefs.current[indexToFocus]) {
-          inputRefs.current[indexToFocus].focus();
+        if (optionRefs.current[indexToFocus]) {
+          optionRefs.current[indexToFocus].focus();
         } else if (addButtonRef.current) {
           addButtonRef.current.focus();
         }
-      },
-      [blockDraft, setBlockDraft],
-    );
-
-    const onBlur = useCallback(
-      (e: React.FocusEvent<HTMLInputElement>, index: number) => {
-        startTransition(() => {
-          setIsStale(true);
-          setBlockDraft(
-            produce(blockDraft, (draft) => {
-              draft.multipleChoiceOptions[index].text = e.target.value;
-            }),
-          );
-        });
       },
       [blockDraft, setBlockDraft, setIsStale],
     );
@@ -79,7 +65,7 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
 
     // Reassign inputRefs
     useEffect(() => {
-      inputRefs.current = inputRefs.current.slice(
+      optionRefs.current = optionRefs.current.slice(
         0,
         blockDraft.multipleChoiceOptions.length,
       );
@@ -111,14 +97,17 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
                 draggingId={draggingId}
                 setDraggingId={setDraggingId}
                 deleteOption={() => deleteOption(index)}
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
-                  onBlur(e, index)
-                }
                 ref={(el) => {
                   if (el) {
-                    inputRefs.current[index] = el;
+                    optionRefs.current[index] = el;
                   }
                 }}
+                refocusOption={() => {
+                  if (optionRefs.current[index]) {
+                    optionRefs.current[index].focus();
+                  }
+                }}
+                blockDraft={blockDraft}
               />
             ))}
           </Reorder.Group>
