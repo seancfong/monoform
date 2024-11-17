@@ -15,7 +15,6 @@ type Props = {
   setDraggingId: Dispatch<SetStateAction<string | undefined>>;
   blockDraft: MultipleChoiceBlock;
   deleteOption: () => void;
-  refocusOption: () => void;
 };
 
 const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
@@ -27,7 +26,6 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
       setDraggingId,
       blockDraft,
       deleteOption,
-      refocusOption,
     }: Props,
     ref,
   ) => {
@@ -91,7 +89,6 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
               onChange={debounceUpdate}
               onBlur={(e) => {
                 e.stopPropagation();
-                refocusOption();
               }}
               autoComplete="off"
             />

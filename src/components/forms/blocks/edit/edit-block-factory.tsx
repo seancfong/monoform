@@ -1,5 +1,5 @@
 import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
-import EditBlockHeader from "@/components/forms/blocks/edit/variants/edit-block-header";
+import EditBlockHeader from "@/components/forms/blocks/edit/variants/header/edit-block-header";
 import EditBlockMultipleChoice from "@/components/forms/blocks/edit/variants/multiple-choice/edit-block-multiple-choice";
 import {
   isCheckboxBlock,
@@ -15,7 +15,7 @@ export default function EditBlockFactory() {
       <EditBlockMultipleChoice blockDraft={blockDraft} ref={mutationRef} />
     );
   } else if (isHeaderBlock(blockDraft)) {
-    return <EditBlockHeader block={blockDraft} />;
+    return <EditBlockHeader blockDraft={blockDraft} ref={mutationRef} />;
   } else if (isCheckboxBlock(blockDraft)) {
     return <div>Checkbox</div>;
   }

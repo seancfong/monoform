@@ -1,5 +1,4 @@
 import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
-import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,7 +15,6 @@ type Props = {};
 
 export default function ChangeBlock({}: Props) {
   const { blockDraft, optimisticBlock, setBlockDraft } = useBlockContext();
-  const { focusedBlockId } = useSectionsContext();
 
   return (
     <div className="border-zinc-200">

@@ -4,7 +4,7 @@ import {
 } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
 import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
 import AddOption from "@/components/forms/blocks/edit/variants/multiple-choice/add-option";
-import MultipleChoiceHeader from "@/components/forms/blocks/edit/variants/multiple-choice/multiple-choice-header";
+import HeaderBlocks from "@/components/forms/blocks/edit/header-blocks";
 import MultipleChoiceOption from "@/components/forms/blocks/edit/variants/multiple-choice/multiple-choice-option";
 import mutateMultipleChoiceBlock from "@/lib/actions/forms/mutations/multiple-choice";
 import { MultipleChoiceBlock } from "@/lib/types/forms";
@@ -73,7 +73,7 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
 
     return (
       <div>
-        <MultipleChoiceHeader blockDraft={blockDraft} />
+        <HeaderBlocks blockDraft={blockDraft} />
         <motion.div layout className="flex max-w-80 flex-col pr-12">
           <Reorder.Group
             axis="y"
@@ -100,11 +100,6 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
                 ref={(el) => {
                   if (el) {
                     optionRefs.current[index] = el;
-                  }
-                }}
-                refocusOption={() => {
-                  if (optionRefs.current[index]) {
-                    optionRefs.current[index].focus();
                   }
                 }}
                 blockDraft={blockDraft}

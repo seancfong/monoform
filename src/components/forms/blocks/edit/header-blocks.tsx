@@ -5,7 +5,7 @@ import { startTransition } from "react";
 
 const QUESTION_PLACEHOLDER = "Untitled Question" as const;
 
-export default function MultipleChoiceHeader({
+export default function HeaderBlocks({
   blockDraft,
 }: {
   blockDraft: MultipleChoiceBlock;
@@ -15,7 +15,7 @@ export default function MultipleChoiceHeader({
   return (
     <div className="text-lg font-medium tracking-tight">
       <textarea
-        className="w-full bg-transparent text-zinc-600 placeholder:text-zinc-300"
+        className="w-full bg-zinc-100 text-zinc-600 placeholder:text-zinc-300"
         placeholder={QUESTION_PLACEHOLDER}
         value={blockDraft.text}
         onChange={(e) => {
@@ -28,6 +28,7 @@ export default function MultipleChoiceHeader({
             );
           });
         }}
+        rows={7}
       />
     </div>
   );
