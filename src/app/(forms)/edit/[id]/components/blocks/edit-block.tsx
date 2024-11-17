@@ -6,10 +6,19 @@ import EditBlockFactory from "@/components/forms/blocks/edit/edit-block-factory"
 import PreviewBlockFactory from "@/components/forms/blocks/preview/preview-block-factory";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 
 export default function EditBlock() {
   const { focusedBlockId, setFocusedBlockId } = useSectionsContext();
   const { optimisticBlock, saveCallback } = useBlockContext();
+
+  const blockRef = useRef<HTMLDivElement>(null);
+
+  const refocusBlock = () => {
+    if (!blockRef.current) return;
+
+    blockRef.current.focus();
+  };
 
   return (
     <div
@@ -26,6 +35,7 @@ export default function EditBlock() {
       }}
       tabIndex={0}
       role="button"
+      ref={blockRef}
     >
       <motion.div
         layout
@@ -41,7 +51,7 @@ export default function EditBlock() {
           {focusedBlockId === optimisticBlock.id ? (
             <>
               <div className="flex w-full justify-between">
-                <ChangeBlock />
+                <ChangeBlock refocusBlock={refocusBlock} />
               </div>
               <hr />
               <EditBlockFactory />

@@ -12,16 +12,19 @@ import { revalidatePath } from "next/cache";
 
 /**
  * Data integrity must be followed for this mutation:
- * I. user must own the mutated block
+ * I.   user must own the mutated block
  * II. orderNum must be sequential (0-based index) for each option
- * III. newly inserted options must belong to the block
- * IV. existing options that belong to the block may be inserted, but options that
- *     do not belong to the block will be ignored
+ * III.  block must be a multiple choice block
+ *      otherwise, reconcile block type
+ * IV.  newly inserted options must belong to the block
+ * V.   existing options that belong to the block may be inserted, but options that
+ *      do not belong to the block will be ignored
  */
 export default async function mutateMultipleChoiceBlock(
   formId: string,
   blockDraft: MultipleChoiceBlock,
 ) {
+  console.log("Mutating multiple choice block", blockDraft);
   const { user } = await validateUser();
 
   // I. Check if user owns block
@@ -64,42 +67,57 @@ export default async function mutateMultipleChoiceBlock(
       return;
     }
 
-    const draftMultipleChoiceIds = blockDraft.multipleChoiceOptions.map(
-      (option) => option.id,
-    );
-
-    // Delete old options that are not in new draft
-    await tx
-      .delete(multipleChoiceOptions)
-      .where(
-        and(
-          eq(multipleChoiceOptions.blockId, blockDraft.id),
-          notInArray(multipleChoiceOptions.id, draftMultipleChoiceIds),
-        ),
-      );
-
-    // Update block and new options
-    await Promise.all([
-      tx
-        .update(blocks)
-        .set({
+    // II. Reconcile block type if different
+    if (blockDraft.blockType !== existingBlock.blockType) {
+      await tx.transaction(async (tx2) => {
+        await tx2.delete(blocks).where(eq(blocks.id, blockDraft.id));
+        await tx2.insert(blocks).values({
+          id: existingBlock.id,
           text: blockDraft.text,
           description: blockDraft.description,
           required: blockDraft.required,
-        })
-        .where(eq(blocks.id, blockDraft.id)),
+          blockType: blockDraft.blockType,
+          sectionId: existingBlock.sectionId,
+          orderNum: existingBlock.orderNum,
+        });
+      });
+    } else {
+      await tx.transaction(async (tx2) => {
+        // Delete old options that are not in new draft
+        await tx2.delete(multipleChoiceOptions).where(
+          and(
+            eq(multipleChoiceOptions.blockId, blockDraft.id),
+            notInArray(
+              multipleChoiceOptions.id,
+              blockDraft.multipleChoiceOptions.map((option) => option.id),
+            ),
+          ),
+        );
+        await tx2
+          .update(blocks)
+          .set({
+            text: blockDraft.text,
+            description: blockDraft.description,
+            required: blockDraft.required,
+          })
+          .where(eq(blocks.id, blockDraft.id));
+      });
+    }
+
+    // Update new options
+    await Promise.all([
       ...blockDraft.multipleChoiceOptions.map((option) => {
         return (
           tx
             .insert(multipleChoiceOptions)
-            // III. Newly inserted options must belong to the block
+            // IV. Newly inserted options must belong to the block
             .values({
               id: option.id,
               text: option.text,
               orderNum: option.orderNum,
               blockId: blockDraft.id,
             })
-            // IV. Existing options that belong to the block may be inserted, but options that
+            // V. Existing options that belong to the block may be inserted, but options that
             //     do not belong to the block will be ignored
             .onConflictDoUpdate({
               target: multipleChoiceOptions.id,
@@ -112,10 +130,6 @@ export default async function mutateMultipleChoiceBlock(
         );
       }),
     ]);
-
-    // TODO: reconcile block type
-    // if (blockDraft.blockType !== currentBlock.blockType) {
-    // }
   });
 
   revalidatePath(`/edit/${formId}`, "page");

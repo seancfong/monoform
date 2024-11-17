@@ -14,7 +14,7 @@ import {
 } from "react";
 
 export interface MutationRef {
-  invokeSave: (sectionIndex: number, blockIndex: number) => void;
+  invokeSave: (formId: string) => Promise<void>;
 }
 
 interface BlockContextValue {
@@ -49,16 +49,19 @@ export const BlockProvider = ({
   optimisticBlock,
   children,
 }: Props) => {
-  const { setFocusedBlockId } = useSectionsContext();
+  const { focusedBlockId, setFocusedBlockId, mutateBlock, formId } =
+    useSectionsContext();
   const [blockDraft, setBlockDraft] =
     useState<BlockVariantUnion>(optimisticBlock);
   const mutationRef = useRef<MutationRef>(null);
   const [isStale, setIsStale] = useState(false);
 
-  // Sync the block draft with the optimistic block on revalidation
+  // In the background, sync the block draft with the optimistic block on revalidation
   useEffect(() => {
-    setBlockDraft(optimisticBlock);
-  }, [optimisticBlock]);
+    if (optimisticBlock.id !== focusedBlockId) {
+      setBlockDraft(optimisticBlock);
+    }
+  }, [blockDraft.id, focusedBlockId, optimisticBlock]);
 
   const saveCallback = useCallback(() => {
     saveAttempt: try {
@@ -68,19 +71,29 @@ export const BlockProvider = ({
 
       setIsStale(false);
 
-      if (!mutationRef.current) {
-        throw new Error(
-          "`mutationRef` is not initialized, cannot save this block entry.",
-        );
-      }
+      mutateBlock(sectionIndex, blockIndex, blockDraft, async () => {
+        if (!mutationRef.current) {
+          throw new Error(
+            "`mutationRef` is not initialized, cannot save this block entry.",
+          );
+        }
 
-      mutationRef.current.invokeSave(sectionIndex, blockIndex);
+        await mutationRef.current.invokeSave(formId);
+      });
     } catch (error) {
       console.error(error);
     } finally {
       setFocusedBlockId(undefined);
     }
-  }, [blockIndex, isStale, sectionIndex, setFocusedBlockId]);
+  }, [
+    blockDraft,
+    blockIndex,
+    formId,
+    isStale,
+    mutateBlock,
+    sectionIndex,
+    setFocusedBlockId,
+  ]);
 
   const value = useMemo(
     () => ({

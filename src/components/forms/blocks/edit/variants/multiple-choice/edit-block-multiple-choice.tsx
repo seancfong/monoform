@@ -2,11 +2,10 @@ import {
   MutationRef,
   useBlockContext,
 } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
-import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
-import AddOption from "@/components/forms/blocks/edit/variants/multiple-choice/add-option";
 import HeaderBlocks from "@/components/forms/blocks/edit/header-blocks";
+import AddOption from "@/components/forms/blocks/edit/variants/multiple-choice/add-option";
 import MultipleChoiceOption from "@/components/forms/blocks/edit/variants/multiple-choice/multiple-choice-option";
-import mutateMultipleChoiceBlock from "@/lib/actions/forms/mutations/multiple-choice";
+import mutateMultipleChoiceBlock from "@/lib/actions/forms/mutations/blocks/multiple-choice";
 import { MultipleChoiceBlock } from "@/lib/types/forms";
 import { motion, Reorder } from "framer-motion";
 import { produce } from "immer";
@@ -25,12 +24,25 @@ type Props = {
 
 const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
   ({ blockDraft }, ref) => {
-    const { mutateBlock, formId } = useSectionsContext();
     const { setBlockDraft, setIsStale } = useBlockContext();
     const [draggingId, setDraggingId] = useState<string | undefined>(undefined);
 
+    useImperativeHandle(ref, () => ({
+      invokeSave: async (formId: string) => {
+        await mutateMultipleChoiceBlock(formId, blockDraft);
+      },
+    }));
+
     const optionRefs = useRef<HTMLButtonElement[]>([]);
     const addButtonRef = useRef<HTMLButtonElement>(null);
+
+    // Reassign inputRefs whenever the options change
+    useEffect(() => {
+      optionRefs.current = optionRefs.current.slice(
+        0,
+        blockDraft.multipleChoiceOptions.length,
+      );
+    }, [blockDraft.multipleChoiceOptions]);
 
     const deleteOption = useCallback(
       (index: number) => {
@@ -54,22 +66,6 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
       },
       [blockDraft, setBlockDraft, setIsStale],
     );
-
-    useImperativeHandle(ref, () => ({
-      invokeSave: (sectionIndex: number, blockIndex: number) => {
-        mutateBlock(sectionIndex, blockIndex, blockDraft, async () => {
-          await mutateMultipleChoiceBlock(formId, blockDraft);
-        });
-      },
-    }));
-
-    // Reassign inputRefs
-    useEffect(() => {
-      optionRefs.current = optionRefs.current.slice(
-        0,
-        blockDraft.multipleChoiceOptions.length,
-      );
-    }, [blockDraft.multipleChoiceOptions]);
 
     return (
       <div>

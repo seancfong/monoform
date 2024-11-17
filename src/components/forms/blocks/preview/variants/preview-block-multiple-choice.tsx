@@ -1,5 +1,5 @@
 import { MultipleChoiceBlock } from "@/lib/types/forms";
-import { Markdown } from "@react-email/components";
+import Markdown from "react-markdown";
 
 type Props = {
   block: MultipleChoiceBlock;

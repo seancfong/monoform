@@ -1,14 +1,14 @@
 import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
-import { MultipleChoiceBlock } from "@/lib/types/forms";
+import { BlockVariantUnion, FormBlock } from "@/lib/types/forms";
 import { produce } from "immer";
 import { startTransition } from "react";
 
-const QUESTION_PLACEHOLDER = "Untitled Question" as const;
+const QUESTION_PLACEHOLDER = "Untitled" as const;
 
 export default function HeaderBlocks({
   blockDraft,
 }: {
-  blockDraft: MultipleChoiceBlock;
+  blockDraft: FormBlock;
 }) {
   const { setBlockDraft, setIsStale } = useBlockContext();
 
@@ -17,18 +17,21 @@ export default function HeaderBlocks({
       <textarea
         className="w-full bg-zinc-100 text-zinc-600 placeholder:text-zinc-300"
         placeholder={QUESTION_PLACEHOLDER}
-        value={blockDraft.text}
+        defaultValue={blockDraft.text}
         onChange={(e) => {
           startTransition(() => {
             setIsStale(true);
             setBlockDraft(
-              produce(blockDraft, (draft) => {
+              produce(blockDraft as BlockVariantUnion, (draft) => {
                 draft.text = e.target.value;
               }),
             );
           });
         }}
-        rows={7}
+        onBlur={(e) => {
+          e.stopPropagation();
+        }}
+        rows={4}
       />
     </div>
   );

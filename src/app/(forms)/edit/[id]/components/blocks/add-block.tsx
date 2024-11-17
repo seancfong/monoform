@@ -4,7 +4,7 @@ import {
   Command,
   CommandGroup,
   CommandItem,
-  CommandList
+  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { BlockVariant } from "@/db/schema";
-import { variantName } from "@/lib/types/blockVariants";
+import { variantName } from "@/lib/types/block-variants";
 import { FormSection } from "@/lib/types/forms";
 import { motion } from "framer-motion";
 import { ChevronsUpDown } from "lucide-react";

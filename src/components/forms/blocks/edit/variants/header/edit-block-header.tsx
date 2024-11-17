@@ -1,7 +1,8 @@
 import { MutationRef } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
-import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
+import HeaderBlocks from "@/components/forms/blocks/edit/header-blocks";
+import mutateHeaderBlock from "@/lib/actions/forms/mutations/blocks/header";
 import { FormBlock } from "@/lib/types/forms";
-import React, { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle } from "react";
 
 type Props = {
   blockDraft: FormBlock;
@@ -9,17 +10,17 @@ type Props = {
 
 const EditBlockHeader = forwardRef<MutationRef, Props>(
   ({ blockDraft }, ref) => {
-    // const {  } = useSectionsContext();
+    useImperativeHandle(ref, () => ({
+      invokeSave: async (formId: string) => {
+        await mutateHeaderBlock(formId, blockDraft);
+      },
+    }));
 
-    // useImperativeHandle(ref, () => ({
-    //   invokeSave: (sectionIndex: number, blockIndex: number) => {
-    //     mutateBlock(sectionIndex, blockIndex, blockDraft, async () => {
-    //       await mutateMultipleChoiceBlock(formId, blockDraft);
-    //     });
-    //   },
-    // }));
-
-    return <div>BlockHeader</div>;
+    return (
+      <div>
+        <HeaderBlocks blockDraft={blockDraft} />
+      </div>
+    );
   },
 );
 EditBlockHeader.displayName = "EditBlockHeader";
