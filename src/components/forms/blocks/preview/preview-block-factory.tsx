@@ -15,7 +15,7 @@ export default function PreviewBlockFactory() {
   } else if (isHeaderBlock(optimisticBlock)) {
     return <PreviewBlockHeader block={optimisticBlock} />;
   } else if (isCheckboxBlock(optimisticBlock)) {
-    return <div>Checkbox</div>;
+    return <PreviewBlockMultipleChoice block={optimisticBlock} />;
   }
 
   return <></>;

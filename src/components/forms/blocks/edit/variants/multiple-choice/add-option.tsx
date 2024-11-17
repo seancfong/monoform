@@ -2,6 +2,7 @@ import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/blo
 import { MultipleChoiceBlock } from "@/lib/types/forms";
 import { motion } from "framer-motion";
 import { produce } from "immer";
+import { Plus } from "lucide-react";
 import { forwardRef, startTransition, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -17,7 +18,7 @@ const AddOption = forwardRef<HTMLButtonElement, Props>(
       <motion.button
         layout
         ref={ref}
-        className="ml-5 rounded-md border-1 border-zinc-200 bg-zinc-50 px-4 py-2 text-left tracking-tight text-zinc-300"
+        className="ml-5 flex items-center gap-2 rounded-md border-1 border-zinc-200 bg-zinc-100 px-4 py-2 text-left tracking-tight text-zinc-300 transition-colors duration-150 hover:bg-zinc-50"
         onClick={() => {
           const newId = uuidv4();
           setIsStale(true);
@@ -36,6 +37,7 @@ const AddOption = forwardRef<HTMLButtonElement, Props>(
           });
         }}
       >
+        <Plus className="size-5" />
         Add Option
       </motion.button>
     );

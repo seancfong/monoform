@@ -23,3 +23,9 @@ export const VariantIcon = ({
       return <CircleCheckBig className={className} />;
   }
 };
+
+export const variantBackground = {
+  [BlockVariant.HEADER]: "bg-slate-100",
+  [BlockVariant.CHECKBOX]: "bg-zinc-100",
+  [BlockVariant.MULTIPLE_CHOICE]: "bg-zinc-100",
+};

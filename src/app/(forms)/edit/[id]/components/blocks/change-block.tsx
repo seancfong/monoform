@@ -4,10 +4,17 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BlockVariant } from "@/db/schema";
-import { VariantIcon, variantName } from "@/lib/types/block-variants";
+import {
+  variantBackground,
+  VariantIcon,
+  variantName,
+} from "@/lib/types/block-variants";
+import { BlockVariantUnion } from "@/lib/types/forms";
+import { cn } from "@/lib/utils";
 import { produce } from "immer";
 import { ChevronDown } from "lucide-react";
 
@@ -31,7 +38,12 @@ export default function ChangeBlock({}: Props) {
               }
             }}
           >
-            <span className="flex rounded-sm bg-slate-100 p-2">
+            <span
+              className={cn(
+                "flex rounded-sm p-2",
+                variantBackground[blockDraft.blockType],
+              )}
+            >
               <VariantIcon variant={blockDraft.blockType} className="size-4" />
             </span>
             <span className="text-sm font-normal">
@@ -49,28 +61,66 @@ export default function ChangeBlock({}: Props) {
           }}
           align="start"
         >
-          {Object.values(BlockVariant).map((variant) => (
-            <DropdownMenuCheckboxItem
-              key={variant}
-              checked={variant === blockDraft.blockType}
-              onCheckedChange={() => {
-                setIsStale(true);
-                setBlockDraft(
-                  produce(blockDraft, (draft) => {
-                    draft.blockType = variant;
-                  }),
-                );
-              }}
-              className="gap-2"
-            >
-              <span className="flex rounded-sm bg-slate-100 p-2">
-                <VariantIcon variant={variant} className="size-4" />
-              </span>
-              <span>{variantName[variant]}</span>
-            </DropdownMenuCheckboxItem>
-          ))}
+          <VariantDropdownItem
+            variant={BlockVariant.HEADER}
+            setIsStale={setIsStale}
+            setBlockDraft={setBlockDraft}
+            blockDraft={blockDraft}
+          />
+          <DropdownMenuSeparator />
+          <VariantDropdownItem
+            variant={BlockVariant.MULTIPLE_CHOICE}
+            setIsStale={setIsStale}
+            setBlockDraft={setBlockDraft}
+            blockDraft={blockDraft}
+          />
+          <VariantDropdownItem
+            variant={BlockVariant.CHECKBOX}
+            setIsStale={setIsStale}
+            setBlockDraft={setBlockDraft}
+            blockDraft={blockDraft}
+          />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
+  );
+}
+
+type VariantDropdownItemProps = {
+  variant: BlockVariant;
+  setIsStale: React.Dispatch<React.SetStateAction<boolean>>;
+  setBlockDraft: React.Dispatch<React.SetStateAction<BlockVariantUnion>>;
+  blockDraft: BlockVariantUnion;
+};
+
+function VariantDropdownItem({
+  variant,
+  setIsStale,
+  setBlockDraft,
+  blockDraft,
+}: VariantDropdownItemProps) {
+  return (
+    <DropdownMenuCheckboxItem
+      checked={variant === blockDraft.blockType}
+      onCheckedChange={() => {
+        setIsStale(true);
+        setBlockDraft(
+          produce(blockDraft, (draft) => {
+            draft.blockType = variant;
+          }),
+        );
+      }}
+      className="group/item gap-2 focus:bg-transparent"
+    >
+      <span
+        className={cn(
+          "flex rounded-sm p-2 group-hover/item:outline group-hover/item:outline-1 group-hover/item:outline-zinc-200",
+          variantBackground[variant],
+        )}
+      >
+        <VariantIcon variant={variant} className="size-4" />
+      </span>
+      <span>{variantName[variant]}</span>
+    </DropdownMenuCheckboxItem>
   );
 }

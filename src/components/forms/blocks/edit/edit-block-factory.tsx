@@ -17,7 +17,9 @@ export default function EditBlockFactory() {
   } else if (isHeaderBlock(blockDraft)) {
     return <EditBlockHeader blockDraft={blockDraft} ref={mutationRef} />;
   } else if (isCheckboxBlock(blockDraft)) {
-    return <div>Checkbox</div>;
+    return (
+      <EditBlockMultipleChoice blockDraft={blockDraft} ref={mutationRef} />
+    );
   }
 
   return <></>;
