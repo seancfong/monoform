@@ -20,7 +20,7 @@ export default async function EditFormPage({ params }: Props) {
   const sectionsPromise = getFormSections(formId);
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 sm:p-12">
+    <div className="flex flex-col items-center justify-center p-4 sm:p-12">
       <div className="w-full max-w-screen-sm lg:max-w-screen-md">
         <Tabs defaultValue="questions" className="w-full">
           <TabsList className="bg-zinc-200/75">

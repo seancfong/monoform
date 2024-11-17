@@ -2,11 +2,9 @@ import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/
 import { Button } from "@/components/ui/button";
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
-  CommandList,
+  CommandList
 } from "@/components/ui/command";
 import {
   Popover,
@@ -14,6 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { BlockVariant } from "@/db/schema";
+import { variantName } from "@/lib/types/blockVariants";
 import { FormSection } from "@/lib/types/forms";
 import { motion } from "framer-motion";
 import { ChevronsUpDown } from "lucide-react";
@@ -21,12 +20,6 @@ import { useState } from "react";
 
 type Props = {
   section: FormSection;
-};
-
-const variantName: Record<BlockVariant, string> = {
-  [BlockVariant.HEADER]: "Header",
-  [BlockVariant.CHECKBOX]: "Checkbox",
-  [BlockVariant.MULTIPLE_CHOICE]: "Multiple Choice",
 };
 
 export default function AddBlock({ section }: Props) {

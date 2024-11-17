@@ -14,34 +14,30 @@ const AddOption = forwardRef<HTMLButtonElement, Props>(
     const { setBlockDraft, optimisticBlock, setIsStale } = useBlockContext();
 
     return (
-      <motion.div
+      <motion.button
         layout
-        className="ml-5 rounded-md border-1 border-zinc-200 tracking-tight text-zinc-300"
-      >
-        <button
-          ref={ref}
-          className="px-4 py-2"
-          onClick={() => {
-            const newId = uuidv4();
-            setIsStale(true);
+        ref={ref}
+        className="ml-5 rounded-md border-1 border-zinc-200 bg-zinc-50 px-4 py-2 text-left tracking-tight text-zinc-300"
+        onClick={() => {
+          const newId = uuidv4();
+          setIsStale(true);
 
-            startTransition(() => {
-              setBlockDraft(
-                produce(block, (draft) => {
-                  draft.multipleChoiceOptions.push({
-                    id: newId,
-                    text: "",
-                    orderNum: draft.multipleChoiceOptions.length,
-                    blockId: optimisticBlock.id,
-                  });
-                }),
-              );
-            });
-          }}
-        >
-          Add Option
-        </button>
-      </motion.div>
+          startTransition(() => {
+            setBlockDraft(
+              produce(block, (draft) => {
+                draft.multipleChoiceOptions.push({
+                  id: newId,
+                  text: "",
+                  orderNum: draft.multipleChoiceOptions.length,
+                  blockId: optimisticBlock.id,
+                });
+              }),
+            );
+          });
+        }}
+      >
+        Add Option
+      </motion.button>
     );
   },
 );
