@@ -2,7 +2,6 @@
 
 import { sectionsReducer } from "@/app/(forms)/edit/[id]/components/contexts/sections-reducer";
 import { BlockVariant } from "@/db/schema";
-import delay from "@/lib/actions/delay";
 import appendBlockToSection from "@/lib/actions/forms/mutations/append-block";
 import createSection from "@/lib/actions/forms/mutations/create-section";
 import { BlockVariantUnion, FormSection } from "@/lib/types/forms";
@@ -20,6 +19,7 @@ import {
   useState,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { default as deleteSectionAction } from "@/lib/actions/forms/mutations/delete-section";
 
 interface SectionsContextValue {
   formId: string;
@@ -32,6 +32,7 @@ interface SectionsContextValue {
     block: BlockVariantUnion,
     action: () => Promise<void>,
   ) => void;
+  deleteSection: (sectionIndex: number) => void;
 
   focusedBlockId: string | undefined;
   setFocusedBlockId: Dispatch<SetStateAction<string | undefined>>;
@@ -136,6 +137,24 @@ export const SectionsProvider = ({
     [updateOptimisticSections],
   );
 
+  const deleteSection = useCallback(
+    async (sectionIndex: number) => {
+      startTransition(async () => {
+        updateOptimisticSections({
+          type: "DELETE_SECTION",
+          payload: {
+            sectionIndex,
+          },
+        });
+      });
+
+      // await deleteSectionAction(sectionIndex);
+      console.log("deleting", optimisticSections[sectionIndex]);
+      await deleteSectionAction(formId, optimisticSections[sectionIndex]);
+    },
+    [formId, optimisticSections, updateOptimisticSections],
+  );
+
   const value = useMemo(() => {
     return {
       formId,
@@ -145,6 +164,7 @@ export const SectionsProvider = ({
       focusedBlockId,
       setFocusedBlockId,
       mutateBlock,
+      deleteSection,
     };
   }, [
     formId,
@@ -153,6 +173,7 @@ export const SectionsProvider = ({
     appendBlock,
     focusedBlockId,
     mutateBlock,
+    deleteSection,
   ]);
 
   return (

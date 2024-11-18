@@ -3,6 +3,7 @@
 import AddBlock from "@/app/(forms)/edit/[id]/components/blocks/add-block";
 import EditBlock from "@/app/(forms)/edit/[id]/components/blocks/edit-block";
 import { BlockProvider } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
+import DeleteSection from "@/app/(forms)/edit/[id]/components/sections/delete-section";
 import { FormSection } from "@/lib/types/forms";
 import { motion } from "framer-motion";
 
@@ -42,7 +43,7 @@ type SectionContentProps = {
 
 function SectionContent({ section, sectionIndex }: SectionContentProps) {
   return (
-    <motion.div layout className="rounded-lg bg-zinc-200/25 p-3">
+    <motion.div layout className="space-y-2 rounded-lg bg-zinc-200/25 p-3">
       <div className="flex flex-col gap-2">
         {section.blocks.map((block, blockIndex) => (
           <BlockProvider
@@ -55,8 +56,9 @@ function SectionContent({ section, sectionIndex }: SectionContentProps) {
           </BlockProvider>
         ))}
       </div>
-      <div className="flex justify-center">
+      <div className="relative flex justify-center">
         <AddBlock section={section} />
+        <DeleteSection sectionIndex={sectionIndex} />
       </div>
     </motion.div>
   );

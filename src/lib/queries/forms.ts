@@ -12,7 +12,7 @@ import {
   workspaceFolders,
 } from "@/db/schema";
 import { FormSection } from "@/lib/types/forms";
-import { and, asc, count, eq } from "drizzle-orm";
+import { and, asc, count, eq, sql } from "drizzle-orm";
 
 export async function getWorkspaceFormsCount(
   workspaceId: number,
@@ -67,3 +67,22 @@ export async function getFormSections(formId: string): Promise<FormSection[]> {
     },
   });
 }
+
+export const userOwnsSection = db
+  .select({ sectionId: sections.id })
+  .from(usersOwnWorkspaces)
+  .innerJoin(
+    workspaceFolders,
+    eq(usersOwnWorkspaces.workspaceId, workspaceFolders.workspaceId),
+  )
+  .innerJoin(forms, eq(workspaceFolders.id, forms.workspaceFolderId))
+  .innerJoin(sections, eq(forms.id, sections.formId))
+  .where(
+    and(
+      eq(usersOwnWorkspaces.userId, sql.placeholder("userId")),
+      eq(forms.id, sql.placeholder("formId")),
+      eq(sections.id, sql.placeholder("sectionId")),
+    ),
+  )
+  .limit(1)
+  .prepare("userOwnsSection");

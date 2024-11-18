@@ -2,7 +2,11 @@ import { BlockVariant } from "@/db/schema";
 import { BlockVariantUnion, FormSection } from "@/lib/types/forms";
 import { produce } from "immer";
 
-type SectionsAction = AddSectionAction | AppendBlockAction | MutateBlockAction;
+type SectionsAction =
+  | AddSectionAction
+  | AppendBlockAction
+  | MutateBlockAction
+  | DeleteSectionAction;
 
 export function sectionsReducer(
   state: FormSection[] | undefined,
@@ -62,6 +66,14 @@ export function sectionsReducer(
       return newDraft;
     }
 
+    case "DELETE_SECTION": {
+      const { sectionIndex } = action.payload;
+
+      return produce(currentSectionsState, (draft) => {
+        draft.splice(sectionIndex, 1);
+      });
+    }
+
     default:
       return currentSectionsState;
   }
@@ -90,5 +102,12 @@ type MutateBlockAction = {
     sectionIndex: number;
     blockIndex: number;
     block: BlockVariantUnion;
+  };
+};
+
+type DeleteSectionAction = {
+  type: "DELETE_SECTION";
+  payload: {
+    sectionIndex: number;
   };
 };
