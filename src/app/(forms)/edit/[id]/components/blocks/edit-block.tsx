@@ -22,7 +22,8 @@ export default function EditBlock() {
   };
 
   return (
-    <div
+    <motion.div
+      layout
       className={cn("relative cursor-default", {
         "z-20 mb-4": focusedBlockId === optimisticBlock.id,
       })}
@@ -67,6 +68,6 @@ export default function EditBlock() {
         </motion.div>
       </motion.div>
       {focusedBlockId === optimisticBlock.id && <BlockOptions />}
-    </div>
+    </motion.div>
   );
 }

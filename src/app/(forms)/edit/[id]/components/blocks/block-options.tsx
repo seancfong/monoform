@@ -1,6 +1,7 @@
 import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { produce } from "immer";
 import React from "react";
 
@@ -10,7 +11,10 @@ export default function BlockOptions({}: Props) {
   const { setIsStale, blockDraft, setBlockDraft } = useBlockContext();
 
   return (
-    <div className="absolute -bottom-2 left-1/2 z-20 duration-500 animate-in fade-in-50 zoom-in-90">
+    <motion.div
+      layout="position"
+      className="absolute -bottom-2 left-1/2 z-20 duration-500 animate-in fade-in-50 zoom-in-90"
+    >
       <div className="relative">
         <div className="absolute z-20 -translate-x-1/2 rounded-sm bg-zinc-800 px-4 py-2 text-xs text-zinc-300 shadow-lg md:text-sm">
           <div className="flex items-center gap-2">
@@ -38,6 +42,6 @@ export default function BlockOptions({}: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

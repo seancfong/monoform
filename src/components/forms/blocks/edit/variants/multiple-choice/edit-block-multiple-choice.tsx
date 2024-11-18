@@ -36,6 +36,7 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
 
     const optionRefs = useRef<HTMLButtonElement[]>([]);
     const addButtonRef = useRef<HTMLButtonElement>(null);
+    const constraintRef = useRef<HTMLDivElement>(null);
 
     // Reassign inputRefs whenever the options change
     useEffect(() => {
@@ -69,7 +70,11 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
     );
 
     return (
-      <div>
+      <div
+        onPointerUp={() => {
+          setDraggingId(undefined);
+        }}
+      >
         <HeaderBlocks blockDraft={blockDraft} />
         <motion.div layout className="flex max-w-80 flex-col pr-12">
           <Reorder.Group
@@ -85,6 +90,7 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
               );
             }}
             className="-ml-1 mb-2 space-y-2"
+            ref={constraintRef}
           >
             {blockDraft.multipleChoiceOptions.map((option, index) => (
               <MultipleChoiceOption
@@ -99,6 +105,7 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
                     optionRefs.current[index] = el;
                   }
                 }}
+                constraintRef={constraintRef}
                 blockDraft={blockDraft}
               />
             ))}

@@ -15,6 +15,7 @@ type Props = {
   draggingId: string | undefined;
   setDraggingId: Dispatch<SetStateAction<string | undefined>>;
   blockDraft: MultipleChoiceBlock;
+  constraintRef: React.RefObject<HTMLDivElement>;
   deleteOption: () => void;
 };
 
@@ -27,6 +28,7 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
       setDraggingId,
       blockDraft,
       deleteOption,
+      constraintRef,
     }: Props,
     ref,
   ) => {
@@ -54,6 +56,7 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
         className={cn("cursor-auto", {
           relative: draggingId === option.id,
         })}
+        dragConstraints={constraintRef}
       >
         <motion.div
           layout
@@ -63,9 +66,6 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
             onPointerDown={(e) => {
               setDraggingId(option.id);
               controls.start(e);
-            }}
-            onPointerUp={() => {
-              setDraggingId(undefined);
             }}
             style={{
               touchAction: "none",
