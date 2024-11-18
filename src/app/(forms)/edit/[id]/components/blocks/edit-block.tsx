@@ -62,7 +62,9 @@ export default function EditBlock() {
             <>
               <ChangeBlockPreview />
               <hr />
-              <PreviewBlockFactory />
+              <div className="px-2 md:px-6">
+                <PreviewBlockFactory />
+              </div>
             </>
           )}
         </motion.div>

@@ -1,12 +1,12 @@
 import PreviewBlockHeader from "@/components/forms/blocks/preview/variants/preview-block-header";
 import { MultipleChoiceBlock } from "@/lib/types/forms";
-import Markdown from "react-markdown";
+import React from "react";
 
 type Props = {
   block: MultipleChoiceBlock;
 };
 
-export default function PreviewBlockMultipleChoice({ block }: Props) {
+export default function FillBlockMultipleChoice({ block }: Props) {
   return (
     <div>
       <PreviewBlockHeader block={block} />
