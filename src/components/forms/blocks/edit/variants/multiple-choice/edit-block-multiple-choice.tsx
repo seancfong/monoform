@@ -19,6 +19,7 @@ import {
 } from "react";
 
 type Props = {
+  // Can be either radio or checkbox
   blockDraft: MultipleChoiceBlock;
 };
 

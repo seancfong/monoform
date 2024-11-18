@@ -110,7 +110,7 @@ function VariantDropdownItem({
           }),
         );
       }}
-      className="group/item gap-2 focus:bg-transparent"
+      className="group/item cursor-pointer gap-2 focus:bg-transparent"
     >
       <span
         className={cn(

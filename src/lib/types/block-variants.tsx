@@ -1,5 +1,5 @@
 import { BlockVariant } from "@/db/schema";
-import { CircleCheckBig, SquareCheckBig, Type } from "lucide-react";
+import { CircleCheckBig, CopyCheck, Type } from "lucide-react";
 
 export const variantName: Record<BlockVariant, string> = {
   [BlockVariant.HEADER]: "Header",
@@ -18,7 +18,7 @@ export const VariantIcon = ({
     case BlockVariant.HEADER:
       return <Type className={className} />;
     case BlockVariant.CHECKBOX:
-      return <SquareCheckBig className={className} />;
+      return <CopyCheck className={className} />;
     case BlockVariant.MULTIPLE_CHOICE:
       return <CircleCheckBig className={className} />;
   }

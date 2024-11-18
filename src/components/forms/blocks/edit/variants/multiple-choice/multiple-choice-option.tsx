@@ -1,11 +1,12 @@
 import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
 import { Button } from "@/components/ui/button";
+import { BlockVariant } from "@/db/schema";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { MultipleChoiceBlock } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";
 import { motion, Reorder, useDragControls } from "framer-motion";
 import { produce } from "immer";
-import { Circle, GripVertical, X } from "lucide-react";
+import { Circle, GripVertical, Square, X } from "lucide-react";
 import { Dispatch, forwardRef, SetStateAction } from "react";
 
 type Props = {
@@ -79,7 +80,12 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
             <GripVertical className="size-5" />
           </button>
           <div className="flex w-full items-center gap-2 rounded-md border-1 border-zinc-200 bg-zinc-50 px-4 py-2">
-            <Circle className="size-5 text-zinc-300" />
+            {blockDraft.blockType === BlockVariant.CHECKBOX && (
+              <Square className="size-5 text-zinc-300" />
+            )}
+            {blockDraft.blockType === BlockVariant.MULTIPLE_CHOICE && (
+              <Circle className="size-5 text-zinc-300" />
+            )}
             <input
               type="text"
               name="new-option"
