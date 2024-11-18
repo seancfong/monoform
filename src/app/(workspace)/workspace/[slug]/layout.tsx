@@ -1,9 +1,9 @@
+import { SidebarProvider } from "@/app/(workspace)/workspace/[slug]/components/contexts/sidebar-context";
 import NavigationBar from "@/app/(workspace)/workspace/[slug]/components/navigation-bar";
 import {
   Sidebar,
   SidebarSkeleton,
 } from "@/app/(workspace)/workspace/[slug]/components/sidebar";
-import { SidebarProvider } from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-context";
 import React, { Suspense } from "react";
 
 type Props = {
@@ -11,13 +11,13 @@ type Props = {
   params: { slug: string };
 };
 
-export default function DashboardLayout({ children, params }: Props) {
+export default async function DashboardLayout({ children, params }: Props) {
   const { slug } = params;
 
   return (
     <SidebarProvider>
       <div className="relative min-h-screen w-full overflow-x-hidden bg-zinc-50 lg:flex">
-        <Suspense fallback={<SidebarSkeleton />}>
+        <Suspense fallback={<SidebarSkeleton slug={slug} />}>
           <Sidebar slug={slug} />
         </Suspense>
         <div className="min-w-0 lg:flex-grow lg:px-6">

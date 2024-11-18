@@ -1,5 +1,5 @@
-import { users } from "@/db/schema/auth";
-import { InferSelectModel } from "drizzle-orm";
+import { blocks, forms, users } from "@/db/schema";
+import { InferSelectModel, relations } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   unique,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 export const workspaces = pgTable("workspaces", {
@@ -26,6 +27,11 @@ export const workspaces = pgTable("workspaces", {
     .notNull()
     .defaultNow(),
 });
+
+export const workspacesRelations = relations(workspaces, ({ many }) => ({
+  usersOwnWorkspaces: many(usersOwnWorkspaces),
+  folders: many(workspaceFolders),
+}));
 
 export const usersOwnWorkspaces = pgTable(
   "users_own_workspaces",
@@ -48,11 +54,21 @@ export const usersOwnWorkspaces = pgTable(
   },
 );
 
+export const usersOwnWorkspacesRelations = relations(
+  usersOwnWorkspaces,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [usersOwnWorkspaces.workspaceId],
+      references: [workspaces.id],
+    }),
+  }),
+);
+
 export const workspaceFolders = pgTable("workspace_folders", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   workspaceId: integer("workspace_id")
     .notNull()
-    .references(() => workspaces.id),
+    .references(() => workspaces.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   createdAt: timestamp("created_at", {
     withTimezone: true,
@@ -67,6 +83,17 @@ export const workspaceFolders = pgTable("workspace_folders", {
     .notNull()
     .defaultNow(),
 });
+
+export const workspaceFoldersRelations = relations(
+  workspaceFolders,
+  ({ one, many }) => ({
+    workspaces: one(workspaces, {
+      fields: [workspaceFolders.workspaceId],
+      references: [workspaces.id],
+    }),
+    forms: many(forms),
+  }),
+);
 
 export type SelectWorkspaces = InferSelectModel<typeof workspaces>;
 export type SelectWorkspaceFolders = InferSelectModel<typeof workspaceFolders>;

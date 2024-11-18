@@ -7,7 +7,7 @@ export default function NavigationBar() {
       <div>
         <MobileSidebarToggle />
         <h1 className="hidden text-xl font-semibold leading-loose text-zinc-800 lg:block lg:text-2xl">
-          monoform_
+          monoform
         </h1>
       </div>
       <div>

@@ -162,6 +162,76 @@
       "when": 1725264314486,
       "tag": "0022_closed_darkstar",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1725571801508,
+      "tag": "0023_fixed_malcolm_colcord",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1725571964089,
+      "tag": "0024_jittery_nebula",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1727461455679,
+      "tag": "0025_cooing_xorn",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1727721853990,
+      "tag": "0026_icy_loa",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1728070134336,
+      "tag": "0027_dark_hitman",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1728070184973,
+      "tag": "0028_classy_liz_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1728779601982,
+      "tag": "0029_strong_oracle",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1728779648091,
+      "tag": "0030_adorable_kinsey_walden",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1730761196916,
+      "tag": "0031_reflective_wallow",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1730761224907,
+      "tag": "0032_aberrant_professor_monster",
+      "breakpoints": true
     }
   ]
 }

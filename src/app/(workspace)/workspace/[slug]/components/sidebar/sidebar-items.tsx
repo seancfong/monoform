@@ -1,7 +1,8 @@
 "use client";
 
+import { FoldersProvider } from "@/app/(workspace)/workspace/[slug]/components/contexts/folders-context";
+import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/contexts/sidebar-context";
 import { ChangeWorkspaces } from "@/app/(workspace)/workspace/[slug]/components/sidebar/change-workspaces";
-import { useSidebarContext } from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-context";
 import SidebarFolders from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-folders";
 import SidebarNavigation from "@/app/(workspace)/workspace/[slug]/components/sidebar/sidebar-navigation";
 import { Separator } from "@/components/ui/separator";
@@ -12,15 +13,13 @@ import { AnimatePresence, motion } from "framer-motion";
 type Props = {
   currentWorkspace: UserWorkspace;
   otherWorkspaces: UserWorkspace[];
-  folders: UserWorkspaceFolder[];
-  slug: string;
+  foldersPromise: Promise<UserWorkspaceFolder[]>;
 };
 
 export default function SidebarItems({
   currentWorkspace,
   otherWorkspaces,
-  folders,
-  slug,
+  foldersPromise,
 }: Props) {
   const { isOpen } = useSidebarContext();
 
@@ -29,7 +28,7 @@ export default function SidebarItems({
       <SidebarBackground />
       <div
         className={cn(
-          "fixed left-0 top-0 z-50 flex min-h-screen w-80 -translate-x-full flex-col border-r-1 border-r-zinc-200 bg-zinc-100 py-3 duration-500 ease-out-quart lg:relative lg:translate-x-0 lg:duration-0",
+          "fixed left-0 top-0 z-50 flex min-h-screen min-w-80 -translate-x-full flex-col border-r-1 border-r-zinc-200 bg-zinc-100 py-3 duration-500 ease-out-quart lg:relative lg:translate-x-0 lg:duration-0",
           { "translate-x-0": isOpen },
         )}
       >
@@ -38,8 +37,13 @@ export default function SidebarItems({
           otherWorkspaces={otherWorkspaces}
         />
         <Separator />
-        <SidebarNavigation slug={slug} />
-        <SidebarFolders folders={folders} />
+        <SidebarNavigation slug={currentWorkspace.slug} />
+        <FoldersProvider
+          foldersPromise={foldersPromise}
+          workspace={currentWorkspace}
+        >
+          <SidebarFolders workspace={currentWorkspace} />
+        </FoldersProvider>
       </div>
     </>
   );
