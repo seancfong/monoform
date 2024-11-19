@@ -42,14 +42,14 @@ export default function EditBlock() {
       <motion.div
         layout
         className={cn(
-          "relative flex w-full flex-col overflow-hidden rounded-md border-1 border-zinc-200 bg-zinc-50 p-2 text-left",
+          "relative flex w-full flex-col overflow-hidden rounded-md border-1 border-zinc-200 bg-zinc-50 p-2 pb-4 text-left md:pb-8",
           {
             "border-opacity-0 outline outline-2 -outline-offset-1 outline-slate-300":
               focusedBlockId === optimisticBlock.id,
           },
         )}
       >
-        <motion.div layout="position" className="space-y-2">
+        <motion.div layout="position" className="space-y-1">
           {focusedBlockId === optimisticBlock.id ? (
             <>
               <div className="flex w-full justify-between">
@@ -62,7 +62,7 @@ export default function EditBlock() {
             <>
               <ChangeBlockPreview />
               <hr />
-              <div className="px-2 md:px-6">
+              <div className="px-2 pt-4 md:px-6">
                 <PreviewBlockFactory />
               </div>
             </>

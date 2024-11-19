@@ -1,4 +1,4 @@
-import FillBlockMultipleChoice from "@/components/forms/blocks/fill/variants/fill-block-multiple-choice";
+import FillBlockMultipleChoice from "@/components/forms/blocks/fill/variants/multiple-choice/fill-block-multiple-choice";
 import PreviewBlockHeader from "@/components/forms/blocks/preview/variants/preview-block-header";
 import {
   BlockVariantUnion,

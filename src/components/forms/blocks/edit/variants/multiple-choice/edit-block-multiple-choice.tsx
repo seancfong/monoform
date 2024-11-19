@@ -74,6 +74,7 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
         onPointerUp={() => {
           setDraggingId(undefined);
         }}
+        className="space-y-4"
       >
         <HeaderBlocks blockDraft={blockDraft} />
         <motion.div layout className="flex max-w-80 flex-col pr-12">

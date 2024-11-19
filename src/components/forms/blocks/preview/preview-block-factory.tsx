@@ -1,6 +1,6 @@
 import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
 import PreviewBlockHeader from "@/components/forms/blocks/preview/variants/preview-block-header";
-import PreviewBlockMultipleChoice from "@/components/forms/blocks/preview/variants/preview-block-multiple-choice";
+import PreviewBlockMultipleChoice from "@/components/forms/blocks/preview/variants/multiple-choice/preview-block-multiple-choice";
 import {
   isCheckboxBlock,
   isHeaderBlock,

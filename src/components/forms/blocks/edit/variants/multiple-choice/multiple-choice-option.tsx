@@ -45,7 +45,7 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
           }),
         );
       },
-      200,
+      50,
     );
 
     return (
@@ -79,7 +79,7 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
           >
             <GripVertical className="size-5" />
           </button>
-          <div className="flex w-full items-center gap-2 rounded-md border-1 border-zinc-200 bg-zinc-50 px-4 py-2">
+          <div className="flex w-full items-center gap-2 rounded-md border-2 border-zinc-200/50 bg-zinc-50 px-4 py-2">
             {blockDraft.blockType === BlockVariant.CHECKBOX && (
               <Square className="size-5 text-zinc-300" />
             )}
