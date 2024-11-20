@@ -1,56 +1,173 @@
 "use client";
 
+import { FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { BlockVariant } from "@/db/schema";
 import { MultipleChoiceBlock } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";
-import { Check, Square, SquareCheckBig } from "lucide-react";
+import { produce } from "immer";
+import { Circle, CircleCheckBig, Square, SquareCheckBig } from "lucide-react";
 import React from "react";
+import { Control, FieldValues } from "react-hook-form";
 
-type Props = {
+type Props<T> = {
   block: MultipleChoiceBlock;
+  control: Control<FieldValues, T>;
 };
 
-export default function FillMultipleChoiceOptions({ block }: Props) {
+export default function FillMultipleChoiceOptions<T>({
+  block,
+  control,
+}: Props<T>) {
   return (
     <>
-      {block.multipleChoiceOptions.map((option, index) => (
-        <div key={option.id}>
-          {block.blockType === BlockVariant.CHECKBOX && (
-            <CustomCheckbox
-              isChecked={true}
-              onChange={() => {}}
-              label={option.text}
-            />
-          )}
-          {/* {block.blockType === BlockVariant.MULTIPLE_CHOICE && (
-            <CustomRadio option={option} />
-          )} */}
-        </div>
-      ))}
+      {block.blockType === BlockVariant.CHECKBOX && (
+        <FormField<Record<string, string[]>>
+          control={control}
+          name={block.id}
+          render={({ field }) => {
+            // console.log(field.value);
+            return (
+              <>
+                {block.multipleChoiceOptions.map((option) => (
+                  <MultipleChoiceItem
+                    key={option.id}
+                    label={option.text}
+                    isChecked={field.value?.includes(option.id) ?? false}
+                  >
+                    <MultipleChoiceInput
+                      type="checkbox"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const checked = e.target.checked;
+
+                        const newValue: string[] = checked
+                          ? produce(field.value ?? [], (draft) => {
+                              draft.push(option.id);
+                            })
+                          : produce(field.value ?? [], (draft) => {
+                              if (block.required && draft.length === 1) return;
+
+                              draft.splice(draft.indexOf(option.id), 1);
+                            });
+
+                        field.onChange(newValue);
+                      }}
+                      checkedIcon={<SquareCheckBig />}
+                      uncheckedIcon={<Square />}
+                    />
+                  </MultipleChoiceItem>
+                ))}
+                <FormMessage />
+              </>
+            );
+          }}
+        />
+      )}
+      {block.blockType === BlockVariant.MULTIPLE_CHOICE && (
+        <FormField<Record<string, string>>
+          control={control}
+          name={block.id}
+          render={({ field }) => {
+            return (
+              <>
+                {block.multipleChoiceOptions.map((option) => (
+                  <MultipleChoiceItem
+                    key={option.id}
+                    label={option.text}
+                    isChecked={field.value?.includes(option.id) ?? false}
+                  >
+                    <MultipleChoiceInput
+                      type="radio"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const checked = e.target.checked;
+
+                        const uncheckedValue = block.required
+                          ? field.value
+                          : undefined;
+
+                        const newValue = checked ? option.id : uncheckedValue;
+
+                        field.onChange(newValue);
+                      }}
+                      className="peer sr-only"
+                      checkedIcon={<CircleCheckBig className="rounded-full" />}
+                      uncheckedIcon={<Circle />}
+                    />
+                  </MultipleChoiceItem>
+                ))}
+                <FormMessage />
+              </>
+            );
+          }}
+        />
+      )}
     </>
   );
 }
 
-type CustomCheckboxProps = {
+type MultipleChoiceItemProps = {
   isChecked: boolean;
-  onChange: () => void;
-  label?: string;
+  label: string;
+  children: React.ReactElement;
 };
 
-function CustomCheckbox({ isChecked, onChange, label }: CustomCheckboxProps) {
+function MultipleChoiceItem({
+  isChecked,
+  label,
+  children,
+}: MultipleChoiceItemProps) {
+  const input = React.cloneElement(children, {
+    isChecked,
+  });
+
   return (
-    <label
-      className={cn(
-        "mb-2 flex w-full flex-grow cursor-pointer items-center gap-2 rounded-md border-2 border-zinc-200/50 bg-zinc-50 px-4 py-2",
-        isChecked && "bg-zinc-100",
-      )}
-    >
+    <FormItem>
+      <label
+        className={cn(
+          "group/label mb-2 flex w-full flex-grow cursor-pointer items-center gap-2 rounded-md border-2 border-zinc-200/50 bg-zinc-50 px-4 py-2",
+          isChecked && "bg-zinc-200/25",
+        )}
+      >
+        {input}
+        <span
+          className={cn(
+            "ml-2 flex-grow select-none text-zinc-500 transition-colors peer-focus-visible:text-zinc-600",
+            isChecked && "text-zinc-700",
+          )}
+        >
+          {label}
+        </span>
+      </label>
+    </FormItem>
+  );
+}
+
+interface MultipleChoiceInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  isChecked?: boolean;
+  checkedIcon: React.ReactElement;
+  uncheckedIcon: React.ReactElement;
+}
+
+function MultipleChoiceInput({
+  isChecked = false,
+  checkedIcon,
+  uncheckedIcon,
+  ...props
+}: MultipleChoiceInputProps) {
+  const checkedIconElement = React.cloneElement(checkedIcon, {
+    className: "transition-transform duration-150 group-active/label:scale-90",
+  });
+  const uncheckedIconElement = React.cloneElement(uncheckedIcon, {
+    className: "transition-transform duration-150 group-active/label:scale-90",
+  });
+
+  return (
+    <>
       <input
-        type="checkbox"
         checked={isChecked}
-        onChange={onChange}
-        className="peer sr-only"
         aria-checked={isChecked}
+        className="peer sr-only"
+        {...props}
       />
       <div
         className={cn(
@@ -60,19 +177,11 @@ function CustomCheckbox({ isChecked, onChange, label }: CustomCheckboxProps) {
             : "border-gray-400 text-zinc-300 peer-focus-visible:ring-gray-400",
         )}
       >
-        {isChecked && <SquareCheckBig />}
-        {!isChecked && <Square />}
+        <>
+          {isChecked && checkedIconElement}
+          {!isChecked && uncheckedIconElement}
+        </>
       </div>
-      {label && (
-        <span
-          className={cn(
-            "ml-2 flex-grow select-none text-zinc-500 transition-colors peer-focus-visible:text-zinc-600",
-            isChecked && "text-zinc-700",
-          )}
-        >
-          {label}
-        </span>
-      )}
-    </label>
+    </>
   );
 }

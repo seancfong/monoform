@@ -9,14 +9,14 @@ type Props = {
 
 export default function PreviewBlockHeader({ block }: Props) {
   return (
-    <div>
+    <div tabIndex={0}>
       <div
         className={cn(
-          "prose md:prose-lg prose-zinc tracking-tight",
-          "prose-headings:text-zinc-600 prose-headings:font-medium prose-headings:mb-0",
-          "prose-p:m-0 prose-p:text-zinc-500 prose-p:text-base",
-          "prose-li:m-0 prose-ul:m-0 prose-li:text-zinc-500 prose-li:text-base",
-          "prose-code:before:content-none prose-code:after:content-none prose-code:bg-zinc-200/75 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-sm prose-code:text-sm",
+          "prose prose-zinc tracking-tight md:prose-lg",
+          "prose-headings:mb-0 prose-headings:font-medium prose-headings:text-zinc-600",
+          "prose-p:m-0 prose-p:text-base prose-p:text-zinc-500",
+          "prose-ul:m-0 prose-li:m-0 prose-li:text-base prose-li:text-zinc-500",
+          "prose-code:rounded-sm prose-code:bg-zinc-200/75 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none",
           {
             "prose-h2:text-xl prose-h3:text-lg md:prose-h2:text-2xl md:prose-h3:text-xl":
               block.blockType !== BlockVariant.HEADER,
