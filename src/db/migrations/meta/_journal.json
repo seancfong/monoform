@@ -232,6 +232,13 @@
       "when": 1730761224907,
       "tag": "0032_aberrant_professor_monster",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1732312138740,
+      "tag": "0033_zippy_trish_tilby",
+      "breakpoints": true
     }
   ]
 }

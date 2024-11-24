@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/role-supports-aria-props */
 "use client";
 
 import { FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -7,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { produce } from "immer";
 import { Circle, CircleCheckBig, Square, SquareCheckBig } from "lucide-react";
 import React from "react";
-import { Control, FieldValues } from "react-hook-form";
+import { Control, ControllerRenderProps, FieldValues } from "react-hook-form";
 
 type Props<T> = {
   block: MultipleChoiceBlock;
@@ -25,7 +26,6 @@ export default function FillMultipleChoiceOptions<T>({
           control={control}
           name={block.id}
           render={({ field }) => {
-            // console.log(field.value);
             return (
               <>
                 {block.multipleChoiceOptions.map((option) => (
@@ -33,6 +33,7 @@ export default function FillMultipleChoiceOptions<T>({
                     key={option.id}
                     label={option.text}
                     isChecked={field.value?.includes(option.id) ?? false}
+                    containsAnswer={field.value?.length > 0}
                   >
                     <MultipleChoiceInput
                       type="checkbox"
@@ -74,6 +75,7 @@ export default function FillMultipleChoiceOptions<T>({
                     key={option.id}
                     label={option.text}
                     isChecked={field.value?.includes(option.id) ?? false}
+                    containsAnswer={field.value !== undefined}
                   >
                     <MultipleChoiceInput
                       type="radio"
@@ -94,6 +96,14 @@ export default function FillMultipleChoiceOptions<T>({
                     />
                   </MultipleChoiceItem>
                 ))}
+                {!block.required && field.value !== undefined && (
+                  <button
+                    className="font-mono text-xs tracking-tight text-zinc-400"
+                    onClick={() => field.onChange(undefined)}
+                  >
+                    Reset
+                  </button>
+                )}
                 <FormMessage />
               </>
             );
@@ -108,12 +118,14 @@ type MultipleChoiceItemProps = {
   isChecked: boolean;
   label: string;
   children: React.ReactElement;
+  containsAnswer: boolean;
 };
 
 function MultipleChoiceItem({
   isChecked,
   label,
   children,
+  containsAnswer,
 }: MultipleChoiceItemProps) {
   const input = React.cloneElement(children, {
     isChecked,
@@ -123,7 +135,7 @@ function MultipleChoiceItem({
     <FormItem>
       <label
         className={cn(
-          "group/label mb-2 flex w-full flex-grow cursor-pointer items-center gap-2 rounded-md border-2 border-zinc-200/50 bg-zinc-50 px-4 py-2",
+          "group/label mb-2 flex w-full flex-grow cursor-pointer items-center gap-2 rounded-md border-2 border-zinc-200/50 bg-zinc-50 px-4 py-2 active:bg-zinc-200/25",
           isChecked && "bg-zinc-200/25",
         )}
       >
@@ -131,7 +143,9 @@ function MultipleChoiceItem({
         <span
           className={cn(
             "ml-2 flex-grow select-none text-zinc-500 transition-colors peer-focus-visible:text-zinc-600",
-            isChecked && "text-zinc-700",
+            isChecked && "text-zinc-800",
+            containsAnswer && !isChecked && "text-zinc-400",
+            containsAnswer && isChecked && "text-zinc-600",
           )}
         >
           {label}
@@ -146,24 +160,27 @@ interface MultipleChoiceInputProps
   isChecked?: boolean;
   checkedIcon: React.ReactElement;
   uncheckedIcon: React.ReactElement;
+  type: "checkbox" | "radio";
 }
 
 function MultipleChoiceInput({
   isChecked = false,
   checkedIcon,
   uncheckedIcon,
+  type,
   ...props
 }: MultipleChoiceInputProps) {
   const checkedIconElement = React.cloneElement(checkedIcon, {
-    className: "transition-transform duration-150 group-active/label:scale-90",
+    className: "group-active/label:scale-90",
   });
   const uncheckedIconElement = React.cloneElement(uncheckedIcon, {
-    className: "transition-transform duration-150 group-active/label:scale-90",
+    className: "group-active/label:scale-90",
   });
 
   return (
     <>
       <input
+        type={type}
         checked={isChecked}
         aria-checked={isChecked}
         className="peer sr-only"
