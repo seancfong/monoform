@@ -75,6 +75,7 @@ export default async function mutateHeaderBlock(
   });
 
   revalidatePath(`/edit/${formId}`, "page");
+  revalidatePath(`/fill/${formId}`, "page");
 
   await pool.end();
 }

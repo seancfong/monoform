@@ -9,6 +9,7 @@ import { FormSection } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";
 import { motion, Reorder, useDragControls } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import isEqual from "lodash.isequal";
 
 type Props = {
   section: FormSection;
@@ -45,6 +46,8 @@ type SectionContentProps = {
 };
 
 function SectionContent({ section, sectionIndex }: SectionContentProps) {
+  const { setReorderingBlockId, setSectionBlocks } = useSectionsContext();
+
   const [draggingBlocksClone, setDraggingBlocksClone] = useState(
     section.blocks.map((block) => block),
   );
@@ -65,6 +68,7 @@ function SectionContent({ section, sectionIndex }: SectionContentProps) {
         axis="y"
         values={draggingBlocksClone}
         onReorder={(blocks: FormSection["blocks"]) => {
+          console.log("reordering");
           setDraggingBlocksClone(blocks);
         }}
         className="space-y-2"
@@ -76,6 +80,19 @@ function SectionContent({ section, sectionIndex }: SectionContentProps) {
             blockIndex={blockIndex}
             sectionIndex={sectionIndex}
             sectionConstraintsRef={sectionConstraintsRef}
+            dragEnd={() => {
+              setReorderingBlockId(undefined);
+
+              const draftIds = draggingBlocksClone.map((block) => block.id);
+              const currentIds = section.blocks.map((block) => block.id);
+
+              if (isEqual(draftIds, currentIds)) {
+                console.log("Skipping reordering - no change detected");
+                return;
+              }
+
+              setSectionBlocks(sectionIndex, draggingBlocksClone);
+            }}
           />
         ))}
       </Reorder.Group>
@@ -92,11 +109,13 @@ function SectionItem({
   blockIndex,
   sectionIndex,
   sectionConstraintsRef,
+  dragEnd,
 }: {
   block: FormSection["blocks"][number];
   blockIndex: number;
   sectionIndex: number;
   sectionConstraintsRef: React.RefObject<HTMLDivElement>;
+  dragEnd: () => void;
 }) {
   const controls = useDragControls();
   const { focusedBlockId } = useSectionsContext();
@@ -111,6 +130,7 @@ function SectionItem({
         "!z-20 mb-4": focusedBlockId === block.id,
       })}
       dragConstraints={sectionConstraintsRef}
+      onDragEnd={dragEnd}
     >
       <BlockProvider
         sectionIndex={sectionIndex}

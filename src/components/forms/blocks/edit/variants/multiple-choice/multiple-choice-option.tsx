@@ -57,6 +57,9 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
           relative: draggingId === option.id,
         })}
         dragConstraints={constraintRef}
+        onDragEnd={() => {
+          setDraggingId(undefined);
+        }}
       >
         <motion.div
           layout

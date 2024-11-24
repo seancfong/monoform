@@ -21,6 +21,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { default as deleteSectionAction } from "@/lib/actions/forms/mutations/delete-section";
 import { default as deleteBlockAction } from "@/lib/actions/forms/mutations/delete-block";
+import reorderSectionBlocks from "@/lib/actions/forms/mutations/reorder-section-blocks";
 
 interface SectionsContextValue {
   formId: string;
@@ -179,16 +180,22 @@ export const SectionsProvider = ({
   );
 
   const setSectionBlocks = useCallback(
-    (sectionIndex: number, blocks: FormSection["blocks"]) => {
+    async (sectionIndex: number, blockListDraft: FormSection["blocks"]) => {
+      const draftIds = blockListDraft.map((block) => block.id);
+
       startTransition(() => {
         updateOptimisticSections({
           type: "SET_SECTION_BLOCKS",
           payload: {
             sectionIndex,
-            blocks,
+            blocks: blockListDraft,
           },
         });
       });
+
+      const sectionId = optimisticSections[sectionIndex].id;
+
+      await reorderSectionBlocks(formId, sectionId, draftIds);
     },
     [updateOptimisticSections],
   );

@@ -18,4 +18,5 @@ export default async function createSection(
   await db.insert(sections).values(newSection);
 
   revalidatePath(`/edit/${formId}`, "page");
+  revalidatePath(`/fill/${formId}`, "page");
 }

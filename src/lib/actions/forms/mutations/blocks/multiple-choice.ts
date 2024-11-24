@@ -133,6 +133,7 @@ export default async function mutateMultipleChoiceBlock(
   });
 
   revalidatePath(`/edit/${formId}`, "page");
+  revalidatePath(`/fill/${formId}`, "page");
 
   await pool.end();
 }
