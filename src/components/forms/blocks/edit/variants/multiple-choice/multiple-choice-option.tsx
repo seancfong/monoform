@@ -81,10 +81,10 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
           </button>
           <div className="flex w-full items-center gap-2 rounded-md border-2 border-zinc-200/50 bg-zinc-50 px-4 py-2">
             {blockDraft.blockType === BlockVariant.CHECKBOX && (
-              <Square className="size-5 text-zinc-300" />
+              <Square className="size-6 text-zinc-300" />
             )}
             {blockDraft.blockType === BlockVariant.MULTIPLE_CHOICE && (
-              <Circle className="size-5 text-zinc-300" />
+              <Circle className="size-6 text-zinc-300" />
             )}
             <input
               type="text"

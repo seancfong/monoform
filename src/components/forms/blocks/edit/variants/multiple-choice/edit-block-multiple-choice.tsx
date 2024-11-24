@@ -75,10 +75,10 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
         onPointerUp={() => {
           setDraggingId(undefined);
         }}
-        className="space-y-4"
+        className="space-y-4 pt-2"
       >
         <HeaderBlocks blockDraft={blockDraft} refocusBlock={refocusBlock} />
-        <motion.div layout className="flex max-w-80 flex-col pr-12">
+        <motion.div layout className="flex max-w-[22rem] flex-col pr-12">
           <Reorder.Group
             axis="y"
             values={blockDraft.multipleChoiceOptions}

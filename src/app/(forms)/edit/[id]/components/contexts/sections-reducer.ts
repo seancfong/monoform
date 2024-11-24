@@ -7,7 +7,8 @@ type SectionsAction =
   | AppendBlockAction
   | SetBlocksAction
   | MutateBlockAction
-  | DeleteSectionAction;
+  | DeleteSectionAction
+  | DeleteBlockAction;
 
 export function sectionsReducer(
   state: FormSection[] | undefined,
@@ -83,6 +84,18 @@ export function sectionsReducer(
       });
     }
 
+    case "DELETE_BLOCK": {
+      const { sectionIndex, blockId } = action.payload;
+
+      const blockIndex = currentSectionsState[sectionIndex].blocks.findIndex(
+        (block) => block.id === blockId,
+      );
+
+      return produce(currentSectionsState, (draft) => {
+        draft[sectionIndex].blocks.splice(blockIndex, 1);
+      });
+    }
+
     case "SET_SECTION_BLOCKS": {
       const { sectionIndex, blocks } = action.payload;
 
@@ -133,5 +146,13 @@ type DeleteSectionAction = {
   type: "DELETE_SECTION";
   payload: {
     sectionIndex: number;
+  };
+};
+
+type DeleteBlockAction = {
+  type: "DELETE_BLOCK";
+  payload: {
+    sectionIndex: number;
+    blockId: string;
   };
 };

@@ -7,6 +7,7 @@ import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/blo
 import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
 import EditBlockFactory from "@/components/forms/blocks/edit/edit-block-factory";
 import PreviewBlockFactory from "@/components/forms/blocks/preview/preview-block-factory";
+import { BlockVariant } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { DragControls, motion } from "framer-motion";
 import { useRef } from "react";
@@ -47,7 +48,7 @@ export default function EditBlock({ controls }: Props) {
       <motion.div
         layout
         className={cn(
-          "relative flex w-full flex-col overflow-hidden rounded-md border-1 border-zinc-200 bg-zinc-50 p-2 pb-4 text-left duration-300 [transition:opacity_200ms,box-shadow_200ms] md:pb-8",
+          "relative flex w-full flex-col overflow-hidden rounded-md border-1 border-zinc-200 bg-zinc-50 p-2 py-4 text-left duration-300 [transition:opacity_200ms,box-shadow_200ms] md:pb-8",
           {
             "border-opacity-0 outline outline-2 -outline-offset-1 outline-slate-300":
               focusedBlockId === optimisticBlock.id,
@@ -62,11 +63,13 @@ export default function EditBlock({ controls }: Props) {
         <motion.div layout="position" className="space-y-1">
           {focusedBlockId === optimisticBlock.id ? (
             <>
-              <div className="flex w-full justify-between">
+              <div className="flex w-full justify-between py-1">
                 <ChangeBlock refocusBlock={refocusBlock} />
               </div>
               <hr />
-              <EditBlockFactory refocusBlock={refocusBlock} />
+              <div className="px-1">
+                <EditBlockFactory refocusBlock={refocusBlock} />
+              </div>
             </>
           ) : (
             <>
@@ -83,7 +86,8 @@ export default function EditBlock({ controls }: Props) {
           )}
         </motion.div>
       </motion.div>
-      {focusedBlockId === optimisticBlock.id && <BlockOptions />}
+      {focusedBlockId === optimisticBlock.id &&
+        optimisticBlock.blockType !== BlockVariant.HEADER && <BlockOptions />}
     </motion.div>
   );
 }

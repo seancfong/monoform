@@ -20,6 +20,7 @@ import {
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { default as deleteSectionAction } from "@/lib/actions/forms/mutations/delete-section";
+import { default as deleteBlockAction } from "@/lib/actions/forms/mutations/delete-block";
 
 interface SectionsContextValue {
   formId: string;
@@ -32,6 +33,7 @@ interface SectionsContextValue {
     action: () => Promise<void>,
   ) => void;
   deleteSection: (sectionIndex: number) => void;
+  deleteBlock: (sectionIndex: number, blockDraft: BlockVariantUnion) => void;
   setSectionBlocks: (
     sectionIndex: number,
     blocks: FormSection["blocks"],
@@ -153,11 +155,27 @@ export const SectionsProvider = ({
         });
       });
 
-      // await deleteSectionAction(sectionIndex);
       console.log("deleting", optimisticSections[sectionIndex]);
       await deleteSectionAction(formId, optimisticSections[sectionIndex]);
     },
     [formId, optimisticSections, updateOptimisticSections],
+  );
+
+  const deleteBlock = useCallback(
+    async (sectionIndex: number, blockDraft: BlockVariantUnion) => {
+      startTransition(async () => {
+        updateOptimisticSections({
+          type: "DELETE_BLOCK",
+          payload: {
+            sectionIndex,
+            blockId: blockDraft.id,
+          },
+        });
+      });
+
+      await deleteBlockAction(formId, blockDraft);
+    },
+    [updateOptimisticSections],
   );
 
   const setSectionBlocks = useCallback(
@@ -185,6 +203,7 @@ export const SectionsProvider = ({
       setFocusedBlockId,
       mutateBlock,
       deleteSection,
+      deleteBlock,
       setSectionBlocks,
       reorderingBlockId,
       setReorderingBlockId,
@@ -197,6 +216,7 @@ export const SectionsProvider = ({
     focusedBlockId,
     mutateBlock,
     deleteSection,
+    deleteBlock,
     setSectionBlocks,
     reorderingBlockId,
     setReorderingBlockId,

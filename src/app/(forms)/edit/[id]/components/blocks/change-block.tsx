@@ -46,7 +46,7 @@ export default function ChangeBlock({}: Props) {
             >
               <VariantIcon variant={blockDraft.blockType} className="size-4" />
             </span>
-            <span className="text-sm font-normal">
+            <span className="text-base font-normal">
               {variantName[blockDraft.blockType]}
             </span>
             <span>

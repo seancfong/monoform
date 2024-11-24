@@ -41,7 +41,7 @@ export default function HeaderBlocks({
   }, []);
 
   return (
-    <div className="px-5 font-medium tracking-tight">
+    <div className="font-medium tracking-tight sm:px-5">
       <p className="font-mono text-xs tracking-tight text-zinc-300">Markdown</p>
       <textarea
         className="w-full rounded-sm bg-zinc-200/50 p-2 pb-0 font-mono text-zinc-600 placeholder:text-zinc-300"
@@ -67,7 +67,6 @@ export default function HeaderBlocks({
           e.stopPropagation();
 
           if (refocusBlock) {
-            console.log("im blurred");
             refocusBlock();
           }
         }}
