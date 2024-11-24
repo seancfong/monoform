@@ -3,6 +3,7 @@
 import FillBlockFactory from "@/components/forms/blocks/fill/variants/fill-block-factory";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import delay from "@/lib/actions/delay";
 import submitForm from "@/lib/actions/forms/submit/submit-form";
 import { FormSection } from "@/lib/types/forms";
 import generateZodSchema from "@/lib/utils/generate-schema";
@@ -25,12 +26,14 @@ export default function FillFormSections({ formId, sections }: Props) {
     resolver: zodResolver(formSchema),
   });
 
+  const isSubmitting = form.formState.isSubmitting;
+
   return (
     <Form {...form}>
       <form
         className="flex flex-col gap-4"
         onSubmit={form.handleSubmit(async (data) => {
-          console.log(data);
+          // console.log(data);
           await submitForm(formId, data);
         })}
       >
@@ -59,10 +62,11 @@ export default function FillFormSections({ formId, sections }: Props) {
         ))}
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-zinc-200/50 p-4 sm:flex-row sm:px-8">
           <Button
+            disabled={isSubmitting}
             type="submit"
             className="flex w-fit items-center justify-center gap-2 rounded-md bg-zinc-900 px-6 py-3 text-sm font-semibold text-zinc-50 hover:bg-zinc-800"
           >
-            Submit
+            {isSubmitting ? "Submitting" : "Submit"}
           </Button>
           <p className="font-mono text-xs text-zinc-400">
             Do not submit passwords or sensitive data.

@@ -22,7 +22,9 @@ export const multipleChoiceOptionsRelations = relations(
 );
 
 export const multipleChoiceResponses = pgTable("multiple_choice_responses", {
-  responseId: integer("response_id").references(() => responses.id),
+  responseId: integer("response_id").references(() => responses.id, {
+    onDelete: "cascade",
+  }),
   selectedOptionId: uuid("selected_option_id").references(
     () => multipleChoiceOptions.id,
     { onDelete: "cascade" },

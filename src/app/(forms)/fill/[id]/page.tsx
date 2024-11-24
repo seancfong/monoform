@@ -1,10 +1,24 @@
 import FillFormSections from "@/app/(forms)/fill/[id]/components/sections/fill-form-sections";
-import { getFormSections } from "@/lib/queries/forms";
+import { getFormInformation, getFormSections } from "@/lib/queries/forms";
 import { notFound } from "next/navigation";
 import React from "react";
 
 type Props = {
   params: { id: string };
+};
+
+export const generateMetadata = async ({ params }: Props) => {
+  const { id: formId } = params;
+
+  const formInformation = await getFormInformation(formId);
+
+  if (!formInformation) {
+    notFound();
+  }
+
+  return {
+    title: `${formInformation.title} | Monoform`,
+  };
 };
 
 export default async function Page({ params }: Props) {

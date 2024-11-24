@@ -13,6 +13,7 @@ import {
 } from "@/db/schema";
 import { FormSection } from "@/lib/types/forms";
 import { and, asc, count, eq, sql } from "drizzle-orm";
+import { cache } from "react";
 
 export async function getWorkspaceFormsCount(
   workspaceId: number,
@@ -67,6 +68,12 @@ export async function getFormSections(formId: string): Promise<FormSection[]> {
     },
   });
 }
+
+export const getFormInformation = cache(async (formId: string) => {
+  return db.query.forms.findFirst({
+    where: eq(forms.id, formId),
+  });
+});
 
 export const userOwnsSection = db
   .select({ sectionId: sections.id })
