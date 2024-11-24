@@ -11,8 +11,10 @@ const MULTIPLE_CHOICE_PLACEHOLDER =
 
 export default function HeaderBlocks({
   blockDraft,
+  refocusBlock,
 }: {
   blockDraft: FormBlock;
+  refocusBlock?: () => void;
 }) {
   const { setBlockDraft, setIsStale } = useBlockContext();
 
@@ -63,6 +65,11 @@ export default function HeaderBlocks({
         }}
         onBlur={(e) => {
           e.stopPropagation();
+
+          if (refocusBlock) {
+            console.log("im blurred");
+            refocusBlock();
+          }
         }}
         rows={1}
         ref={textareaRef}

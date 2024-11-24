@@ -71,7 +71,7 @@ export const BlockProvider = ({
 
       setIsStale(false);
 
-      mutateBlock(sectionIndex, blockIndex, blockDraft, async () => {
+      mutateBlock(sectionIndex, blockDraft, async () => {
         if (!mutationRef.current) {
           throw new Error(
             "`mutationRef` is not initialized, cannot save this block entry.",
@@ -87,7 +87,6 @@ export const BlockProvider = ({
     }
   }, [
     blockDraft,
-    blockIndex,
     formId,
     isStale,
     mutateBlock,

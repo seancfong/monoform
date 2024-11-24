@@ -5,6 +5,7 @@ import { produce } from "immer";
 type SectionsAction =
   | AddSectionAction
   | AppendBlockAction
+  | SetBlocksAction
   | MutateBlockAction
   | DeleteSectionAction;
 
@@ -31,7 +32,6 @@ export function sectionsReducer(
     case "APPEND_BLOCK": {
       const { sectionId, blockId, variant } = action.payload;
 
-      // TODO: pass section index in payload and index currentSectionsState
       const sectionIndex = currentSectionsState.findIndex(
         (section) => section.id === sectionId,
       );
@@ -57,7 +57,16 @@ export function sectionsReducer(
     }
 
     case "MUTATE_BLOCK": {
-      const { sectionIndex, blockIndex, block } = action.payload;
+      const { sectionIndex, block } = action.payload;
+
+      // Manually find index instead of passing an index through payload to prevent unwanted read collisions
+      const blockIndex = currentSectionsState[sectionIndex].blocks.findIndex(
+        (b) => b.id === block.id,
+      );
+
+      if (blockIndex < 0) {
+        return currentSectionsState;
+      }
 
       const newDraft = produce(currentSectionsState, (draft) => {
         draft[sectionIndex].blocks[blockIndex] = block;
@@ -71,6 +80,14 @@ export function sectionsReducer(
 
       return produce(currentSectionsState, (draft) => {
         draft.splice(sectionIndex, 1);
+      });
+    }
+
+    case "SET_SECTION_BLOCKS": {
+      const { sectionIndex, blocks } = action.payload;
+
+      return produce(currentSectionsState, (draft) => {
+        draft[sectionIndex].blocks = blocks;
       });
     }
 
@@ -96,11 +113,18 @@ type AppendBlockAction = {
   };
 };
 
+type SetBlocksAction = {
+  type: "SET_SECTION_BLOCKS";
+  payload: {
+    sectionIndex: number;
+    blocks: FormSection["blocks"];
+  };
+};
+
 type MutateBlockAction = {
   type: "MUTATE_BLOCK";
   payload: {
     sectionIndex: number;
-    blockIndex: number;
     block: BlockVariantUnion;
   };
 };

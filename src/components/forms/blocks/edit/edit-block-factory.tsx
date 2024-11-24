@@ -7,18 +7,36 @@ import {
   isMultipleChoiceBlock,
 } from "@/lib/types/forms";
 
-export default function EditBlockFactory() {
+type Props = {
+  refocusBlock: () => void;
+};
+
+export default function EditBlockFactory({ refocusBlock }: Props) {
   const { blockDraft, mutationRef } = useBlockContext();
 
   if (isMultipleChoiceBlock(blockDraft)) {
     return (
-      <EditBlockMultipleChoice blockDraft={blockDraft} ref={mutationRef} />
+      <EditBlockMultipleChoice
+        blockDraft={blockDraft}
+        ref={mutationRef}
+        refocusBlock={refocusBlock}
+      />
     );
   } else if (isHeaderBlock(blockDraft)) {
-    return <EditBlockHeader blockDraft={blockDraft} ref={mutationRef} />;
+    return (
+      <EditBlockHeader
+        blockDraft={blockDraft}
+        ref={mutationRef}
+        refocusBlock={refocusBlock}
+      />
+    );
   } else if (isCheckboxBlock(blockDraft)) {
     return (
-      <EditBlockMultipleChoice blockDraft={blockDraft} ref={mutationRef} />
+      <EditBlockMultipleChoice
+        blockDraft={blockDraft}
+        ref={mutationRef}
+        refocusBlock={refocusBlock}
+      />
     );
   }
 

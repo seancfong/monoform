@@ -7,12 +7,18 @@ import { Button } from "@/components/ui/button";
 type Props = {};
 
 export default function EditQuestions({}: Props) {
-  const { sections, appendSection: addSection } = useSectionsContext();
-
-  console.log(sections);
+  const {
+    sections,
+    appendSection: addSection,
+    setReorderingBlockId,
+  } = useSectionsContext();
 
   return (
-    <div>
+    <div
+      onPointerUp={(e) => {
+        setReorderingBlockId(undefined);
+      }}
+    >
       <div className="flex flex-col gap-8">
         {sections.map((section, index) => (
           <EditSection key={section.id} section={section} index={index} />

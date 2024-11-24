@@ -28,14 +28,20 @@ interface SectionsContextValue {
   appendBlock: (section: FormSection, variant: BlockVariant) => void;
   mutateBlock: (
     sectionIndex: number,
-    blockIndex: number,
     block: BlockVariantUnion,
     action: () => Promise<void>,
   ) => void;
   deleteSection: (sectionIndex: number) => void;
+  setSectionBlocks: (
+    sectionIndex: number,
+    blocks: FormSection["blocks"],
+  ) => void;
 
   focusedBlockId: string | undefined;
   setFocusedBlockId: Dispatch<SetStateAction<string | undefined>>;
+
+  reorderingBlockId: string | undefined;
+  setReorderingBlockId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const SectionsContext = createContext<SectionsContextValue | undefined>(
@@ -59,6 +65,7 @@ export const SectionsProvider = ({
     sectionsReducer,
   );
   const [focusedBlockId, setFocusedBlockId] = useState<string>();
+  const [reorderingBlockId, setReorderingBlockId] = useState<string>();
 
   const appendSection = useCallback(
     (title: string) => {
@@ -117,7 +124,6 @@ export const SectionsProvider = ({
   const mutateBlock = useCallback(
     (
       sectionIndex: number,
-      blockIndex: number,
       block: BlockVariantUnion,
       action: () => Promise<void>,
     ) => {
@@ -126,7 +132,6 @@ export const SectionsProvider = ({
           type: "MUTATE_BLOCK",
           payload: {
             sectionIndex,
-            blockIndex,
             block,
           },
         });
@@ -155,6 +160,21 @@ export const SectionsProvider = ({
     [formId, optimisticSections, updateOptimisticSections],
   );
 
+  const setSectionBlocks = useCallback(
+    (sectionIndex: number, blocks: FormSection["blocks"]) => {
+      startTransition(() => {
+        updateOptimisticSections({
+          type: "SET_SECTION_BLOCKS",
+          payload: {
+            sectionIndex,
+            blocks,
+          },
+        });
+      });
+    },
+    [updateOptimisticSections],
+  );
+
   const value = useMemo(() => {
     return {
       formId,
@@ -165,6 +185,9 @@ export const SectionsProvider = ({
       setFocusedBlockId,
       mutateBlock,
       deleteSection,
+      setSectionBlocks,
+      reorderingBlockId,
+      setReorderingBlockId,
     };
   }, [
     formId,
@@ -174,6 +197,9 @@ export const SectionsProvider = ({
     focusedBlockId,
     mutateBlock,
     deleteSection,
+    setSectionBlocks,
+    reorderingBlockId,
+    setReorderingBlockId,
   ]);
 
   return (

@@ -9,7 +9,7 @@ type Props = {
 
 export default function PreviewBlockHeader({ block }: Props) {
   return (
-    <div tabIndex={0}>
+    <div>
       <div
         className={cn(
           "prose prose-zinc tracking-tight md:prose-lg",

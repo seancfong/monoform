@@ -4,10 +4,15 @@ import EditQuestionsSkeleton from "@/app/(forms)/edit/[id]/components/questions/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { validateUser } from "@/lib/auth/validate-user";
 import { getFormSections } from "@/lib/queries/forms";
+import { Metadata } from "next";
 import { Suspense } from "react";
 
 type Props = {
   params: { id: string };
+};
+
+export const metadata: Metadata = {
+  title: "Editing Form | Monoform",
 };
 
 export default async function EditFormPage({ params }: Props) {
