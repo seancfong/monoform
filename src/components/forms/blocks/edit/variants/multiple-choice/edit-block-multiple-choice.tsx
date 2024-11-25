@@ -21,10 +21,11 @@ import {
 type Props = {
   // Can be either radio or checkbox
   blockDraft: MultipleChoiceBlock;
+  refocusBlock: () => void;
 };
 
 const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
-  ({ blockDraft }, ref) => {
+  ({ blockDraft, refocusBlock }, ref) => {
     const { setBlockDraft, setIsStale } = useBlockContext();
     const [draggingId, setDraggingId] = useState<string | undefined>(undefined);
 
@@ -74,9 +75,10 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
         onPointerUp={() => {
           setDraggingId(undefined);
         }}
+        className="space-y-4 pt-2"
       >
-        <HeaderBlocks blockDraft={blockDraft} />
-        <motion.div layout className="flex max-w-80 flex-col pr-12">
+        <HeaderBlocks blockDraft={blockDraft} refocusBlock={refocusBlock} />
+        <motion.div layout className="flex max-w-[22rem] flex-col pr-12">
           <Reorder.Group
             axis="y"
             values={blockDraft.multipleChoiceOptions}

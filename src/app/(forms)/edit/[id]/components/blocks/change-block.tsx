@@ -46,7 +46,7 @@ export default function ChangeBlock({}: Props) {
             >
               <VariantIcon variant={blockDraft.blockType} className="size-4" />
             </span>
-            <span className="text-sm font-normal">
+            <span className="text-base font-normal">
               {variantName[blockDraft.blockType]}
             </span>
             <span>
@@ -114,7 +114,7 @@ function VariantDropdownItem({
     >
       <span
         className={cn(
-          "flex rounded-sm p-2 group-hover/item:outline group-hover/item:outline-1 group-hover/item:outline-zinc-200",
+          "flex rounded-sm p-2 group-hover/item:outline group-hover/item:outline-1 group-hover/item:outline-zinc-200 group-focus-visible/item:outline group-focus-visible/item:outline-1 group-focus-visible/item:outline-zinc-200",
           variantBackground[variant],
         )}
       >

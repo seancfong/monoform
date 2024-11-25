@@ -18,7 +18,7 @@ const AddOption = forwardRef<HTMLButtonElement, Props>(
       <motion.button
         layout
         ref={ref}
-        className="ml-5 flex items-center gap-2 rounded-md bg-zinc-50 px-4 py-2 text-left tracking-tight text-zinc-300 outline-dashed outline-2 -outline-offset-2 outline-zinc-200 transition-colors duration-150 hover:outline hover:outline-1 hover:-outline-offset-1"
+        className="ml-5 flex items-center gap-2 rounded-md bg-zinc-50 px-4 py-2 text-left tracking-tight text-zinc-300 outline-dashed outline-2 -outline-offset-2 outline-zinc-200 transition-colors duration-150 hover:outline hover:outline-1 hover:-outline-offset-1 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         onClick={() => {
           const newId = uuidv4();
           setIsStale(true);

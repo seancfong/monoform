@@ -1,13 +1,19 @@
 import { SectionsProvider } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
 import EditQuestions from "@/app/(forms)/edit/[id]/components/questions/edit-questions";
-import EditQuestionsSkeleton from "@/app/(forms)/edit/[id]/components/questions/edit-questions-skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { validateUser } from "@/lib/auth/validate-user";
 import { getFormSections } from "@/lib/queries/forms";
+import { Metadata } from "next";
+import { userOwnsForm } from "@/lib/queries/forms";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: { id: string };
+};
+
+export const metadata: Metadata = {
+  title: "Editing Form | Monoform",
 };
 
 export default async function EditFormPage({ params }: Props) {
@@ -15,12 +21,19 @@ export default async function EditFormPage({ params }: Props) {
 
   const { user } = await validateUser();
 
-  // TODO: check if user owns form
+  const [ownsForm] = await userOwnsForm.execute({
+    formId,
+    userId: user.id,
+  });
+
+  if (!ownsForm) {
+    notFound();
+  }
 
   const sectionsPromise = getFormSections(formId);
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 sm:p-12">
+    <div className="flex flex-col items-center justify-center p-2 sm:p-12">
       <div className="w-full max-w-screen-sm lg:max-w-screen-md">
         <Tabs defaultValue="questions" className="w-full">
           <TabsList className="bg-zinc-200/75">
@@ -37,8 +50,8 @@ export default async function EditFormPage({ params }: Props) {
               Responses
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="questions" className="mt-4">
-            <Suspense fallback={<EditQuestionsSkeleton />}>
+          <TabsContent value="questions" className="relative mt-4">
+            <Suspense fallback={<></>}>
               <SectionsProvider
                 formId={formId}
                 sectionsPromise={sectionsPromise}

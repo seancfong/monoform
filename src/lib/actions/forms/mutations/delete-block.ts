@@ -1,32 +1,32 @@
 "use server";
 
 import { db } from "@/db";
-import { sections } from "@/db/schema";
+import { blocks } from "@/db/schema";
 import { validateUser } from "@/lib/auth/validate-user";
-import { userOwnsSection } from "@/lib/queries/forms";
+import { userOwnsBlock } from "@/lib/queries/blocks";
 import { FormSection } from "@/lib/types/forms";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export default async function deleteSection(
+export default async function deleteBlock(
   formId: string,
-  section: FormSection,
+  blockDraft: FormSection["blocks"][number],
 ) {
   const { user } = await validateUser();
 
-  // I. Check if user owns section
+  // I. Check if user owns block
   // TODO: use unstable cache
-  const [ownedSection] = await userOwnsSection.execute({
-    sectionId: section.id,
-    formId: formId,
+  const [ownedBlock] = await userOwnsBlock.execute({
+    blockId: blockDraft.id,
+    formId,
     userId: user.id,
   });
 
-  if (!ownedSection) {
+  if (!ownedBlock || ownedBlock.blockId !== blockDraft.id) {
     return;
   }
 
-  await db.delete(sections).where(eq(sections.id, section.id));
+  await db.delete(blocks).where(eq(blocks.id, blockDraft.id));
 
   revalidatePath(`/edit/${formId}`);
   revalidatePath(`/fill/${formId}`);

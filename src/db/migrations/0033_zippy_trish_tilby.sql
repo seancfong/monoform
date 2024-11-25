@@ -1,0 +1,1 @@
+ALTER TABLE "responses" ALTER COLUMN "responder_id" DROP NOT NULL;

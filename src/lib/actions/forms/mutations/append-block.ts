@@ -18,5 +18,6 @@ export default async function appendBlockToSection(
 
   await db.insert(blocks).values(newBlock);
 
-  revalidatePath(`/edit/${formId}`, "page");
+  revalidatePath(`/edit/${formId}`);
+  revalidatePath(`/fill/${formId}`);
 }

@@ -32,6 +32,8 @@ interface BlockContextValue {
 
   isStale: boolean;
   setIsStale: Dispatch<SetStateAction<boolean>>;
+
+  deleteCurrentBlock: () => void;
 }
 
 const BlockContext = createContext<BlockContextValue | undefined>(undefined);
@@ -49,8 +51,13 @@ export const BlockProvider = ({
   optimisticBlock,
   children,
 }: Props) => {
-  const { focusedBlockId, setFocusedBlockId, mutateBlock, formId } =
-    useSectionsContext();
+  const {
+    focusedBlockId,
+    setFocusedBlockId,
+    mutateBlock,
+    deleteBlock,
+    formId,
+  } = useSectionsContext();
   const [blockDraft, setBlockDraft] =
     useState<BlockVariantUnion>(optimisticBlock);
   const mutationRef = useRef<MutationRef>(null);
@@ -71,7 +78,7 @@ export const BlockProvider = ({
 
       setIsStale(false);
 
-      mutateBlock(sectionIndex, blockIndex, blockDraft, async () => {
+      mutateBlock(sectionIndex, blockDraft, async () => {
         if (!mutationRef.current) {
           throw new Error(
             "`mutationRef` is not initialized, cannot save this block entry.",
@@ -87,13 +94,16 @@ export const BlockProvider = ({
     }
   }, [
     blockDraft,
-    blockIndex,
     formId,
     isStale,
     mutateBlock,
     sectionIndex,
     setFocusedBlockId,
   ]);
+
+  const deleteCurrentBlock = useCallback(() => {
+    deleteBlock(sectionIndex, blockDraft);
+  }, [blockDraft, deleteBlock, sectionIndex]);
 
   const value = useMemo(
     () => ({
@@ -105,8 +115,16 @@ export const BlockProvider = ({
       mutationRef,
       isStale,
       setIsStale,
+      deleteCurrentBlock,
     }),
-    [optimisticBlock, blockDraft, blockIndex, saveCallback, isStale],
+    [
+      optimisticBlock,
+      blockDraft,
+      blockIndex,
+      saveCallback,
+      isStale,
+      deleteCurrentBlock,
+    ],
   );
 
   return (

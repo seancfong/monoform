@@ -101,9 +101,9 @@ export const blocksRelations = relations(blocks, ({ one, many }) => ({
 
 export const responses = pgTable("responses", {
   id: serial("id").primaryKey(),
-  responderId: text("responder_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+  responderId: text("responder_id").references(() => users.id, {
+    onDelete: "cascade",
+  }),
   submittedAt: timestamp("submitted_at", {
     withTimezone: true,
     mode: "date",

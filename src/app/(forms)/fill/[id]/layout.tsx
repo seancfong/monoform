@@ -11,7 +11,6 @@ export default function Layout({ children, params }: Props) {
 
   return (
     <div className="min-h-screen w-full bg-zinc-100">
-      <EditFormNavigation formId={formId} />
       <main className="w-full">{children}</main>
     </div>
   );

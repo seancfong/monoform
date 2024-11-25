@@ -6,10 +6,11 @@ import { forwardRef, useImperativeHandle } from "react";
 
 type Props = {
   blockDraft: FormBlock;
+  refocusBlock: () => void;
 };
 
 const EditBlockHeader = forwardRef<MutationRef, Props>(
-  ({ blockDraft }, ref) => {
+  ({ blockDraft, refocusBlock }, ref) => {
     useImperativeHandle(ref, () => ({
       invokeSave: async (formId: string) => {
         await mutateHeaderBlock(formId, blockDraft);
@@ -18,7 +19,7 @@ const EditBlockHeader = forwardRef<MutationRef, Props>(
 
     return (
       <div>
-        <HeaderBlocks blockDraft={blockDraft} />
+        <HeaderBlocks blockDraft={blockDraft} refocusBlock={refocusBlock} />
       </div>
     );
   },
