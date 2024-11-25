@@ -13,6 +13,7 @@ Monoform is an open-source form-builder app with:
 ## Technologies used
 - Next.JS 14
 - Drizzle ORM
+- PostgreSQL
 - Neon DB Serverless HTTP
 - Neon DB Websocket Pooling
 - Resend
