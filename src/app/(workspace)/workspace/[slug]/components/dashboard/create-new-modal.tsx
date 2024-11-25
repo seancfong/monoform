@@ -67,9 +67,7 @@ export default function CreateNewModal({ workspaceFoldersPromise }: Props) {
     <DialogContent className="mx-auto w-[calc(100vw-2rem)] rounded-md lg:gap-0">
       <DialogHeader className="text-left">
         <DialogTitle>Create a new form</DialogTitle>
-        <DialogDescription>
-          Where would you like to create it?
-        </DialogDescription>
+        <DialogDescription>Select a folder and enter a name.</DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-2">
         <Form {...form.formManager}>
