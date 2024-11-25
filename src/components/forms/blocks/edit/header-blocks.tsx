@@ -34,6 +34,7 @@ export default function HeaderBlocks({
 
   useEffect(() => {
     debouncedResize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blockDraft.text]);
 
   useEffect(() => {

@@ -4,6 +4,9 @@ import { sectionsReducer } from "@/app/(forms)/edit/[id]/components/contexts/sec
 import { BlockVariant } from "@/db/schema";
 import appendBlockToSection from "@/lib/actions/forms/mutations/append-block";
 import createSection from "@/lib/actions/forms/mutations/create-section";
+import { default as deleteBlockAction } from "@/lib/actions/forms/mutations/delete-block";
+import { default as deleteSectionAction } from "@/lib/actions/forms/mutations/delete-section";
+import reorderSectionBlocks from "@/lib/actions/forms/mutations/reorder-section-blocks";
 import { BlockVariantUnion, FormSection } from "@/lib/types/forms";
 import {
   createContext,
@@ -19,9 +22,6 @@ import {
   useState,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { default as deleteSectionAction } from "@/lib/actions/forms/mutations/delete-section";
-import { default as deleteBlockAction } from "@/lib/actions/forms/mutations/delete-block";
-import reorderSectionBlocks from "@/lib/actions/forms/mutations/reorder-section-blocks";
 
 interface SectionsContextValue {
   formId: string;
@@ -176,7 +176,7 @@ export const SectionsProvider = ({
 
       await deleteBlockAction(formId, blockDraft);
     },
-    [updateOptimisticSections],
+    [formId, updateOptimisticSections],
   );
 
   const setSectionBlocks = useCallback(
@@ -197,7 +197,7 @@ export const SectionsProvider = ({
 
       await reorderSectionBlocks(formId, sectionId, draftIds);
     },
-    [updateOptimisticSections],
+    [formId, optimisticSections, updateOptimisticSections],
   );
 
   const value = useMemo(() => {
