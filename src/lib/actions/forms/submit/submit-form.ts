@@ -14,6 +14,7 @@ import generateZodSchema from "@/lib/utils/generate-schema";
 import { Pool } from "@neondatabase/serverless";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-serverless";
+import { redirect } from "next/navigation";
 
 export default async function submitForm(
   formId: string,
@@ -31,11 +32,14 @@ export default async function submitForm(
   const parsed = await formSchema.safeParseAsync(formData);
 
   if (!parsed.success) {
+    console.log(parsed.error);
     return; // TODO: return error on server
   }
 
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const dbPool = drizzle(pool, { schema: schema });
+
+  let submitSuccess = false;
 
   try {
     await dbPool.transaction(async (tx) => {
@@ -47,9 +51,15 @@ export default async function submitForm(
       );
 
       await saveResponses(tx, multipleChoice, checkbox);
+
+      submitSuccess = true;
     });
   } finally {
     await pool.end();
+  }
+
+  if (submitSuccess) {
+    redirect(`/fill/${formId}/success`);
   }
 }
 
