@@ -93,3 +93,20 @@ export const userOwnsSection = db
   )
   .limit(1)
   .prepare("userOwnsSection");
+
+export const userOwnsForm = db
+  .select({ formId: forms.id })
+  .from(usersOwnWorkspaces)
+  .innerJoin(
+    workspaceFolders,
+    eq(usersOwnWorkspaces.workspaceId, workspaceFolders.workspaceId),
+  )
+  .innerJoin(forms, eq(workspaceFolders.id, forms.workspaceFolderId))
+  .where(
+    and(
+      eq(usersOwnWorkspaces.userId, sql.placeholder("userId")),
+      eq(forms.id, sql.placeholder("formId")),
+    ),
+  )
+  .limit(1)
+  .prepare("userOwnsForm");

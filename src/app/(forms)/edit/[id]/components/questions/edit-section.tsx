@@ -8,8 +8,8 @@ import DeleteSection from "@/app/(forms)/edit/[id]/components/sections/delete-se
 import { FormSection } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";
 import { motion, Reorder, useDragControls } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
 import isEqual from "lodash.isequal";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   section: FormSection;

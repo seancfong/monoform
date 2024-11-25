@@ -4,7 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { validateUser } from "@/lib/auth/validate-user";
 import { getFormSections } from "@/lib/queries/forms";
 import { Metadata } from "next";
+import { userOwnsForm } from "@/lib/queries/forms";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: { id: string };
@@ -19,7 +21,14 @@ export default async function EditFormPage({ params }: Props) {
 
   const { user } = await validateUser();
 
-  // TODO: check if user owns form
+  const [ownsForm] = await userOwnsForm.execute({
+    formId,
+    userId: user.id,
+  });
+
+  if (!ownsForm) {
+    notFound();
+  }
 
   const sectionsPromise = getFormSections(formId);
 
