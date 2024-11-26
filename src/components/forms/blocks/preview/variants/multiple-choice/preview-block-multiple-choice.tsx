@@ -2,7 +2,6 @@ import OptionsLabel from "@/components/forms/blocks/preview/variants/multiple-ch
 import PreviewBlockHeader from "@/components/forms/blocks/preview/variants/preview-block-header";
 import { BlockVariant } from "@/db/schema";
 import { MultipleChoiceBlock } from "@/lib/types/forms";
-import { motion } from "framer-motion";
 import { Circle, Square } from "lucide-react";
 
 type Props = {

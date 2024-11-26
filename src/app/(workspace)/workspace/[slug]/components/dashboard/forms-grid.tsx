@@ -36,10 +36,10 @@ function FormCard({ form }: FormCardProps) {
   return (
     <Link
       href={`/edit/${form.id}`}
-      className="group/form-card flex flex-col rounded-md border-1 border-zinc-200 bg-zinc-50"
+      className="group/form-card flex flex-col rounded-md border-1 border-zinc-200 bg-zinc-50 transition-colors duration-150 hover:bg-zinc-100/50"
     >
       <div className="relative h-36 overflow-hidden rounded-t-md">
-        <div className="absolute bottom-0 right-0 h-5/6 w-5/6 rounded-tl-lg border-l-1 border-t-1 bg-white shadow-xl shadow-zinc-400/25 transition-shadow duration-300 group-hover/form-card:shadow-2xl group-hover/form-card:shadow-zinc-400/50" />
+        <div className="absolute bottom-0 right-0 h-5/6 w-5/6 rounded-tl-lg border-l-1 border-t-1 bg-white shadow-xl shadow-zinc-400/25 transition-shadow duration-150 group-hover/form-card:shadow-2xl group-hover/form-card:shadow-zinc-400/50" />
       </div>
       <div className="space-y-1 rounded-b-md border-t-1 border-zinc-200 bg-white px-4 py-3">
         <h3 className="font-medium text-zinc-600">{form.title}</h3>
