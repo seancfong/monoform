@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { motion, Reorder, useDragControls } from "framer-motion";
 import { produce } from "immer";
 import { Circle, GripVertical, Square, X } from "lucide-react";
-import { Dispatch, forwardRef, SetStateAction } from "react";
+import { Dispatch, forwardRef, SetStateAction, useEffect, useRef } from "react";
 
 type Props = {
   index: number;
@@ -17,6 +17,7 @@ type Props = {
   blockDraft: MultipleChoiceBlock;
   constraintRef: React.RefObject<HTMLDivElement>;
   deleteOption: () => void;
+  shouldFocusNewOption: boolean;
 };
 
 const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
@@ -29,11 +30,14 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
       blockDraft,
       deleteOption,
       constraintRef,
+      shouldFocusNewOption,
     }: Props,
     ref,
   ) => {
     const controls = useDragControls();
     const { setIsStale, setBlockDraft } = useBlockContext();
+
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const debounceUpdate = useDebounce(
       (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +51,12 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
       },
       50,
     );
+
+    useEffect(() => {
+      if (shouldFocusNewOption && inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, [shouldFocusNewOption]);
 
     return (
       <Reorder.Item
@@ -100,6 +110,7 @@ const MultipleChoiceOption = forwardRef<HTMLButtonElement, Props>(
                 e.stopPropagation();
               }}
               autoComplete="off"
+              ref={inputRef}
             />
           </div>
           <Button
