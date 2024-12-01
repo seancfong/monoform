@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/hover-card";
 import { validateUser } from "@/lib/auth/validate-user";
 import { getFormWithWorkspaceFolder } from "@/lib/queries/forms";
-import { ChevronLeft, Slash } from "lucide-react";
+import { ChevronLeft, FolderClosed, Slash } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -39,8 +39,11 @@ export default async function NavigationBreadcrumbs({ formId }: Props) {
           <span>{workspace.title}</span>
         </HoverCardContent>
       </HoverCard>
-      <Slash className="size-4 -rotate-[20deg] text-zinc-200" />
-      <span className="text-sm text-zinc-400 sm:text-base">
+      <Slash className="hidden size-4 -rotate-[20deg] text-zinc-200 md:block" />
+      <span className="hidden md:block">
+        <FolderClosed className="size-4 text-zinc-400" />
+      </span>
+      <span className="hidden text-base text-zinc-400 md:block">
         {workspace.title}
       </span>
       <Slash className="size-4 -rotate-[20deg] text-zinc-200" />

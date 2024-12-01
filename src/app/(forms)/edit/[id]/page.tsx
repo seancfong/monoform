@@ -2,7 +2,7 @@ import { SectionsProvider } from "@/app/(forms)/edit/[id]/components/contexts/se
 import EditQuestions from "@/app/(forms)/edit/[id]/components/questions/edit-questions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { validateUser } from "@/lib/auth/validate-user";
-import { getFormSections } from "@/lib/queries/forms";
+import { getFormInformation, getFormSections } from "@/lib/queries/forms";
 import { Metadata } from "next";
 import { userOwnsForm } from "@/lib/queries/forms";
 import { Suspense } from "react";
@@ -12,8 +12,20 @@ type Props = {
   params: { id: string };
 };
 
-export const metadata: Metadata = {
-  title: "Editing Form | Monoform",
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const { id: formId } = params;
+
+  const formData = await getFormInformation(formId);
+
+  if (!formData) {
+    notFound();
+  }
+
+  return {
+    title: `Editing ${formData.title} | Monoform`,
+  };
 };
 
 export default async function EditFormPage({ params }: Props) {
@@ -33,7 +45,7 @@ export default async function EditFormPage({ params }: Props) {
   const sectionsPromise = getFormSections(formId);
 
   return (
-    <div className="flex flex-col items-center justify-center p-2 sm:p-12">
+    <div className="flex flex-col items-center justify-center p-2 py-6 sm:p-12">
       <div className="w-full max-w-screen-sm lg:max-w-screen-md">
         <Tabs defaultValue="questions" className="w-full">
           <TabsList className="bg-zinc-200/75">
