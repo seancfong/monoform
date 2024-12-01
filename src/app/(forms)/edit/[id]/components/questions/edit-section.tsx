@@ -19,7 +19,7 @@ type Props = {
 export default function EditSection({ section, index }: Props) {
   return (
     <motion.div layout="position" className="flex flex-col gap-2">
-      <SectionHeading section={section} />
+      <SectionHeading section={section} sectionIndex={index} />
       <SectionContent section={section} sectionIndex={index} />
     </motion.div>
   );
@@ -27,13 +27,14 @@ export default function EditSection({ section, index }: Props) {
 
 type SectionHeadingProps = {
   section: FormSection;
+  sectionIndex: number;
 };
 
-function SectionHeading({ section }: SectionHeadingProps) {
+function SectionHeading({ section, sectionIndex }: SectionHeadingProps) {
   return (
     <div className="flex items-center gap-2 px-1">
       <h2 className="text-sm font-medium tracking-tight text-zinc-400">
-        {section.title}
+        Section {sectionIndex + 1}: {section.title}
       </h2>
       <hr className="flex-grow border-zinc-300" />
     </div>

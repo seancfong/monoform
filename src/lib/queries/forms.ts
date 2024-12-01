@@ -30,23 +30,68 @@ export async function getWorkspaceFormsCount(
     .then((rows) => rows[0].count);
 }
 
-export async function getFormWithWorkspaceFolder(formId: string): Promise<{
-  form: SelectForms;
-  workspaceFolder: SelectWorkspaceFolders;
-}> {
-  return db
-    .select({
-      form: forms,
-      workspaceFolder: workspaceFolders,
-    })
-    .from(forms)
-    .innerJoin(
-      workspaceFolders,
-      eq(forms.workspaceFolderId, workspaceFolders.id),
-    )
-    .where(and(eq(forms.id, formId)))
-    .limit(1)
-    .then((rows) => rows[0]);
+export async function getFormWithWorkspaceFolder(
+  formId: string,
+  userId: string,
+): Promise<
+  | {
+      form: SelectForms;
+      workspace: {
+        title: string;
+        slug: string;
+      };
+      folders: SelectWorkspaceFolders[];
+    }
+  | undefined
+> {
+  const rows = await db.query.usersOwnWorkspaces.findFirst({
+    columns: {
+      slug: true,
+    },
+    where: eq(usersOwnWorkspaces.userId, userId),
+    with: {
+      workspace: {
+        columns: {
+          title: true,
+        },
+        with: {
+          folders: {
+            with: {
+              forms: {
+                where: eq(workspaceFolders.id, formId),
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!rows) {
+    return undefined;
+  }
+
+  const slug = rows.slug;
+  const folders = rows.workspace.folders;
+  const workspaceTitle = rows.workspace.title;
+
+  const [form] = folders.reduce(
+    (acc, folder) => [...acc, ...folder.forms],
+    [] as SelectForms[],
+  );
+
+  if (!form || !slug || !folders.length) {
+    return undefined;
+  }
+
+  return {
+    form,
+    workspace: {
+      title: workspaceTitle,
+      slug,
+    },
+    folders,
+  };
 }
 
 export async function getFormSections(formId: string): Promise<FormSection[]> {

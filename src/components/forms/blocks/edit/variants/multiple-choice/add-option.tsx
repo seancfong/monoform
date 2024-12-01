@@ -8,10 +8,11 @@ import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   block: MultipleChoiceBlock;
+  focusNewOption: () => void;
 };
 
 const AddOption = forwardRef<HTMLButtonElement, Props>(
-  ({ block }: Props, ref) => {
+  ({ block, focusNewOption }: Props, ref) => {
     const { setBlockDraft, optimisticBlock, setIsStale } = useBlockContext();
 
     return (
@@ -35,6 +36,8 @@ const AddOption = forwardRef<HTMLButtonElement, Props>(
               }),
             );
           });
+
+          focusNewOption();
         }}
       >
         <Plus className="size-5" />

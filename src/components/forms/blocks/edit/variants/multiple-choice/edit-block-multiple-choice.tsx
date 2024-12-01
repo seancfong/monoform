@@ -28,6 +28,7 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
   ({ blockDraft, refocusBlock }, ref) => {
     const { setBlockDraft, setIsStale } = useBlockContext();
     const [draggingId, setDraggingId] = useState<string | undefined>(undefined);
+    const [shouldFocusNewOption, setShouldFocusNewOption] = useState(false);
 
     useImperativeHandle(ref, () => ({
       invokeSave: async (formId: string) => {
@@ -109,10 +110,19 @@ const EditBlockMultipleChoice = forwardRef<MutationRef, Props>(
                 }}
                 constraintRef={constraintRef}
                 blockDraft={blockDraft}
+                shouldFocusNewOption={
+                  shouldFocusNewOption && index === optionRefs.current.length
+                }
               />
             ))}
           </Reorder.Group>
-          <AddOption block={blockDraft} ref={addButtonRef} />
+          <AddOption
+            block={blockDraft}
+            ref={addButtonRef}
+            focusNewOption={() => {
+              setShouldFocusNewOption(true);
+            }}
+          />
         </motion.div>
       </div>
     );

@@ -2,6 +2,7 @@ import "server-only";
 
 import { db } from "@/db";
 import {
+  SelectForms,
   SelectUserOwnsWorkspaces,
   SelectWorkspaceFolders,
   SelectWorkspaces,
@@ -120,4 +121,33 @@ export async function getWorkspaceIdByFolderId(
     .where(eq(workspaceFolders.id, folderId))
     .limit(1)
     .then((rows) => rows?.[0].id);
+}
+
+export async function getUserWorkspaceForms(
+  user: User,
+  slug: string,
+): Promise<SelectForms[]> {
+  const rows = await db.query.usersOwnWorkspaces.findMany({
+    where: and(
+      eq(usersOwnWorkspaces.userId, user.id),
+      eq(usersOwnWorkspaces.slug, slug),
+    ),
+    with: {
+      workspace: {
+        columns: {},
+        with: {
+          folders: {
+            columns: {},
+            with: {
+              forms: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return rows.flatMap((row) =>
+    row.workspace.folders.flatMap((folder) => folder.forms),
+  );
 }
