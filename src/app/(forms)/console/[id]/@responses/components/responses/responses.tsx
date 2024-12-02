@@ -10,7 +10,9 @@ export default async function Responses({ formId }: Props) {
   // TODO: use cache
   const formSectionResponses = await getFormResponsesSummary(formId);
 
-  console.dir(formSectionResponses, { depth: null });
+  // console.dir(formSectionResponses, { depth: null });
+
+  console.log("fetching responses");
 
   return (
     <div className="pt-2">

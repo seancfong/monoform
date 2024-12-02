@@ -1,4 +1,4 @@
-import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
+import { useBlockContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
 import { BlockVariant } from "@/db/schema";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { BlockVariantUnion, FormBlock } from "@/lib/types/forms";

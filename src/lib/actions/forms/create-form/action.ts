@@ -70,5 +70,5 @@ export default async function createForm(
     orderNum: 0,
   });
 
-  redirect(`/edit/${formId}`);
+  redirect(`/console/${formId}`);
 }

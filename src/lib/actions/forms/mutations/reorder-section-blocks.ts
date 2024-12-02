@@ -55,7 +55,7 @@ export default async function reorderSectionBlocks(
     await updateAllBlockOrders(currentBlocks, draftIndexMap, tx);
   });
 
-  revalidatePath(`/edit/${formId}`);
+  revalidatePath(`/console/${formId}`);
   revalidatePath(`/fill/${formId}`);
 
   await pool.end();

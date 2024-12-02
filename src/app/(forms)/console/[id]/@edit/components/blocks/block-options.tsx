@@ -1,4 +1,4 @@
-import { useBlockContext } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
+import { useBlockContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";

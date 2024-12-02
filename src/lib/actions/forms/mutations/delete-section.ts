@@ -28,6 +28,6 @@ export default async function deleteSection(
 
   await db.delete(sections).where(eq(sections.id, section.id));
 
-  revalidatePath(`/edit/${formId}`);
+  revalidatePath(`/console/${formId}`);
   revalidatePath(`/fill/${formId}`);
 }
