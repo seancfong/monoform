@@ -1,4 +1,4 @@
-import { useBlockContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
+import { useBlockContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/block-context";
 import { MultipleChoiceBlock } from "@/lib/types/forms";
 import { motion } from "framer-motion";
 import { produce } from "immer";

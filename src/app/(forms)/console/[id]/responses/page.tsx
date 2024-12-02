@@ -1,4 +1,4 @@
-import Responses from "@/app/(forms)/console/[id]/@responses/components/responses/responses";
+import Responses from "@/app/(forms)/console/[id]/responses/components/responses/responses";
 import React from "react";
 
 type Props = {

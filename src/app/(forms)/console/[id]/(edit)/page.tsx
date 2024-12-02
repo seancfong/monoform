@@ -1,5 +1,5 @@
-import { SectionsProvider } from "@/app/(forms)/console/[id]/@edit/components/contexts/sections-context";
-import EditQuestions from "@/app/(forms)/console/[id]/@edit/components/questions/edit-questions";
+import { SectionsProvider } from "@/app/(forms)/console/[id]/(edit)/components/contexts/sections-context";
+import EditQuestions from "@/app/(forms)/console/[id]/(edit)/components/questions/edit-questions";
 import { validateUser } from "@/lib/auth/validate-user";
 import {
   getFormInformation,

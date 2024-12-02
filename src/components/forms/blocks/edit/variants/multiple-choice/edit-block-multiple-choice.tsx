@@ -1,7 +1,7 @@
 import {
   MutationRef,
   useBlockContext,
-} from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
+} from "@/app/(forms)/console/[id]/(edit)/components/contexts/block-context";
 import HeaderBlocks from "@/components/forms/blocks/edit/header-blocks";
 import AddOption from "@/components/forms/blocks/edit/variants/multiple-choice/add-option";
 import MultipleChoiceOption from "@/components/forms/blocks/edit/variants/multiple-choice/multiple-choice-option";

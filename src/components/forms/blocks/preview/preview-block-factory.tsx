@@ -1,4 +1,4 @@
-import { useBlockContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
+import { useBlockContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/block-context";
 import PreviewBlockMultipleChoice from "@/components/forms/blocks/preview/variants/multiple-choice/preview-block-multiple-choice";
 import PreviewBlockHeader from "@/components/forms/blocks/preview/variants/preview-block-header";
 import { BlockVariant } from "@/db/schema";

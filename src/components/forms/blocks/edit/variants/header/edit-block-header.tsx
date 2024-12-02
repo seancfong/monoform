@@ -1,4 +1,4 @@
-import { MutationRef } from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
+import { MutationRef } from "@/app/(forms)/console/[id]/(edit)/components/contexts/block-context";
 import HeaderBlocks from "@/components/forms/blocks/edit/header-blocks";
 import mutateHeaderBlock from "@/lib/actions/forms/mutations/blocks/header";
 import { FormBlock } from "@/lib/types/forms";

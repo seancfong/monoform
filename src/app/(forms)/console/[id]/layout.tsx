@@ -1,15 +1,13 @@
-import EditFormNavigation from "@/app/(forms)/console/[id]/@edit/components/layout/edit-form-navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EditFormNavigation from "@/app/(forms)/console/[id]/(edit)/components/layout/edit-form-navigation";
+import Link from "next/link";
 import React from "react";
 
 type Props = {
   children: React.ReactNode;
   params: { id: string };
-  edit: React.ReactNode;
-  responses: React.ReactNode;
 };
 
-export default function Layout({ children, params, edit, responses }: Props) {
+export default function Layout({ children, params }: Props) {
   const { id: formId } = params;
 
   return (
@@ -18,26 +16,8 @@ export default function Layout({ children, params, edit, responses }: Props) {
       <main className="w-full">
         <div className="flex flex-col items-center justify-center p-2 py-6 sm:p-12">
           <div className="w-full max-w-screen-sm lg:max-w-screen-md">
-            <Tabs defaultValue="questions" className="w-full">
-              <TabsList className="bg-zinc-200/75">
-                <TabsTrigger
-                  value="questions"
-                  className="data-[state=active]:bg-zinc-50"
-                >
-                  Questions
-                </TabsTrigger>
-                <TabsTrigger
-                  value="responses"
-                  className="data-[state=active]:bg-zinc-50"
-                >
-                  Responses
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="questions" className="relative mt-4">
-                {edit}
-              </TabsContent>
-              <TabsContent value="responses">{responses}</TabsContent>
-            </Tabs>
+            <Link href={`/console/${formId}`}>Questions</Link>
+            <Link href={`/console/${formId}/responses`}>Responses</Link>
             {children}
           </div>
         </div>

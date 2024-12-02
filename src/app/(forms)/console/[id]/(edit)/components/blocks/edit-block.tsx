@@ -1,10 +1,10 @@
-import BlockOptions from "@/app/(forms)/console/[id]/@edit/components/blocks/block-options";
-import ChangeBlock from "@/app/(forms)/console/[id]/@edit/components/blocks/change-block";
-import ChangeBlockPreview from "@/app/(forms)/console/[id]/@edit/components/blocks/change-block-preview";
-import DeleteBlock from "@/app/(forms)/console/[id]/@edit/components/blocks/delete-block";
-import ReorderBlock from "@/app/(forms)/console/[id]/@edit/components/blocks/reorder-block";
-import { useBlockContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
-import { useSectionsContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/sections-context";
+import BlockOptions from "@/app/(forms)/console/[id]/(edit)/components/blocks/block-options";
+import ChangeBlock from "@/app/(forms)/console/[id]/(edit)/components/blocks/change-block";
+import ChangeBlockPreview from "@/app/(forms)/console/[id]/(edit)/components/blocks/change-block-preview";
+import DeleteBlock from "@/app/(forms)/console/[id]/(edit)/components/blocks/delete-block";
+import ReorderBlock from "@/app/(forms)/console/[id]/(edit)/components/blocks/reorder-block";
+import { useBlockContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/block-context";
+import { useSectionsContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/sections-context";
 import EditBlockFactory from "@/components/forms/blocks/edit/edit-block-factory";
 import PreviewBlockFactory from "@/components/forms/blocks/preview/preview-block-factory";
 import { BlockVariant } from "@/db/schema";

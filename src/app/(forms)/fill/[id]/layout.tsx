@@ -1,4 +1,4 @@
-import EditFormNavigation from "@/app/(forms)/console/[id]/@edit/components/layout/edit-form-navigation";
+import EditFormNavigation from "@/app/(forms)/console/[id]/(edit)/components/layout/edit-form-navigation";
 import React from "react";
 
 type Props = {

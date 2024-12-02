@@ -1,4 +1,4 @@
-import { useSectionsContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/sections-context";
+import { useSectionsContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/sections-context";
 import { Button } from "@/components/ui/button";
 import { FormSection } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";

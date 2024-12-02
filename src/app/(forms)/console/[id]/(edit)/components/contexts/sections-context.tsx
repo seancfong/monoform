@@ -1,6 +1,6 @@
 "use client";
 
-import { sectionsReducer } from "@/app/(forms)/console/[id]/@edit/components/contexts/sections-reducer";
+import { sectionsReducer } from "@/app/(forms)/console/[id]/(edit)/components/contexts/sections-reducer";
 import { BlockVariant } from "@/db/schema";
 import appendBlockToSection from "@/lib/actions/forms/mutations/append-block";
 import createSection from "@/lib/actions/forms/mutations/create-section";

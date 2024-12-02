@@ -1,4 +1,4 @@
-import { useBlockContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/block-context";
+import { useBlockContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/block-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

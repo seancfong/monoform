@@ -1,4 +1,4 @@
-import { useSectionsContext } from "@/app/(forms)/console/[id]/@edit/components/contexts/sections-context";
+import { useSectionsContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/sections-context";
 import { BlockVariantUnion } from "@/lib/types/forms";
 import {
   createContext,
