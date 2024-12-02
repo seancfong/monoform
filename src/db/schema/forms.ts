@@ -102,7 +102,7 @@ export const blocksRelations = relations(blocks, ({ one, many }) => ({
 export const responses = pgTable("responses", {
   id: serial("id").primaryKey(),
   responderId: text("responder_id").references(() => users.id, {
-    onDelete: "cascade",
+    onDelete: "set null",
   }),
   submittedAt: timestamp("submitted_at", {
     withTimezone: true,
@@ -112,7 +112,7 @@ export const responses = pgTable("responses", {
     .defaultNow(),
   formId: uuid("form_id")
     .notNull()
-    .references(() => forms.id),
+    .references(() => forms.id, { onDelete: "cascade" }),
 });
 
 export type SelectForms = InferSelectModel<typeof forms>;

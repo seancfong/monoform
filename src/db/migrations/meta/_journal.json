@@ -246,6 +246,20 @@
       "when": 1732412657058,
       "tag": "0034_smiling_phalanx",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1733111387544,
+      "tag": "0035_faithful_scrambler",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1733111470531,
+      "tag": "0036_stiff_puppet_master",
+      "breakpoints": true
     }
   ]
 }

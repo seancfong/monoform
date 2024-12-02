@@ -4,7 +4,6 @@ import {
   SelectSections,
 } from "@/db/schema";
 
-// TODO: omit sectionId in favor of sectionIndex
 export type FormBlock = SelectBlocks;
 
 /* TypeScript assertation functions for blocks will limit the scope to

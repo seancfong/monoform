@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { userOwnsForm } from "@/lib/queries/forms";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import Responses from "@/app/(forms)/edit/[id]/components/responses/responses";
 
 type Props = {
   params: { id: string };
@@ -73,7 +74,7 @@ export default async function EditFormPage({ params }: Props) {
             </Suspense>
           </TabsContent>
           <TabsContent value="responses">
-            Change your responses here.
+            <Responses formId={formId} />
           </TabsContent>
         </Tabs>
       </div>
