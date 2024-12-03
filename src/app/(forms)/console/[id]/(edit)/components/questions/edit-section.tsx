@@ -1,10 +1,10 @@
 "use client";
 
-import AddBlock from "@/app/(forms)/edit/[id]/components/blocks/add-block";
-import EditBlock from "@/app/(forms)/edit/[id]/components/blocks/edit-block";
-import { BlockProvider } from "@/app/(forms)/edit/[id]/components/contexts/block-context";
-import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
-import DeleteSection from "@/app/(forms)/edit/[id]/components/sections/delete-section";
+import AddBlock from "@/app/(forms)/console/[id]/(edit)/components/blocks/add-block";
+import EditBlock from "@/app/(forms)/console/[id]/(edit)/components/blocks/edit-block";
+import { BlockProvider } from "@/app/(forms)/console/[id]/(edit)/components/contexts/block-context";
+import { useSectionsContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/sections-context";
+import DeleteSection from "@/app/(forms)/console/[id]/(edit)/components/sections/delete-section";
 import { FormSection } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";
 import { motion, Reorder, useDragControls } from "framer-motion";

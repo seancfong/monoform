@@ -1,5 +1,5 @@
-import NavigationBreadcrumbs from "@/app/(forms)/edit/[id]/components/layout/navigation-breadcrumbs";
-import UserAvatar from "@/app/(forms)/edit/[id]/components/layout/user-avatar";
+import NavigationBreadcrumbs from "@/app/(forms)/console/[id]/(edit)/components/layout/navigation-breadcrumbs";
+import UserAvatar from "@/app/(forms)/console/[id]/(edit)/components/layout/user-avatar";
 import { Suspense } from "react";
 
 type Props = {

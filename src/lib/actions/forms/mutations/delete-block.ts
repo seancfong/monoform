@@ -28,6 +28,6 @@ export default async function deleteBlock(
 
   await db.delete(blocks).where(eq(blocks.id, blockDraft.id));
 
-  revalidatePath(`/edit/${formId}`);
+  revalidatePath(`/console/${formId}`);
   revalidatePath(`/fill/${formId}`);
 }

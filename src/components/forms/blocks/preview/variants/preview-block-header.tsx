@@ -1,6 +1,7 @@
 import { BlockVariant } from "@/db/schema";
 import { FormBlock } from "@/lib/types/forms";
 import { cn } from "@/lib/utils";
+import React from "react";
 import Markdown from "react-markdown";
 
 type Props = {
@@ -24,19 +25,20 @@ export default function PreviewBlockHeader({ block }: Props) {
         )}
       >
         {block.text.split("\n").map((line, index) => (
-          <Markdown
-            key={index}
-            components={{
-              h1: ({ children, node, ...props }) => (
-                <h2 {...props}>{children}</h2>
-              ),
-              h2: ({ children, node, ...props }) => (
-                <h3 {...props}>{children}</h3>
-              ),
-            }}
-          >
-            {line}
-          </Markdown>
+          <React.Fragment key={`line__${index}`}>
+            <Markdown
+              components={{
+                h1: ({ children, node, ...props }) => (
+                  <h2 {...props}>{children}</h2>
+                ),
+                h2: ({ children, node, ...props }) => (
+                  <h3 {...props}>{children}</h3>
+                ),
+              }}
+            >
+              {line}
+            </Markdown>
+          </React.Fragment>
         ))}
       </div>
     </div>

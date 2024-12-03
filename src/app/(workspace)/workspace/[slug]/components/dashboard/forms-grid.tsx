@@ -35,7 +35,7 @@ type FormCardProps = {
 function FormCard({ form }: FormCardProps) {
   return (
     <Link
-      href={`/edit/${form.id}`}
+      href={`/console/${form.id}`}
       className="group/form-card flex flex-col rounded-md border-1 border-zinc-200 bg-zinc-50 transition-colors duration-150 hover:bg-zinc-100/50"
     >
       <div className="relative h-36 overflow-hidden rounded-t-md">

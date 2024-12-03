@@ -1,7 +1,7 @@
 "use client";
 
-import { useSectionsContext } from "@/app/(forms)/edit/[id]/components/contexts/sections-context";
-import EditSection from "@/app/(forms)/edit/[id]/components/questions/edit-section";
+import { useSectionsContext } from "@/app/(forms)/console/[id]/(edit)/components/contexts/sections-context";
+import EditSection from "@/app/(forms)/console/[id]/(edit)/components/questions/edit-section";
 import { Button } from "@/components/ui/button";
 
 type Props = {};

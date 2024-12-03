@@ -13,11 +13,12 @@ export const multipleChoiceOptions = pgTable("multiple_choice_options", {
 
 export const multipleChoiceOptionsRelations = relations(
   multipleChoiceOptions,
-  ({ one }) => ({
+  ({ one, many }) => ({
     block: one(blocks, {
       fields: [multipleChoiceOptions.blockId],
       references: [blocks.id],
     }),
+    multipleChoiceBlockResponses: many(multipleChoiceResponses),
   }),
 );
 
@@ -30,6 +31,20 @@ export const multipleChoiceResponses = pgTable("multiple_choice_responses", {
     { onDelete: "cascade" },
   ),
 });
+
+export const multipleChoiceResponsesRelations = relations(
+  multipleChoiceResponses,
+  ({ one }) => ({
+    response: one(responses, {
+      fields: [multipleChoiceResponses.responseId],
+      references: [responses.id],
+    }),
+    selectedOption: one(multipleChoiceOptions, {
+      fields: [multipleChoiceResponses.selectedOptionId],
+      references: [multipleChoiceOptions.id],
+    }),
+  }),
+);
 
 export type SelectMultipleChoiceOptions = InferSelectModel<
   typeof multipleChoiceOptions
