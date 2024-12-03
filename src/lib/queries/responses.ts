@@ -1,8 +1,8 @@
 import "server-only";
 
 import { db } from "@/db";
-import { sections } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { multipleChoiceOptions, sections } from "@/db/schema";
+import { asc, eq } from "drizzle-orm";
 
 export async function getFormResponsesSummary(formId: string) {
   return await db.query.sections.findMany({
@@ -10,9 +10,11 @@ export async function getFormResponsesSummary(formId: string) {
     columns: { id: true, title: true },
     with: {
       blocks: {
+        orderBy: asc(sections.orderNum),
         with: {
           // for multiple choice
           multipleChoiceOptions: {
+            orderBy: asc(multipleChoiceOptions.orderNum),
             with: {
               multipleChoiceBlockResponses: {
                 columns: {

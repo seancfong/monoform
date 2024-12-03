@@ -23,6 +23,13 @@ export default function ResponseBlockFactory({ block }: Props) {
     case BlockVariant.HEADER: {
       return <PreviewBlockHeader block={block as FormBlock} />;
     }
+    case BlockVariant.CHECKBOX: {
+      return (
+        <ResponseBlockMultipleChoice
+          block={block as MultipleChoiceResponseBlock}
+        />
+      );
+    }
   }
 
   return <></>;

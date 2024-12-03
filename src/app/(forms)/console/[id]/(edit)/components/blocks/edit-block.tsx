@@ -48,7 +48,7 @@ export default function EditBlock({ controls }: Props) {
       <motion.div
         layout
         className={cn(
-          "relative flex w-full flex-col overflow-hidden rounded-md border-1 border-zinc-200 bg-zinc-50 p-2 py-2.5 text-left duration-300 [transition:opacity_200ms,box-shadow_200ms] md:pb-8",
+          "relative flex w-full flex-col overflow-hidden rounded-md border-1 border-zinc-200 bg-zinc-50 p-3 pb-4 text-left duration-300 [transition:opacity_200ms,box-shadow_200ms] md:rounded-lg md:pb-8",
           {
             "border-opacity-0 outline outline-2 -outline-offset-1 outline-slate-300":
               focusedBlockId === optimisticBlock.id,
@@ -74,7 +74,7 @@ export default function EditBlock({ controls }: Props) {
           ) : (
             <>
               <div className="relative flex w-full items-center justify-between">
-                <ChangeBlockPreview />
+                <ChangeBlockPreview blockDraft={optimisticBlock} />
                 <ReorderBlock controls={controls} block={optimisticBlock} />
                 <DeleteBlock />
               </div>
