@@ -7,12 +7,7 @@ type Props = {
 };
 
 export default async function Responses({ formId }: Props) {
-  // TODO: use cache
   const formSectionResponses = await getFormResponsesSummary(formId);
-
-  console.dir(formSectionResponses, { depth: null });
-
-  console.log("fetching responses");
 
   return (
     <div>
@@ -28,13 +23,13 @@ export default async function Responses({ formId }: Props) {
             {section.blocks.map((block) => (
               <div
                 key={block.id}
-                className="space-y-1 rounded-md border-1 border-zinc-200 bg-zinc-50 py-3 md:pb-6"
+                className="space-y-1 rounded-md border-1 border-zinc-200 bg-zinc-50 pb-4 pt-3 md:pb-6"
               >
                 <div className="px-3">
                   <ChangeBlockPreview blockDraft={block} />
                 </div>
                 <hr className="mx-2 border-0 border-t-1 border-zinc-200" />
-                <div className="px-4 pt-4 md:px-8">
+                <div className="px-5 pt-4 md:px-9">
                   <ResponseBlockFactory block={block} />
                 </div>
               </div>

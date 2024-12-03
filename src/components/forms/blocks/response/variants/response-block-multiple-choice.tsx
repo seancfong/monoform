@@ -40,8 +40,6 @@ export default function ResponseBlockMultipleChoice({ block }: Props) {
     }));
   }, []);
 
-  console.log(chartData);
-
   return (
     <div className="space-y-4">
       <PreviewBlockHeader block={block} />
