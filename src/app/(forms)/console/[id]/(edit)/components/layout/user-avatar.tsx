@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { validateUser } from "@/lib/auth/validate-user";
-import { Home, User } from "lucide-react";
+import { Diamond, User } from "lucide-react";
 import Link from "next/link";
 
 type Props = {};
@@ -43,7 +43,7 @@ export default async function UserAvatar({}: Props) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/">
-            <Home className="mr-3 size-4" />
+            <Diamond className="mr-3 size-4" />
             <span>Home Page</span>
           </Link>
         </DropdownMenuItem>
