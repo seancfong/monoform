@@ -151,3 +151,34 @@ export async function getUserWorkspaceForms(
     row.workspace.folders.flatMap((folder) => folder.forms),
   );
 }
+
+export async function getUserWorkspaceFolderForms(
+  user: User,
+  slug: string,
+  folderId: string,
+): Promise<SelectForms[]> {
+  const rows = await db.query.usersOwnWorkspaces.findMany({
+    where: and(
+      eq(usersOwnWorkspaces.userId, user.id),
+      eq(usersOwnWorkspaces.slug, slug),
+    ),
+    with: {
+      workspace: {
+        columns: {},
+        with: {
+          folders: {
+            where: eq(workspaceFolders.id, folderId),
+            columns: {},
+            with: {
+              forms: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return rows.flatMap((row) =>
+    row.workspace.folders.flatMap((folder) => folder.forms),
+  );
+}

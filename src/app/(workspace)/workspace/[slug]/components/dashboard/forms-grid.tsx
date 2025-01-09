@@ -32,7 +32,7 @@ type FormCardProps = {
   form: SelectForms;
 };
 
-function FormCard({ form }: FormCardProps) {
+export function FormCard({ form }: FormCardProps) {
   return (
     <Link
       href={`/console/${form.id}`}
