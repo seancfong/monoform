@@ -46,14 +46,11 @@ export async function Sidebar({ slug }: Props) {
   const foldersPromise = getUserWorkspaceFolders(user, slug);
 
   return (
-    <>
-      <SidebarItems
-        currentWorkspace={currentWorkspace}
-        otherWorkspaces={otherWorkspaces}
-        foldersPromise={foldersPromise}
-      />
-      {/* <SidebarSkeleton overlay slug={slug} /> */}
-    </>
+    <SidebarItems
+      currentWorkspace={currentWorkspace}
+      otherWorkspaces={otherWorkspaces}
+      foldersPromise={foldersPromise}
+    />
   );
 }
 

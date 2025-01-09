@@ -11,7 +11,7 @@ type Props = {
 
 export default function ConsoleTabs({ formId }: Props) {
   return (
-    <div className="mb-2 flex w-fit rounded-md bg-zinc-200/75 p-1 sm:mb-6">
+    <div className="flex w-fit rounded-md bg-zinc-200/75 p-1">
       <TabLink href={`/console/${formId}`}>Questions</TabLink>
       <TabLink href={`/console/${formId}/responses`}>Responses</TabLink>
     </div>
